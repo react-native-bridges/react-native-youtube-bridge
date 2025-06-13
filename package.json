@@ -32,7 +32,7 @@
     "!**/.*"
   ],
   "scripts": {
-    "example": "yarn workspace react-native-youtube-bridge-example",
+    "example": "bun --cwd example expo",
     "test": "jest",
     "typecheck": "tsc",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
@@ -89,7 +89,7 @@
   "workspaces": [
     "example"
   ],
-  "packageManager": "yarn@3.6.1",
+  "packageManager": "bun@1.2.15",
   "jest": {
     "preset": "react-native",
     "modulePathIgnorePatterns": [
