@@ -38,13 +38,9 @@
     "lint": "biome check --write **/*.{js,ts,tsx}",
     "clean": "del-cli lib",
     "prepare": "bob build",
-    "release": "release-it --only-version"
+    "release": "changeset version && changeset publish"
   },
-  "keywords": [
-    "react-native",
-    "ios",
-    "android"
-  ],
+  "keywords": ["react-native", "ios", "android"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/react-native-bridges/react-native-youtube-bridge.git"
@@ -60,10 +56,10 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
+    "@changesets/cli": "^2.29.4",
     "@commitlint/config-conventional": "^19.6.0",
     "@evilmartians/lefthook": "^1.5.0",
     "@react-native/babel-preset": "0.78.2",
-    "@release-it/conventional-changelog": "^9.0.2",
     "@types/jest": "^29.5.5",
     "@types/react": "^19.0.12",
     "commitlint": "^19.6.1",
@@ -72,16 +68,13 @@
     "react": "19.0.0",
     "react-native": "0.79.3",
     "react-native-builder-bob": "^0.40.11",
-    "release-it": "^17.10.0",
     "typescript": "^5.8.3"
   },
   "peerDependencies": {
     "react": "*",
     "react-native": "*"
   },
-  "workspaces": [
-    "example"
-  ],
+  "workspaces": ["example"],
   "packageManager": "bun@1.2.15",
   "jest": {
     "preset": "react-native",
@@ -91,28 +84,7 @@
     ]
   },
   "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
-  "release-it": {
-    "git": {
-      "commitMessage": "chore: release ${version}",
-      "tagName": "v${version}"
-    },
-    "npm": {
-      "publish": true
-    },
-    "github": {
-      "release": true
-    },
-    "plugins": {
-      "@release-it/conventional-changelog": {
-        "preset": {
-          "name": "angular"
-        }
-      }
-    }
+    "extends": ["@commitlint/config-conventional"]
   },
   "react-native-builder-bob": {
     "source": "src",
