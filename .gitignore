@@ -76,3 +76,6 @@ android/generated
 
 # React Native Nitro Modules
 nitrogen/
+
+# build
+dist/

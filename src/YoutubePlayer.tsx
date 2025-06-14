@@ -1,6 +1,6 @@
-import useCreateLocalPlayerHtml from '@/hooks/useCreateLocalPlayerHtml';
-import type { MessageData } from '@/types/message';
-import { type PlayerControls, PlayerState, type YoutubePlayerProps } from '@/types/youtube';
+import useCreateLocalPlayerHtml from './hooks/useCreateLocalPlayerHtml';
+import type { MessageData } from './types/message';
+import { type PlayerControls, PlayerState, type YoutubePlayerProps } from './types/youtube';
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import WebView, { type WebViewMessageEvent } from 'react-native-webview';

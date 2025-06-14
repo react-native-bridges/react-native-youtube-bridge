@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
-import type { YoutubePlayerVars } from '@/types/youtube';
-import { escapeHtml, safeNumber, validateVideoId } from '@/utils/validate';
-import { youtubeIframeScripts } from '@/hooks/youtubeIframeScripts';
+import { escapeHtml, safeNumber, validateVideoId } from '../utils/validate';
+import { youtubeIframeScripts } from '../hooks/youtubeIframeScripts';
+import type { YoutubePlayerVars } from '../types/youtube';
 
 const useCreateLocalPlayerHtml = ({
   videoId,

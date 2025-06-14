@@ -1,4 +1,4 @@
-import type { ERROR_CODES, PlaybackQuality } from '@/types/youtube';
+import type { ERROR_CODES, PlaybackQuality } from '../types/youtube';
 
 export const getQualityLabel = (quality: PlaybackQuality): string => {
   const qualityLabels: Record<PlaybackQuality, string> = {
