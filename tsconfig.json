@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
     "rootDir": ".",
+    "baseUrl": ".",
     "paths": {
-      "react-native-youtube-bridge": ["./src/index"]
+      "@/*": ["./src/*"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
@@ -24,6 +25,9 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "ESNext",
-    "verbatimModuleSyntax": true
-  }
+    "verbatimModuleSyntax": true,
+  },
+  "exclude": [
+    "example/**/*"
+  ]
 }

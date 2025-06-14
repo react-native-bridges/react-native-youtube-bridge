@@ -3,7 +3,7 @@ pre-commit:
   commands:
     lint:
       glob: "*.{js,ts,jsx,tsx}"
-      run: bunx biome check --write {staged_files}
+      run: bun run lint
     types:
       glob: "*.{js,ts, jsx, tsx}"
       run: npx tsc
