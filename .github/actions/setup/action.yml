@@ -1,6 +1,12 @@
 name: Setup
 description: Setup Bun and install dependencies
 
+inputs:
+  working-directory:
+    description: 'Working directory for the setup'
+    required: false
+    default: '.'
+
 runs:
   using: composite
   steps:
@@ -14,16 +20,17 @@ runs:
       uses: actions/cache/restore@v4
       with:
         path: |
-          **/node_modules
+          ${{ inputs.working-directory }}/node_modules
           ~/.bun/install/cache
-        key: ${{ runner.os }}-bun-${{ hashFiles('bun.lock') }}-${{ hashFiles('**/package.json', '!node_modules/**') }}
+        key: ${{ runner.os }}-bun-${{ inputs.working-directory }}-${{ hashFiles(format('{0}/bun.lock', inputs.working-directory)) }}-${{ hashFiles(format('{0}/package.json', inputs.working-directory)) }}
         restore-keys: |
-          ${{ runner.os }}-bun-${{ hashFiles('bun.lock') }}
-          ${{ runner.os }}-bun-
+          ${{ runner.os }}-bun-${{ inputs.working-directory }}-${{ hashFiles(format('{0}/bun.lock', inputs.working-directory)) }}
+          ${{ runner.os }}-bun-${{ inputs.working-directory }}-
 
     - name: Install dependencies
       if: steps.bun-cache.outputs.cache-hit != 'true'
       run: bun install --frozen-lockfile
+      working-directory: ${{ inputs.working-directory }}
       shell: bash
 
     - name: Cache dependencies
@@ -31,6 +38,6 @@ runs:
       uses: actions/cache/save@v4
       with:
         path: |
-          **/node_modules
+          ${{ inputs.working-directory }}/node_modules
           ~/.bun/install/cache
         key: ${{ steps.bun-cache.outputs.cache-primary-key }}

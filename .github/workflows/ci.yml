@@ -58,6 +58,8 @@ jobs:
 
       - name: Setup
         uses: ./.github/actions/setup
+        with:
+          working-directory: example
 
       - name: Build example for Web
         run: |
