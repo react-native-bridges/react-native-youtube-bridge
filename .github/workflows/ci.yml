@@ -56,7 +56,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup
+      - name: Setup Root
+        uses: ./.github/actions/setup
+
+      - name: Setup Example
         uses: ./.github/actions/setup
         with:
           working-directory: example
