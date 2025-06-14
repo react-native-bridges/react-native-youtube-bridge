@@ -1,6 +1,10 @@
 {
-  "extends": "../tsconfig",
+  "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    // Avoid expo-cli auto-generating a tsconfig
+    "baseUrl": "..",
+    "paths": {
+      "react-native-youtube-bridge": ["src"],
+      "react-native-youtube-bridge/*": ["src/*"]
+    }
   }
 }
