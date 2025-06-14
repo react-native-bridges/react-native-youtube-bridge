@@ -63,4 +63,4 @@ jobs:
 
       - name: Build example for Web
         run: |
-          bun run example expo export --platform web
+          bun run example expo export --platform web --clear
