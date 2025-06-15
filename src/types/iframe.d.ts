@@ -36,7 +36,7 @@ export interface Options {
         hl?: string | undefined;
         iv_load_policy?: 1 | 3 | undefined;
         list?: string | undefined;
-        listType?: 'playlist' | 'search' | undefined;
+        listType?: 'playlist' | 'search' | 'user_uploads' | undefined;
         loop?: 0 | 1 | undefined;
         origin?: string | undefined;
         playlist?: string | undefined;
@@ -151,7 +151,7 @@ export interface YouTubePlayer {
   setVolume(volume: number): Promise<void>;
   stopVideo(): Promise<void>;
   unMute(): Promise<void>;
-  on(eventType: 'stateChange', listener: (event: CustomEvent & { data: number }) => void): void;
+  on(eventType: 'onStateChange', listener: (event: CustomEvent & { data: number }) => void): void;
   on(eventType: EventType, listener: (event: CustomEvent) => void): void;
 }
 
