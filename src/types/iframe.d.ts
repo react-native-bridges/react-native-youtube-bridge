@@ -65,7 +65,6 @@ export interface YouTubePlayer {
   addEventListener(event: string, listener: (event: CustomEvent) => void): Promise<void>;
   destroy(): Promise<void>;
   getAvailablePlaybackRates(): Promise<number[]>;
-  getAvailableQualityLevels(): Promise<readonly string[]>;
   getCurrentTime(): Promise<number>;
   getDuration(): Promise<number>;
   getIframe(): Promise<HTMLIFrameElement>;
@@ -102,7 +101,6 @@ export interface YouTubePlayer {
   }): Promise<void>;
   getPlaylist(): Promise<readonly string[]>;
   getPlaylistIndex(): Promise<number>;
-  getPlaybackQuality(): Promise<string>;
   getPlaybackRate(): Promise<number>;
   getPlayerState(): Promise<PlayerState>;
   getVideoEmbedCode(): Promise<string>;
@@ -147,10 +145,9 @@ export interface YouTubePlayer {
   removeEventListener(event: string, listener: (event: CustomEvent) => void): Promise<void>;
   seekTo(seconds: number, allowSeekAhead: boolean): Promise<void>;
   setLoop(loopPlaylists: boolean): Promise<void>;
-  setPlaybackQuality(suggestedQuality: string): Promise<void>;
   setPlaybackRate(suggestedRate: number): Promise<void>;
   setShuffle(shufflePlaylist: boolean): Promise<void>;
-  setSize(width: number, height: number): Promise<object>;
+  setSize(width: number, height: number): Promise<{ width: number; height: number }>;
   setVolume(volume: number): Promise<void>;
   stopVideo(): Promise<void>;
   unMute(): Promise<void>;
