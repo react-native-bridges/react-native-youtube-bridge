@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Alert, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {
   type PlayerControls,
@@ -20,7 +20,7 @@ function App() {
   const [isMuted, setIsMuted] = useState(false);
   const [videoId, setVideoId] = useState('AbZH7XWDW_k');
 
-  const handleReady = async () => {
+  const handleReady = useCallback(async () => {
     console.log('Player is ready!');
     Alert.alert('알림', 'YouTube 플레이어가 준비되었습니다!');
 
@@ -36,7 +36,7 @@ function App() {
     } catch (error) {
       console.error('Error getting player info:', error);
     }
-  };
+  }, []);
 
   const handleStateChange = (state: PlayerState) => {
     console.log('Player state changed:', state);
@@ -64,31 +64,31 @@ function App() {
     }
   };
 
-  const handleProgress = (progress: ProgressData) => {
+  const handleProgress = useCallback((progress: ProgressData) => {
     setCurrentTime(progress.currentTime);
     setDuration(progress.duration);
     setLoadedFraction(progress.loadedFraction);
-  };
+  }, []);
 
-  const handleError = (error: YouTubeError) => {
+  const handleError = useCallback((error: YouTubeError) => {
     console.error('Player error:', error);
     Alert.alert('에러', `플레이어 오류 (${error.code}): ${error.message}`);
-  };
+  }, []);
 
-  const handlePlaybackRateChange = (rate: number) => {
+  const handlePlaybackRateChange = useCallback((rate: number) => {
     console.log('Playback rate changed:', rate);
     setPlaybackRate(rate);
-  };
+  }, []);
 
-  const handlePlaybackQualityChange = (quality: string) => {
+  const handlePlaybackQualityChange = useCallback((quality: string) => {
     console.log('Playback quality changed:', quality);
     Alert.alert('품질 변경', `재생 품질이 ${quality}로 변경되었습니다`);
-  };
+  }, []);
 
-  const handleAutoplayBlocked = () => {
+  const handleAutoplayBlocked = useCallback(() => {
     console.log('Autoplay was blocked');
     Alert.alert('알림', '자동재생이 브라우저에 의해 차단되었습니다');
-  };
+  }, []);
 
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
@@ -157,7 +157,6 @@ function App() {
             controls: true,
             playsinline: true,
             rel: false,
-            modestbranding: true,
           }}
           onReady={handleReady}
           onStateChange={handleStateChange}
