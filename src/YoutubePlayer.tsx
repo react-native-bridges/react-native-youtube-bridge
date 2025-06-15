@@ -1,9 +1,10 @@
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { Dimensions, StyleSheet } from 'react-native';
+import WebView, { type WebViewMessageEvent } from 'react-native-webview';
+import YoutubePlayerWrapper from './YoutubePlayerWrapper';
 import useCreateLocalPlayerHtml from './hooks/useCreateLocalPlayerHtml';
 import type { MessageData } from './types/message';
-import { type PlayerControls, PlayerState, type YoutubePlayerProps } from './types/youtube';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
-import WebView, { type WebViewMessageEvent } from 'react-native-webview';
+import type { PlayerControls, YoutubePlayerProps } from './types/youtube';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -29,7 +30,6 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
         muted: false,
         playsinline: true,
         rel: false,
-        modestbranding: true,
       },
     },
     ref,
@@ -38,7 +38,6 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
 
     const webViewRef = useRef<WebView>(null);
     const [isReady, setIsReady] = useState(false);
-    const [_, setCurrentState] = useState<PlayerState>(PlayerState.UNSTARTED);
     const commandIdRef = useRef(0);
     const pendingCommandsRef = useRef<Map<string, (result: unknown) => void>>(new Map());
 
@@ -59,7 +58,6 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
 
           if (data.type === 'stateChange') {
             const state = data.state;
-            setCurrentState(state);
             onStateChange?.(state);
             return;
           }
@@ -203,7 +201,7 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
     }, [isReady, sendCommand]);
 
     return (
-      <View style={[styles.container, { width, height }, style]}>
+      <YoutubePlayerWrapper width={width} height={height} style={style}>
         <WebView
           ref={webViewRef}
           source={{ html: createPlayerHTML() }}
@@ -228,16 +226,12 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
           mixedContentMode="compatibility"
           thirdPartyCookiesEnabled={false}
         />
-      </View>
+      </YoutubePlayerWrapper>
     );
   },
 );
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#000',
-    overflow: 'hidden',
-  },
   webView: {
     flex: 1,
     backgroundColor: 'transparent',

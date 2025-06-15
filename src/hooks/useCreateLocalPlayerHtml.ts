@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
-import { escapeHtml, safeNumber, validateVideoId } from '../utils/validate';
 import { youtubeIframeScripts } from '../hooks/youtubeIframeScripts';
 import type { YoutubePlayerVars } from '../types/youtube';
+import { escapeHtml, safeNumber, validateVideoId } from '../utils/validate';
 
 const useCreateLocalPlayerHtml = ({
   videoId,
@@ -14,7 +14,6 @@ const useCreateLocalPlayerHtml = ({
   muted,
   playsinline,
   rel,
-  modestbranding,
 }: YoutubePlayerVars & { videoId: string }) => {
   const createPlayerHTML = useCallback(() => {
     if (!validateVideoId(videoId)) {
@@ -101,7 +100,6 @@ const useCreateLocalPlayerHtml = ({
                     playsinline: ${playsinline ? 1 : 0},
                     rel: ${rel ? 1 : 0},
                     ${safeOrigin ? `origin: '${safeOrigin}',` : ''}
-                    modestbranding: ${modestbranding ? 1 : 0},
                     enablejsapi: 1
                   },
                   events: {
@@ -196,7 +194,7 @@ const useCreateLocalPlayerHtml = ({
       </body>
     </html>
   `;
-  }, [videoId, origin, startTime, endTime, autoplay, controls, loop, muted, playsinline, rel, modestbranding]);
+  }, [videoId, origin, startTime, endTime, autoplay, controls, loop, muted, playsinline, rel]);
 
   return createPlayerHTML;
 };

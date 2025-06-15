@@ -6,7 +6,7 @@
     "useIgnoreFile": false
   },
   "files": {
-    "include": ["src/**/*.{js,ts,tsx}", "example/src/**/*.{js,ts,tsx}"],
+    "include": ["src/**/*", "example/src/**/*"],
     "ignoreUnknown": false,
     "ignore": ["lib", "node_modules", "ios", "android"]
   },
@@ -20,7 +20,10 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
+      "recommended": true,
+      "suspicious": {
+        "noExplicitAny": "warn"
+      }
     }
   },
   "javascript": {

@@ -9,7 +9,6 @@ export type YoutubePlayerVars = {
   endTime?: number;
   playsinline?: boolean;
   rel?: boolean; // 관련 동영상 표시
-  modestbranding?: boolean; // YouTube 로고 숨김
   origin?: string; // 보안을 위한 origin 설정
 };
 
