@@ -163,7 +163,7 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
             const errorCode = event.data;
             onError?.({
               code: errorCode,
-              message: ERROR_CODES[errorCode],
+              message: ERROR_CODES[errorCode] || `Unknown error: ${errorCode}`,
             });
           },
           onPlaybackQualityChange: (event) => {

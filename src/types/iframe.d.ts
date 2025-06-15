@@ -150,7 +150,6 @@ export interface YouTubePlayer {
   setPlaybackQuality(suggestedQuality: string): Promise<void>;
   setPlaybackRate(suggestedRate: number): Promise<void>;
   setShuffle(shufflePlaylist: boolean): Promise<void>;
-  getSize(): Promise<PlayerSize>;
   setSize(width: number, height: number): Promise<object>;
   setVolume(volume: number): Promise<void>;
   stopVideo(): Promise<void>;
