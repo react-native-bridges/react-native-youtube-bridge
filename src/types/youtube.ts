@@ -19,7 +19,7 @@ export type YoutubePlayerProps = {
   height?: number | `${number}%`;
   style?: StyleProp<ViewStyle>;
   // Events
-  onReady?: () => void;
+  onReady?: (playerInfo: PlayerInfo) => void;
   onStateChange?: (state: PlayerState) => void;
   onError?: (error: YouTubeError) => void;
   onProgress?: (progress: ProgressData) => void;
@@ -52,6 +52,22 @@ export const ERROR_CODES = {
 } as const;
 
 export type PlaybackQuality = 'small' | 'medium' | 'large' | 'hd720' | 'hd1080' | 'highres';
+
+export type PlayerInfo = {
+  availablePlaybackRates?: number[];
+  availableQualityLevels?: PlaybackQuality[];
+  currentTime?: number;
+  duration?: number;
+  muted?: boolean;
+  playbackQuality?: PlaybackQuality;
+  playbackRate?: number;
+  playerState?: PlayerState;
+  size?: {
+    width: number;
+    height: number;
+  };
+  volume?: number;
+};
 
 export type ProgressData = {
   currentTime: number;

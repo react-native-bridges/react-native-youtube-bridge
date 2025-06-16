@@ -144,8 +144,21 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
           enablejsapi: 1,
         },
         events: {
-          onReady: () => {
-            onReady?.();
+          onReady: (event) => {
+            const { playerInfo } = event.target;
+
+            onReady?.({
+              availablePlaybackRates: playerInfo.availablePlaybackRates,
+              availableQualityLevels: playerInfo.availableQualityLevels,
+              currentTime: playerInfo.currentTime,
+              duration: playerInfo.duration,
+              muted: playerInfo.muted,
+              playbackQuality: playerInfo.playbackQuality,
+              playbackRate: playerInfo.playbackRate,
+              playerState: playerInfo.playerState,
+              size: playerInfo.size,
+              volume: playerInfo.volume,
+            });
             startProgressTracking();
           },
           onStateChange: (event) => {

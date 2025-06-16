@@ -51,8 +51,21 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
           console.log('handleMessage', data);
 
           if (data.type === 'ready') {
+            const { playerInfo } = data;
+
             setIsReady(true);
-            onReady?.();
+            onReady?.({
+              availablePlaybackRates: playerInfo.availablePlaybackRates,
+              availableQualityLevels: playerInfo.availableQualityLevels,
+              currentTime: playerInfo.currentTime,
+              duration: playerInfo.duration,
+              muted: playerInfo.muted,
+              playbackQuality: playerInfo.playbackQuality,
+              playbackRate: playerInfo.playbackRate,
+              playerState: playerInfo.playerState,
+              size: playerInfo.size,
+              volume: playerInfo.volume,
+            });
             return;
           }
 

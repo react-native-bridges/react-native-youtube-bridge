@@ -1,4 +1,4 @@
-import type { PlaybackQuality, PlayerState, ProgressData, YouTubeError } from './youtube';
+import type { PlaybackQuality, PlayerInfo, PlayerState, ProgressData, YouTubeError } from './youtube';
 
 export type MessageType =
   | 'ready'
@@ -12,8 +12,7 @@ export type MessageType =
 
 interface ReadyMessageData {
   type: 'ready';
-  duration: number;
-  availablePlaybackRates: number[];
+  playerInfo: PlayerInfo;
 }
 
 interface StateChangeMessageData {
