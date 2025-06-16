@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react';
-import { type StyleProp, StyleSheet, View, type ViewStyle } from 'react-native';
+import { type DimensionValue, type StyleProp, StyleSheet, View, type ViewStyle } from 'react-native';
 
 type YoutubePlayerWrapperProps = {
   children: ReactNode;
-  width?: number | `${number}%`;
-  height?: number | `${number}%`;
+  width?: DimensionValue;
+  height?: DimensionValue;
   style?: StyleProp<ViewStyle>;
 };
 

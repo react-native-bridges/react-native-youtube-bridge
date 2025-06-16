@@ -1,4 +1,6 @@
-import type { StyleProp, ViewStyle } from 'react-native';
+import type { CSSProperties } from 'react';
+import type { DimensionValue, StyleProp, ViewStyle } from 'react-native';
+import type { WebViewProps } from 'react-native-webview';
 
 export type YoutubePlayerVars = {
   autoplay?: boolean;
@@ -15,11 +17,24 @@ export type YoutubePlayerVars = {
 // YouTube IFrame API official documentation based
 export type YoutubePlayerProps = {
   videoId: string;
-  width?: number | `${number}%`;
-  height?: number | `${number}%`;
+  width?: DimensionValue;
+  height?: DimensionValue;
   style?: StyleProp<ViewStyle>;
+  /**
+   * @platform ios, android
+   */
+  webViewStyle?: StyleProp<ViewStyle>;
+  /**
+   * @platform ios, android
+   */
+  webviewProps?: Omit<WebViewProps, 'ref' | 'source' | 'style' | 'onMessage'>;
+  /**
+   * @platform web
+   */
+  iframeStyle?: CSSProperties;
+
   // Events
-  onReady?: () => void;
+  onReady?: (playerInfo: PlayerInfo) => void;
   onStateChange?: (state: PlayerState) => void;
   onError?: (error: YouTubeError) => void;
   onProgress?: (progress: ProgressData) => void;
@@ -52,6 +67,22 @@ export const ERROR_CODES = {
 } as const;
 
 export type PlaybackQuality = 'small' | 'medium' | 'large' | 'hd720' | 'hd1080' | 'highres';
+
+export type PlayerInfo = {
+  availablePlaybackRates?: number[];
+  availableQualityLevels?: PlaybackQuality[];
+  currentTime?: number;
+  duration?: number;
+  muted?: boolean;
+  playbackQuality?: PlaybackQuality;
+  playbackRate?: number;
+  playerState?: PlayerState;
+  size?: {
+    width: number;
+    height: number;
+  };
+  volume?: number;
+};
 
 export type ProgressData = {
   currentTime: number;

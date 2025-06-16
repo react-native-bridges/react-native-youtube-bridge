@@ -53,8 +53,7 @@ const onPlayerReady = /* js */ `
     try {
       window.ReactNativeWebView.postMessage(JSON.stringify({
         type: 'ready',
-        duration: player.getDuration(),
-        availablePlaybackRates: player.getAvailablePlaybackRates()
+        playerInfo: event.target.playerInfo
       }));
       startProgressTracking();
     } catch (error) {

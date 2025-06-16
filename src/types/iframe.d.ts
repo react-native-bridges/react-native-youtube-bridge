@@ -1,4 +1,4 @@
-import type { ERROR_CODES, PlaybackQuality, PlayerState, YouTubeError } from './youtube';
+import type { ERROR_CODES, PlaybackQuality, PlayerInfo, PlayerState, YouTubeError } from './youtube';
 
 declare global {
   interface Window {
@@ -16,6 +16,14 @@ export type EventType =
   | 'onError'
   | 'onApiChange'
   | 'onAutoplayBlocked';
+
+export type PlayerEvent<T> = {
+  target: YouTubePlayer & {
+    options: Options;
+    playerInfo: PlayerInfo;
+  };
+  data: T;
+};
 
 export interface Options {
   width?: number | string | undefined;
@@ -48,12 +56,12 @@ export interface Options {
     | undefined;
   events?:
     | {
-        onReady?: (event: CustomEvent) => void;
-        onStateChange?: (event: { data: PlayerState }) => void;
-        onPlaybackQualityChange?: (event: { data: PlaybackQuality }) => void;
-        onPlaybackRateChange?: (event: { data: number }) => void;
-        onError?: (event: { data: keyof typeof ERROR_CODES }) => void;
-        onAutoplayBlocked?: (event: CustomEvent) => void;
+        onReady?: (event: PlayerEvent<null>) => void;
+        onStateChange?: (event: PlayerEvent<PlayerState>) => void;
+        onPlaybackQualityChange?: (event: PlayerEvent<PlaybackQuality>) => void;
+        onPlaybackRateChange?: (event: PlayerEvent<number>) => void;
+        onError?: (event: PlayerEvent<keyof typeof ERROR_CODES>) => void;
+        onAutoplayBlocked?: (event: PlayerEvent<null>) => void;
       }
     | undefined;
 }

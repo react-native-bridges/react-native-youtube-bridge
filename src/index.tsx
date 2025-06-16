@@ -8,4 +8,5 @@ export {
   type PlaybackQuality,
   type PlayerControls,
   type YouTubeError,
+  type PlayerInfo,
 } from './types/youtube';

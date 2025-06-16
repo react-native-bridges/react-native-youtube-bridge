@@ -1,12 +1,19 @@
 import { useCallback, useRef, useState } from 'react';
-import { Alert, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Platform, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {
   type PlayerControls,
+  type PlayerInfo,
   PlayerState,
   type ProgressData,
   type YouTubeError,
   YoutubePlayer,
 } from 'react-native-youtube-bridge';
+
+const formatTime = (seconds: number): string => {
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+};
 
 function App() {
   const playerRef = useRef<PlayerControls>(null);
@@ -20,19 +27,25 @@ function App() {
   const [isMuted, setIsMuted] = useState(false);
   const [videoId, setVideoId] = useState('AbZH7XWDW_k');
 
-  const handleReady = useCallback(async () => {
+  const handleReady = useCallback(async (playerInfo: PlayerInfo) => {
     console.log('Player is ready!');
     Alert.alert('알림', 'YouTube 플레이어가 준비되었습니다!');
 
     // 플레이어 준비 완료 후 정보 가져오기
     try {
-      const rates = await playerRef.current?.getAvailablePlaybackRates();
-      const vol = await playerRef.current?.getVolume();
-      const muted = await playerRef.current?.isMuted();
+      console.log('rates', playerInfo.availablePlaybackRates);
+      console.log('vol', playerInfo.volume);
+      console.log('muted', playerInfo.muted);
 
-      if (rates) setAvailableRates(rates);
-      if (vol !== undefined) setVolume(vol);
-      if (muted !== undefined) setIsMuted(muted);
+      if (playerInfo.availablePlaybackRates) {
+        setAvailableRates(playerInfo.availablePlaybackRates);
+      }
+      if (playerInfo.volume !== undefined) {
+        setVolume(playerInfo.volume);
+      }
+      if (playerInfo.muted !== undefined) {
+        setIsMuted(playerInfo.muted);
+      }
     } catch (error) {
       console.error('Error getting player info:', error);
     }
@@ -90,41 +103,54 @@ function App() {
     Alert.alert('알림', '자동재생이 브라우저에 의해 차단되었습니다');
   }, []);
 
-  const formatTime = (seconds: number): string => {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
-
   const changePlaybackRate = (rate: number) => {
     playerRef.current?.setPlaybackRate(rate);
   };
 
-  const changeVolume = async (newVolume: number) => {
+  const changeVolume = (newVolume: number) => {
     playerRef.current?.setVolume(newVolume);
     setVolume(newVolume);
   };
 
-  const toggleMute = async () => {
+  const toggleMute = useCallback(() => {
     if (isMuted) {
       playerRef.current?.unMute();
-    } else {
-      playerRef.current?.mute();
+      setIsMuted(false);
+      return;
     }
-    const muted = await playerRef.current?.isMuted();
-    if (muted !== undefined) setIsMuted(muted);
-  };
+
+    playerRef.current?.mute();
+    setIsMuted(true);
+  }, [isMuted]);
+
+  const onPlay = useCallback(() => {
+    if (isPlaying) {
+      playerRef.current?.pause();
+      return;
+    }
+
+    playerRef.current?.play();
+  }, [isPlaying]);
 
   const getPlayerInfo = async () => {
     try {
-      const [currentTime, duration, url, _, state, loaded] = await Promise.all([
+      const [currentTime, duration, url, state, loaded] = await Promise.all([
         playerRef.current?.getCurrentTime(),
         playerRef.current?.getDuration(),
         playerRef.current?.getVideoUrl(),
-        playerRef.current?.getVideoEmbedCode(),
         playerRef.current?.getPlayerState(),
         playerRef.current?.getVideoLoadedFraction(),
       ]);
+
+      console.log(
+        `
+        currentTime: ${currentTime}
+        duration: ${duration}
+        url: ${url}
+        state: ${state}
+        loaded: ${loaded}
+        `,
+      );
 
       Alert.alert(
         '플레이어 정보',
@@ -151,7 +177,7 @@ function App() {
         <YoutubePlayer
           ref={playerRef}
           videoId={videoId}
-          height={220}
+          height={Platform.OS === 'web' ? 'auto' : undefined}
           playerVars={{
             autoplay: true,
             controls: true,
@@ -165,6 +191,12 @@ function App() {
           onPlaybackRateChange={handlePlaybackRateChange}
           onPlaybackQualityChange={handlePlaybackQualityChange}
           onAutoplayBlocked={handleAutoplayBlocked}
+          style={{
+            maxHeight: 400,
+          }}
+          iframeStyle={{
+            aspectRatio: 16 / 9,
+          }}
         />
 
         <View style={styles.progressContainer}>
@@ -187,15 +219,13 @@ function App() {
 
         <View style={styles.controls}>
           <TouchableOpacity
-            style={[styles.button, styles.playButton]}
-            onPress={() => {
-              if (isPlaying) {
-                playerRef.current?.pause();
-              } else {
-                playerRef.current?.play();
-              }
-            }}
+            style={[styles.button, styles.seekButton]}
+            onPress={() => playerRef.current?.seekTo(currentTime > 10 ? currentTime - 10 : 0)}
           >
+            <Text style={styles.buttonText}>⏪ -10초</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={[styles.button, styles.playButton]} onPress={onPlay}>
             <Text style={styles.buttonText}>{isPlaying ? '⏸️ 일시정지' : '▶️ 재생'}</Text>
           </TouchableOpacity>
 
@@ -205,7 +235,7 @@ function App() {
 
           <TouchableOpacity
             style={[styles.button, styles.seekButton]}
-            onPress={() => playerRef.current?.seekTo(currentTime + 10)}
+            onPress={() => playerRef.current?.seekTo(currentTime + 10, true)}
           >
             <Text style={styles.buttonText}>⏭️ +10초</Text>
           </TouchableOpacity>
