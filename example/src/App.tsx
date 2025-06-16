@@ -183,6 +183,7 @@ function App() {
             controls: true,
             playsinline: true,
             rel: false,
+            muted: true,
           }}
           onReady={handleReady}
           onStateChange={handleStateChange}

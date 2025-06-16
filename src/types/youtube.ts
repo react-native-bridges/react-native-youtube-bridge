@@ -3,6 +3,9 @@ import type { DimensionValue, StyleProp, ViewStyle } from 'react-native';
 import type { WebViewProps } from 'react-native-webview';
 
 export type YoutubePlayerVars = {
+  /**
+   * @description If the `muted` is not set to true when activating the `autoplay`, it may not work properly depending on browser policy. (https://developer.chrome.com/blog/autoplay)
+   */
   autoplay?: boolean;
   controls?: boolean;
   loop?: boolean;
