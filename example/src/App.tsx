@@ -2,11 +2,11 @@ import { useCallback, useRef, useState } from 'react';
 import { Alert, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {
   type PlayerControls,
+  type PlayerInfo,
   PlayerState,
   type ProgressData,
   type YouTubeError,
   YoutubePlayer,
-  type PlayerInfo,
 } from 'react-native-youtube-bridge';
 
 const formatTime = (seconds: number): string => {
