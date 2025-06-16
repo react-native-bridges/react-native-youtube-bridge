@@ -115,12 +115,12 @@ function App() {
   const toggleMute = useCallback(() => {
     if (isMuted) {
       playerRef.current?.unMute();
+      setIsMuted(false);
       return;
     }
 
     playerRef.current?.mute();
-
-    setIsMuted(!isMuted);
+    setIsMuted(true);
   }, [isMuted]);
 
   const onPlay = useCallback(() => {
