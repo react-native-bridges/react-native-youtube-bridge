@@ -1,8 +1,13 @@
-const startProgressTracking = `
+const startProgressTracking = /* js */ `
   function startProgressTracking() {
-    if (isDestroyed) return;
+    if (isDestroyed) {
+      return;
+    }
     
-    if (progressInterval) clearInterval(progressInterval);
+    if (progressInterval) {
+      clearInterval(progressInterval);
+    }
+
     progressInterval = setInterval(() => {
       if (isDestroyed || !player || !player.getCurrentTime) {
         stopProgressTracking();
@@ -17,10 +22,10 @@ const startProgressTracking = `
         
         window.ReactNativeWebView.postMessage(JSON.stringify({
           type: 'progress',
-          currentTime: currentTime,
-          duration: duration,
-          percentage: percentage,
-          loadedFraction: loadedFraction
+          currentTime,
+          duration,
+          percentage,
+          loadedFraction,
         }));
       } catch (error) {
         console.error('Progress tracking error:', error);
@@ -30,7 +35,7 @@ const startProgressTracking = `
   }
 `;
 
-const stopProgressTracking = `
+const stopProgressTracking = /* js */ `
   function stopProgressTracking() {
     if (progressInterval) {
       clearInterval(progressInterval);
@@ -39,9 +44,11 @@ const stopProgressTracking = `
   }
 `;
 
-const onPlayerReady = `
+const onPlayerReady = /* js */ `
   function onPlayerReady(event) {
-    if (isDestroyed) return;
+    if (isDestroyed) {
+      return;
+    }
     
     try {
       window.ReactNativeWebView.postMessage(JSON.stringify({
@@ -56,9 +63,11 @@ const onPlayerReady = `
   }
 `;
 
-const onPlayerStateChange = `
+const onPlayerStateChange = /* js */ `
   function onPlayerStateChange(event) {
-    if (isDestroyed) return;
+    if (isDestroyed) {
+      return;
+    }
     
     try {
       window.ReactNativeWebView.postMessage(JSON.stringify({
@@ -77,9 +86,11 @@ const onPlayerStateChange = `
   }
 `;
 
-const onPlayerError = `
+const onPlayerError = /* js */ `
   function onPlayerError(event) {
-    if (isDestroyed) return;
+    if (isDestroyed) {
+      return;
+    }
     
     var errorMessages = {
       2: 'INVALID_PARAMETER_VALUE',
@@ -103,9 +114,11 @@ const onPlayerError = `
   }
 `;
 
-const onPlaybackRateChange = `
+const onPlaybackRateChange = /* js */ `
   function onPlaybackRateChange(event) {
-    if (isDestroyed) return;
+    if (isDestroyed) {
+      return;
+    }
     
     try {
       window.ReactNativeWebView.postMessage(JSON.stringify({
@@ -118,9 +131,11 @@ const onPlaybackRateChange = `
   }
 `;
 
-const onPlaybackQualityChange = `
+const onPlaybackQualityChange = /* js */ `
   function onPlaybackQualityChange(event) {
-    if (isDestroyed) return;
+    if (isDestroyed) {
+      return;
+    }
     
     try {
       window.ReactNativeWebView.postMessage(JSON.stringify({
@@ -133,9 +148,11 @@ const onPlaybackQualityChange = `
   }
 `;
 
-const onAutoplayBlocked = `
+const onAutoplayBlocked = /* js */ `
   function onAutoplayBlocked(event) {
-    if (isDestroyed) return;
+    if (isDestroyed) {
+      return;
+    }
     
     try {
       window.ReactNativeWebView.postMessage(JSON.stringify({

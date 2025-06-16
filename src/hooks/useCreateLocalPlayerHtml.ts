@@ -26,7 +26,8 @@ const useCreateLocalPlayerHtml = ({
     const safeStartTime = safeNumber(startTime);
     const safeEndTime = endTime ? safeNumber(endTime) : undefined;
 
-    return `
+    // NOTE - https://marketplace.visualstudio.com/items?itemName=Tobermory.es6-string-html
+    return /* html */ `
     <!DOCTYPE html>
     <html>
       <head>
@@ -83,7 +84,9 @@ const useCreateLocalPlayerHtml = ({
             window.addEventListener('beforeunload', cleanup);
 
             window.onYouTubeIframeAPIReady = function() {
-              if (isDestroyed) return;
+              if (isDestroyed) {
+                return;
+              }
               
               try {
                 player = new YT.Player('player', {
@@ -171,7 +174,9 @@ const useCreateLocalPlayerHtml = ({
             };
 
             window.addEventListener('message', function(event) {
-              if (isDestroyed) return;
+              if (isDestroyed) {
+                return;
+              }
               
               try {
                 const message = JSON.parse(event.data);
