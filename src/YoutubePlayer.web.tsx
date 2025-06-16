@@ -27,11 +27,11 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
         playsinline: true,
         rel: false,
       },
+      iframeStyle,
     },
     ref,
   ) => {
     const { startTime = 0, endTime, autoplay, controls, loop, playsinline, rel } = playerVars;
-
     const { width: screenWidth } = useWindowDimensions();
 
     const playerRef = useRef<YouTubePlayer>(null);
@@ -390,6 +390,7 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
           style={{
             width: '100%',
             height: '100%',
+            ...iframeStyle,
           }}
         />
       </YoutubePlayerWrapper>

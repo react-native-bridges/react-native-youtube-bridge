@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
-import { Alert, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Platform, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {
   type PlayerControls,
   type PlayerInfo,
@@ -177,6 +177,7 @@ function App() {
         <YoutubePlayer
           ref={playerRef}
           videoId={videoId}
+          height={Platform.OS === 'web' ? 'auto' : undefined}
           playerVars={{
             autoplay: true,
             controls: true,
@@ -192,6 +193,9 @@ function App() {
           onAutoplayBlocked={handleAutoplayBlocked}
           style={{
             maxHeight: 400,
+          }}
+          iframeStyle={{
+            aspectRatio: 16 / 9,
           }}
         />
 

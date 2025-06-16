@@ -1,4 +1,6 @@
-import type { StyleProp, ViewStyle } from 'react-native';
+import type { CSSProperties } from 'react';
+import type { DimensionValue, StyleProp, ViewStyle } from 'react-native';
+import type { WebViewProps } from 'react-native-webview';
 
 export type YoutubePlayerVars = {
   autoplay?: boolean;
@@ -15,9 +17,22 @@ export type YoutubePlayerVars = {
 // YouTube IFrame API official documentation based
 export type YoutubePlayerProps = {
   videoId: string;
-  width?: number | `${number}%`;
-  height?: number | `${number}%`;
+  width?: DimensionValue;
+  height?: DimensionValue;
   style?: StyleProp<ViewStyle>;
+  /**
+   * @platform ios, android
+   */
+  webViewStyle?: StyleProp<ViewStyle>;
+  /**
+   * @platform ios, android
+   */
+  webviewProps?: Omit<WebViewProps, 'ref' | 'source' | 'style' | 'onMessage'>;
+  /**
+   * @platform web
+   */
+  iframeStyle?: CSSProperties;
+
   // Events
   onReady?: (playerInfo: PlayerInfo) => void;
   onStateChange?: (state: PlayerState) => void;

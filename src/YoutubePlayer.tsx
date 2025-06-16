@@ -31,6 +31,8 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
         playsinline: true,
         rel: false,
       },
+      webViewStyle,
+      webviewProps,
     },
     ref,
   ) => {
@@ -218,8 +220,9 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
         <WebView
           ref={webViewRef}
           source={{ html: createPlayerHTML() }}
-          style={styles.webView}
+          style={[styles.webView, webViewStyle]}
           onMessage={handleMessage}
+          {...webviewProps}
           javaScriptEnabled={true}
           originWhitelist={['*']}
           domStorageEnabled={true}
