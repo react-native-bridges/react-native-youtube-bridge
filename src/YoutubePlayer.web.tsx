@@ -147,6 +147,10 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
           onReady: (event) => {
             const { playerInfo } = event.target;
 
+            if (playerVars.autoplay) {
+              event.target.playVideo();
+            }
+
             onReady?.({
               availablePlaybackRates: playerInfo.availablePlaybackRates,
               availableQualityLevels: playerInfo.availableQualityLevels,
