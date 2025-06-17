@@ -1,4 +1,4 @@
-blank_issues_enabled: false
+blank_issues_enabled: true
 contact_links:
   - name: Feature Request 💡
     url: https://github.com/react-native-bridges/react-native-youtube-bridge/discussions/new?category=ideas
