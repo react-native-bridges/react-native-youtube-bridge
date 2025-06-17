@@ -24,11 +24,9 @@ runs:
           ~/.bun/install/cache
         key: ${{ runner.os }}-bun-${{ inputs.working-directory }}-${{ hashFiles(format('{0}/bun.lock', inputs.working-directory)) }}-${{ hashFiles(format('{0}/package.json', inputs.working-directory)) }}
         restore-keys: |
-          ${{ runner.os }}-bun-${{ inputs.working-directory }}-${{ hashFiles(format('{0}/bun.lock', inputs.working-directory)) }}
-          ${{ runner.os }}-bun-${{ inputs.working-directory }}-
+          ${{ runner.os }}-bun-${{ inputs.working-directory }}-${{ hashFiles(format('{0}/bun.lock', inputs.working-directory)) }}-
 
     - name: Install dependencies
-      if: steps.bun-cache.outputs.cache-hit != 'true'
       run: bun install --frozen-lockfile
       working-directory: ${{ inputs.working-directory }}
       shell: bash

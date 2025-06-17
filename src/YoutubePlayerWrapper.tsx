@@ -9,7 +9,9 @@ type YoutubePlayerWrapperProps = {
 };
 
 function YoutubePlayerWrapper({ children, width, height, style }: YoutubePlayerWrapperProps) {
-  return <View style={[styles.container, { width, height }, style]}>{children}</View>;
+  const safeStyles = StyleSheet.flatten([styles.container, { width, height }, style]);
+
+  return <View style={safeStyles}>{children}</View>;
 }
 
 const styles = StyleSheet.create({

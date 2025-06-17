@@ -1,5 +1,5 @@
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { Dimensions, StyleSheet } from 'react-native';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import { type DataDetectorTypes, Dimensions, StyleSheet } from 'react-native';
 import WebView, { type WebViewMessageEvent } from 'react-native-webview';
 import YoutubePlayerWrapper from './YoutubePlayerWrapper';
 import useCreateLocalPlayerHtml from './hooks/useCreateLocalPlayerHtml';
@@ -42,6 +42,8 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
     const [isReady, setIsReady] = useState(false);
     const commandIdRef = useRef(0);
     const pendingCommandsRef = useRef<Map<string, (result: unknown) => void>>(new Map());
+
+    const dataDetectorTypes = useMemo(() => ['none'] as DataDetectorTypes[], []);
 
     const createPlayerHTML = useCreateLocalPlayerHtml({ videoId, ...playerVars });
 
@@ -132,6 +134,7 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
           if (needsResult && messageId) {
             const timeout = setTimeout(() => {
               pendingCommandsRef.current.delete(messageId);
+              console.warn('Command timeout:', command, messageId);
               resolve(null);
             }, 5000);
 
@@ -141,15 +144,19 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
             });
           }
 
-          const message = JSON.stringify({
+          const commandData = {
             command,
             args,
-            id: messageId,
-          });
+            ...(messageId && { id: messageId }),
+          };
 
-          console.log('sendCommand', message);
+          const injectedJS = /*js*/ `
+            window.__execCommand && window.__execCommand(${JSON.stringify(commandData)}); true;
+          `;
 
-          webViewRef.current?.postMessage(message);
+          console.log('Sending command:', command, injectedJS);
+
+          webViewRef.current?.injectJavaScript(injectedJS);
 
           if (!needsResult) {
             resolve(null);
@@ -237,7 +244,7 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
           }}
           // iOS specific props
           allowsLinkPreview={false}
-          dataDetectorTypes="none"
+          dataDetectorTypes={dataDetectorTypes}
           // Android specific props
           mixedContentMode="compatibility"
           thirdPartyCookiesEnabled={false}

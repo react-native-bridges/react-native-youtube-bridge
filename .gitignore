@@ -79,3 +79,7 @@ nitrogen/
 
 # build
 dist/
+
+# expo native
+example/ios/
+example/android/
