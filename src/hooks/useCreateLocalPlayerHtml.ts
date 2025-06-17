@@ -72,6 +72,8 @@ const useCreateLocalPlayerHtml = ({
             var progressInterval;
             var isDestroyed = false;
 
+            ${youtubeIframeScripts.receiveMessage}
+
             function cleanup() {
               isDestroyed = true;
               if (progressInterval) {

@@ -144,41 +144,17 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
             });
           }
 
-          const message = {
+          const commandData = {
             command,
             args,
-            id: messageId,
+            ...(messageId && { id: messageId }),
           };
 
-          console.log('sendCommand', message);
-
-          const injectedJS = /*javascript*/ `
-            (function() {
-              try {
-                const message = ${JSON.stringify(message)};
-                
-                if (window.playerCommands && typeof window.playerCommands[message.command] === 'function') {
-                  const result = window.playerCommands[message.command](...(message.args || []));
-                  
-                  if (message.id && window.ReactNativeWebView) {
-                    window.ReactNativeWebView.postMessage(JSON.stringify({
-                      type: 'commandResult',
-                      id: message.id,
-                      result: result
-                    }));
-                  }
-                }
-              } catch (error) {
-                if (window.ReactNativeWebView) {
-                  window.ReactNativeWebView.postMessage(JSON.stringify({
-                    type: 'error',
-                    error: { code: -4, message: 'Command execution failed: ' + error.message }
-                  }));
-                }
-              }
-            })();
-            true;
+          const injectedJS = /*js*/ `
+            window.__execCommand && window.__execCommand(${JSON.stringify(commandData)}); true;
           `;
+
+          console.log('Sending command:', command, injectedJS);
 
           webViewRef.current?.injectJavaScript(injectedJS);
 
