@@ -1,6 +1,6 @@
 # React Native Youtube Bridge
 
-> English | [한국어](./README.ko.md)
+> English | [한국어](./README-ko_kr.md)
 
 ## Overview
 Using a YouTube player in React Native requires complex setup and configuration.   
