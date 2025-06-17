@@ -27,31 +27,29 @@ function App() {
   const [isMuted, setIsMuted] = useState(false);
   const [videoId, setVideoId] = useState('AbZH7XWDW_k');
 
-  const handleReady = useCallback(async (playerInfo: PlayerInfo) => {
+  const handleReady = useCallback((playerInfo: PlayerInfo) => {
     console.log('Player is ready!');
     Alert.alert('알림', 'YouTube 플레이어가 준비되었습니다!');
 
     // 플레이어 준비 완료 후 정보 가져오기
-    try {
-      console.log('rates', playerInfo.availablePlaybackRates);
-      console.log('vol', playerInfo.volume);
-      console.log('muted', playerInfo.muted);
+    console.log('rates', playerInfo.availablePlaybackRates);
+    console.log('vol', playerInfo.volume);
+    console.log('muted', playerInfo.muted);
 
-      if (playerInfo.availablePlaybackRates) {
-        setAvailableRates(playerInfo.availablePlaybackRates);
-      }
-      if (playerInfo.volume !== undefined) {
-        setVolume(playerInfo.volume);
-      }
-      if (playerInfo.muted !== undefined) {
-        setIsMuted(playerInfo.muted);
-      }
-    } catch (error) {
-      console.error('Error getting player info:', error);
+    if (playerInfo?.availablePlaybackRates) {
+      setAvailableRates(playerInfo.availablePlaybackRates);
+    }
+
+    if (playerInfo?.volume !== undefined) {
+      setVolume(playerInfo.volume);
+    }
+
+    if (playerInfo?.muted !== undefined) {
+      setIsMuted(playerInfo.muted);
     }
   }, []);
 
-  const handleStateChange = (state: PlayerState) => {
+  const handleStateChange = useCallback((state: PlayerState) => {
     console.log('Player state changed:', state);
     setIsPlaying(state === PlayerState.PLAYING);
 
@@ -75,7 +73,7 @@ function App() {
         console.log('비디오가 큐에 준비되었습니다');
         break;
     }
-  };
+  }, []);
 
   const handleProgress = useCallback((progress: ProgressData) => {
     setCurrentTime(progress.currentTime);

@@ -12,7 +12,8 @@ We want this community to be friendly and respectful to each other. Please follo
 To get started with the project, run `bun` in the root directory to install the required dependencies for each package:
 
 ```sh
-bun
+bun install
+cd example && bun install
 ```
 
 The [example app](/example/) demonstrates usage of the library. You need to run it to test any changes you make.
@@ -87,21 +88,15 @@ Our pre-commit hooks verify that your commit message matches this format when co
 
 ### Linting and tests
 
-[ESLint](https://eslint.org/), [Prettier](https://prettier.io/), [TypeScript](https://www.typescriptlang.org/)
+[biomejs](https://biomejs.dev/), [TypeScript](https://www.typescriptlang.org/)
 
-We use [TypeScript](https://www.typescriptlang.org/) for type checking, [ESLint](https://eslint.org/) with [Prettier](https://prettier.io/) for linting and formatting the code, and [Jest](https://jestjs.io/) for testing.
+We use [TypeScript](https://www.typescriptlang.org/) for type checking, [biomejs](https://biomejs.dev/) for linting and formatting the code, and [Jest](https://jestjs.io/) for testing.
 
 Our pre-commit hooks verify that the linter and tests pass when committing.
 
 ### Publishing to npm
 
 We use [changesets](https://github.com/changesets/changesets) to make it easier to publish new versions. It handles common tasks like bumping version based on semver, creating tags and releases etc.
-
-To publish new versions, run the following:
-
-```sh
-bun run release
-```
 
 ### Scripts
 

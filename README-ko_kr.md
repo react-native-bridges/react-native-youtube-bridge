@@ -1,27 +1,27 @@
 # React Native Youtube Bridge
 
-> English | [한국어](./README-ko_kr.md)
+> [English](./README.md) | 한국어
 
-## Overview
-Using a YouTube player in React Native requires complex setup and configuration.   
-However, there are currently no actively maintained YouTube player libraries for React Native. (The most popular react-native-youtube-iframe's [latest release was July 2, 2023](https://github.com/LonelyCpp/react-native-youtube-iframe/releases/tag/v2.3.0))   
+## 개요
+React Native에서 YouTube 플레이어를 사용하려면 복잡한 설정이 필요합니다.   
+하지만 현재 지속적으로 유지보수되고 있는 React Native용 YouTube 플레이어 라이브러리가 없는 상황입니다. (가장 인기 있는 react-native-youtube-iframe의 [최근 릴리즈는 2023년 07월 02일](https://github.com/LonelyCpp/react-native-youtube-iframe/releases/tag/v2.3.0))   
 
-`react-native-youtube-bridge` is a library that makes it easy to use the [YouTube iframe Player API](https://developers.google.com/youtube/iframe_api_reference) in React Native applications.   
+`react-native-youtube-bridge`는 [YouTube iframe Player API](https://developers.google.com/youtube/iframe_api_reference)를 React Native에서 쉽게 사용할 수 있도록 도와주는 라이브러리입니다.   
 
-- ✅ TypeScript support
-- ✅ iOS, Android, and Web platform support
-- ✅ New Architecture support
-- ✅ Works without YouTube native player modules
-- ✅ Full [YouTube iframe Player API](https://developers.google.com/youtube/iframe_api_reference) feature support
-- ✅ Developer-friendly API
-- ✅ Expo support
+- ✅ TypeScript 지원
+- ✅ iOS, Android, Web 플랫폼 지원
+- ✅ New Architecture 지원
+- ✅ YouTube 네이티브 플레이어 모듈 없이도 사용 가능
+- ✅ [YouTube iframe Player API](https://developers.google.com/youtube/iframe_api_reference) 전체 기능 지원
+- ✅ 개발자 친화적인 API 제공
+- ✅ Expo 지원
 
-## Example
-> For a quick start, check out the [example](/example/).
+## 예제
+> 빠른 시작을 원하신다면 [예제](/example/)를 확인해보세요.
 
-- [Web Demo](https://react-native-youtube-bridge.pages.dev/) 
+- [웹 데모](https://react-native-youtube-bridge.pages.dev/)
 
-## Installation
+## 설치
 
 ```bash
 npm install react-native-youtube-bridge
@@ -33,7 +33,7 @@ yarn add react-native-youtube-bridge
 bun add react-native-youtube-bridge
 ```
 
-## Usage
+## 사용법
 
 ```tsx
 import { YoutubePlayer } from 'react-native-youtube-bridge';
@@ -45,37 +45,37 @@ function App() {
 }
 ```
 
-### Events
-The library fires [events](https://developers.google.com/youtube/iframe_api_reference#Events) to notify your application of YouTube iframe API state changes. You can subscribe to these events using callback functions.   
+### 이벤트
+YouTube iframe API의 상태 변화를 애플리케이션에 전달하기 위해 [이벤트](https://developers.google.com/youtube/iframe_api_reference#Events)를 발생시킵니다. 콜백 함수를 통해 원하는 이벤트를 구독할 수 있습니다.   
 
-> Note - Wrap callback functions with `useCallback` for performance optimization and to prevent abnormal behavior.
+> 주의 - 성능 최적화 및 비정상 동작 방지를 위해 콜백 함수는 `useCallback`으로 감싸주세요.
 
 ```tsx
 function App() {
   const playerRef = useRef<PlayerControls>(null);
 
   const handleReady = useCallback(() => {
-    console.log('Player is ready!');
+    console.log('플레이어 준비 완료!');
   }, []);
 
   const handleStateChange = useCallback((state: PlayerState) => {
-    console.log('Player state changed:', state);
+    console.log('플레이어 상태 변경:', state);
   }, []);
 
   const handlePlaybackRateChange = useCallback((rate: number) => {
-    console.log('Playback rate changed:', rate);
+    console.log('재생 속도 변경:', rate);
   }, []);
 
   const handlePlaybackQualityChange = useCallback((quality: string) => {
-    console.log('Playback quality changed:', quality);
+    console.log('재생 품질 변경:', quality);
   }, []);
 
   const handleAutoplayBlocked = useCallback(() => {
-    console.log('Autoplay was blocked');
+    console.log('자동 재생이 차단되었습니다');
   }, []);
 
   const handleError = useCallback((error: YouTubeError) => {
-    console.error('Player error:', error);
+    console.error('플레이어 오류:', error);
   }, []);
 
   return (
@@ -91,8 +91,8 @@ function App() {
 }
 ```
 
-### Functions
-You can control various player features like mute, play, volume, and more by calling YouTube iframe API [functions](https://developers.google.com/youtube/iframe_api_reference#Functions) through the `ref`.   
+### 기능
+YouTube iframe API의 [함수들](https://developers.google.com/youtube/iframe_api_reference#Functions)을 `ref`를 통해 호출하여 음소거, 재생, 볼륨 조절 등 다양한 플레이어 기능을 제어할 수 있습니다.   
 
 ```tsx
 function App() {
@@ -128,22 +128,22 @@ function App() {
           style={[styles.button, styles.seekButton]}
           onPress={() => seekTo(currentTime > 10 ? currentTime - 10 : 0)}
         >
-          <Text style={styles.buttonText}>⏪ -10s</Text>
+          <Text style={styles.buttonText}>⏪ -10초</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={[styles.button, styles.playButton]} onPress={onPlay}>
-          <Text style={styles.buttonText}>{isPlaying ? '⏸️ Pause' : '▶️ Play'}</Text>
+          <Text style={styles.buttonText}>{isPlaying ? '⏸️ 일시정지' : '▶️ 재생'}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={[styles.button, styles.stopButton]} onPress={stop}>
-          <Text style={styles.buttonText}>⏹️ Stop</Text>
+          <Text style={styles.buttonText}>⏹️ 정지</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={[styles.button, styles.seekButton]}
           onPress={() => seekTo(currentTime + 10, true)}
         >
-          <Text style={styles.buttonText}>⏭️ +10s</Text>
+          <Text style={styles.buttonText}>⏭️ +10초</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -151,8 +151,8 @@ function App() {
 }
 ```
 
-### Player Parameters
-You can customize the playback environment by configuring YouTube embedded player [parameters](https://developers.google.com/youtube/player_parameters#Parameters).
+### 플레이어 매개변수
+YouTube 내장 플레이어의 [매개변수](https://developers.google.com/youtube/player_parameters#Parameters)를 설정하여 재생 환경을 맞춤화할 수 있습니다.
 
 ```tsx
 function App() {
@@ -171,8 +171,8 @@ function App() {
 }
 ```
 
-### Styles
-You can customize the YouTube player's styling to match your application's design.
+### 스타일
+YouTube 플레이어의 스타일을 원하는 대로 커스터마이징할 수 있습니다.
 
 ```tsx
 function App() {
@@ -192,15 +192,15 @@ function App() {
       style={{
         borderRadius: 10,
       }}
-      // Web platform support
+      // 웹 플랫폼 지원
       iframeStyle={{
         aspectRatio: 16 / 9,
       }}
-      // iOS, Android platform support
+      // iOS, Android 플랫폼 지원
       webviewStyle={{
         // ...
       }}
-      // iOS, Android platform support
+      // iOS, Android 플랫폼 지원
       webviewProps={{
         // ...
       }}
@@ -209,13 +209,13 @@ function App() {
 }
 ```
 
-### Useful Features
+### 유용한 기능
 
-#### Playback Progress Tracking
+#### 재생 진행률 추적
 
 ```tsx
 function App() {
-  // Progress event callback called every second
+  // 1초마다 호출되는 진행률 이벤트 콜백
   const handleProgress = useCallback((progress: ProgressData) => {
     setCurrentTime(progress.currentTime);
     setDuration(progress.duration);
@@ -231,10 +231,10 @@ function App() {
 }
 ```
 
-## Contributing
+## 기여하기
 
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+리포지토리 기여 방법과 개발 워크플로우를 알아보려면 [기여 가이드](CONTRIBUTING.md)를 참고하세요.
 
-## License
+## 라이선스
 
 [MIT](./LICENSE)
