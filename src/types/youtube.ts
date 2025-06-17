@@ -22,6 +22,12 @@ export type YoutubePlayerProps = {
   videoId: string;
   width?: DimensionValue;
   height?: DimensionValue;
+  /**
+   * @description The interval (in milliseconds) at which `onProgress` callback is called.
+   * Must be a positive number to enable progress tracking.
+   * If not provided or set to 0/falsy value, progress tracking is disabled.
+   */
+  progressInterval?: number;
   style?: StyleProp<ViewStyle>;
   /**
    * @platform ios, android
@@ -40,6 +46,10 @@ export type YoutubePlayerProps = {
   onReady?: (playerInfo: PlayerInfo) => void;
   onStateChange?: (state: PlayerState) => void;
   onError?: (error: YouTubeError) => void;
+  /**
+   * @description Callback function called at the specified `progressInterval`.
+   * Only invoked when `progressInterval` is provided as a positive number.
+   */
   onProgress?: (progress: ProgressData) => void;
   onPlaybackRateChange?: (playbackRate: number) => void;
   onPlaybackQualityChange?: (quality: string) => void;

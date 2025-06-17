@@ -10,6 +10,31 @@ export type MessageType =
   | 'autoplayBlocked'
   | 'commandResult';
 
+export type CommandType =
+  | 'play'
+  | 'pause'
+  | 'stop'
+  | 'seekTo'
+  | 'setVolume'
+  | 'getVolume'
+  | 'mute'
+  | 'unMute'
+  | 'isMuted'
+  | 'getCurrentTime'
+  | 'getDuration'
+  | 'getVideoUrl'
+  | 'getVideoEmbedCode'
+  | 'getPlaybackRate'
+  | 'setPlaybackRate'
+  | 'getAvailablePlaybackRates'
+  | 'getPlayerState'
+  | 'getVideoLoadedFraction'
+  | 'loadVideoById'
+  | 'cueVideoById'
+  | 'setSize'
+  | 'cleanup'
+  | 'updateProgressInterval';
+
 interface ReadyMessageData {
   type: 'ready';
   playerInfo: PlayerInfo;

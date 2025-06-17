@@ -171,8 +171,19 @@ const useCreateLocalPlayerHtml = ({
               },
               
               setSize: (width, height) => player && player.setSize(width, height),
-              
-              cleanup: cleanup
+              updateProgressInterval: (newInterval) => {
+                window.currentInterval = newInterval;
+                
+                if (progressInterval) {
+                  clearInterval(progressInterval);
+                  progressInterval = null;
+                }
+                
+                if (player && player.getPlayerState() === YT.PlayerState.PLAYING) {
+                  startProgressTracking();
+                }
+              },
+              cleanup: cleanup,
             };
 
             window.addEventListener('message', function(event) {

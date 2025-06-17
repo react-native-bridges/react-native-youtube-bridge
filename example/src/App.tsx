@@ -26,6 +26,7 @@ function App() {
   const [volume, setVolume] = useState(100);
   const [isMuted, setIsMuted] = useState(false);
   const [videoId, setVideoId] = useState('AbZH7XWDW_k');
+  const [progressInterval, setProgressInterval] = useState(1000);
 
   const handleReady = useCallback((playerInfo: PlayerInfo) => {
     console.log('Player is ready!');
@@ -183,6 +184,7 @@ function App() {
             rel: false,
             muted: true,
           }}
+          progressInterval={progressInterval}
           onReady={handleReady}
           onStateChange={handleStateChange}
           onProgress={handleProgress}
@@ -214,6 +216,15 @@ function App() {
             <View style={[styles.bufferFill, { width: `${loadedFraction * 100}%` }]} />
           </View>
           <Text style={styles.bufferText}>버퍼: {(loadedFraction * 100).toFixed(1)}%</Text>
+        </View>
+
+        <View style={styles.progressContainer}>
+          <TouchableOpacity
+            style={[styles.button, { backgroundColor: progressInterval === 0 ? '#9E9E9E' : '#4CAF50' }]}
+            onPress={() => setProgressInterval(progressInterval === 0 ? 1000 : 0)}
+          >
+            <Text style={styles.buttonText}>{progressInterval}ms interval</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.controls}>
