@@ -166,17 +166,35 @@ const onAutoplayBlocked = /* js */ `
 const receiveMessage = /* js */ `
   window.__execCommand = function(commandData) {
     if (isDestroyed) {
-      console.warn('Player is destroyed, ignoring command');
       return;
     }
 
     try {
       const { command, args = [], id } = commandData;
-      console.log('Executing command:', command, args);
       
       if (window.playerCommands && typeof window.playerCommands[command] === 'function') {
         const result = window.playerCommands[command](...args);
         
+        if (result instanceof Promise) {
+          return result
+            .then(r =>
+              id &&
+              window.ReactNativeWebView?.postMessage(
+                JSON.stringify({ type: 'commandResult', id, result: r })
+              )
+            )
+            .catch(err =>
+              id &&
+              window.ReactNativeWebView?.postMessage(
+                JSON.stringify({
+                  type: 'error',
+                  id,
+                  error: { code: -5, message: err?.message || String(err) }
+                })
+              )
+            );
+        }
+
         if (id && window.ReactNativeWebView) {
           window.ReactNativeWebView.postMessage(JSON.stringify({
             type: 'commandResult',
