@@ -1,5 +1,5 @@
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { Dimensions, StyleSheet } from 'react-native';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import { type DataDetectorTypes, Dimensions, StyleSheet } from 'react-native';
 import WebView, { type WebViewMessageEvent } from 'react-native-webview';
 import YoutubePlayerWrapper from './YoutubePlayerWrapper';
 import useCreateLocalPlayerHtml from './hooks/useCreateLocalPlayerHtml';
@@ -42,6 +42,8 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
     const [isReady, setIsReady] = useState(false);
     const commandIdRef = useRef(0);
     const pendingCommandsRef = useRef<Map<string, (result: unknown) => void>>(new Map());
+
+    const dataDetectorTypes = useMemo(() => ['none'] as DataDetectorTypes[], []);
 
     const createPlayerHTML = useCreateLocalPlayerHtml({ videoId, ...playerVars });
 
@@ -132,6 +134,7 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
           if (needsResult && messageId) {
             const timeout = setTimeout(() => {
               pendingCommandsRef.current.delete(messageId);
+              console.warn('Command timeout:', command, messageId);
               resolve(null);
             }, 5000);
 
@@ -141,15 +144,43 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
             });
           }
 
-          const message = JSON.stringify({
+          const message = {
             command,
             args,
             id: messageId,
-          });
+          };
 
           console.log('sendCommand', message);
 
-          webViewRef.current?.postMessage(message);
+          const injectedJS = /*javascript*/ `
+            (function() {
+              try {
+                const message = ${JSON.stringify(message)};
+                
+                if (window.playerCommands && typeof window.playerCommands[message.command] === 'function') {
+                  const result = window.playerCommands[message.command](...(message.args || []));
+                  
+                  if (message.id && window.ReactNativeWebView) {
+                    window.ReactNativeWebView.postMessage(JSON.stringify({
+                      type: 'commandResult',
+                      id: message.id,
+                      result: result
+                    }));
+                  }
+                }
+              } catch (error) {
+                if (window.ReactNativeWebView) {
+                  window.ReactNativeWebView.postMessage(JSON.stringify({
+                    type: 'error',
+                    error: { code: -4, message: 'Command execution failed: ' + error.message }
+                  }));
+                }
+              }
+            })();
+            true;
+          `;
+
+          webViewRef.current?.injectJavaScript(injectedJS);
 
           if (!needsResult) {
             resolve(null);
@@ -237,7 +268,7 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
           }}
           // iOS specific props
           allowsLinkPreview={false}
-          dataDetectorTypes="none"
+          dataDetectorTypes={dataDetectorTypes}
           // Android specific props
           mixedContentMode="compatibility"
           thirdPartyCookiesEnabled={false}
