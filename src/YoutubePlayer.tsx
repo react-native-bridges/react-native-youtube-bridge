@@ -5,6 +5,7 @@ import YoutubePlayerWrapper from './YoutubePlayerWrapper';
 import useCreateLocalPlayerHtml from './hooks/useCreateLocalPlayerHtml';
 import type { CommandType, MessageData } from './types/message';
 import type { PlayerControls, YoutubePlayerProps } from './types/youtube';
+import { safeNumber } from './utils/validate';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -229,7 +230,9 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
 
     useEffect(() => {
       if (isReady) {
-        sendCommand('updateProgressInterval', [progressInterval]);
+        const safeInterval = safeNumber(progressInterval);
+
+        sendCommand('updateProgressInterval', [safeInterval]);
       }
     }, [progressInterval, isReady, sendCommand]);
 

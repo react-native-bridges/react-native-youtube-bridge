@@ -172,14 +172,16 @@ const useCreateLocalPlayerHtml = ({
               
               setSize: (width, height) => player && player.setSize(width, height),
               updateProgressInterval: (newInterval) => {
-                window.currentInterval = newInterval;
+                const interval = Number(newInterval) > 0 ? Number(newInterval) : null;
+
+                window.currentInterval = interval;
                 
                 if (progressInterval) {
                   clearInterval(progressInterval);
                   progressInterval = null;
                 }
                 
-                if (player && player.getPlayerState() === YT.PlayerState.PLAYING) {
+                if (interval && player && player.getPlayerState() === YT.PlayerState.PLAYING) {
                   startProgressTracking();
                 }
               },

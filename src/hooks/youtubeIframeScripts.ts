@@ -1,6 +1,6 @@
 const startProgressTracking = /* js */ `
   function startProgressTracking() {
-    if (isDestroyed || !window.currentInterval) {
+    if (isDestroyed || typeof window.currentInterval !== 'number' || window.currentInterval <= 0) {
       return;
     }
     

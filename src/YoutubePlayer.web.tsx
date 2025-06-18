@@ -39,8 +39,7 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
     const containerRef = useRef<HTMLDivElement>(null);
     const createPlayerRef = useRef<() => void>(null);
     const progressInterval = useRef<NodeJS.Timeout | null>(null);
-
-    const intervalRef = useRef(interval);
+    const intervalRef = useRef<number>(interval);
 
     const stopProgressTracking = useCallback(() => {
       if (progressInterval.current) {
