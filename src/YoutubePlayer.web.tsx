@@ -41,6 +41,7 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
     const createPlayerRef = useRef<() => void>(null);
     const progressInterval = useRef<NodeJS.Timeout | null>(null);
     const intervalRef = useRef<number>(interval);
+    const seekTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     const stopProgressTracking = useCallback(() => {
       if (progressInterval.current) {
@@ -139,7 +140,12 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
     }, []);
 
     createPlayerRef.current = () => {
-      if (!containerRef.current || !window.YT?.Player || !validateVideoId(videoId)) {
+      if (!containerRef.current || !window.YT?.Player) {
+        return;
+      }
+
+      if (!validateVideoId(videoId)) {
+        onError?.({ code: -2, message: 'Invalid YouTube videoId supplied' });
         return;
       }
 
@@ -306,7 +312,11 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
       (seconds: number, allowSeekAhead = true) => {
         playerRef.current?.seekTo(seconds, allowSeekAhead);
 
-        setTimeout(() => {
+        if (seekTimeoutRef.current) {
+          clearTimeout(seekTimeoutRef.current);
+        }
+
+        seekTimeoutRef.current = setTimeout(() => {
           sendProgress();
         }, 200);
       },
