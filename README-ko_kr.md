@@ -189,11 +189,11 @@ function App() {
         aspectRatio: 16 / 9,
       }}
       // iOS, Android 플랫폼 지원
-      webviewStyle={{
+      webViewStyle={{
         // ...
       }}
       // iOS, Android 플랫폼 지원
-      webviewProps={{
+      webViewProps={{
         // ...
       }}
     />

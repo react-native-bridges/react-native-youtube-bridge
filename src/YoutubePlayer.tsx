@@ -34,7 +34,7 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
         rel: false,
       },
       webViewStyle,
-      webviewProps,
+      webViewProps,
     },
     ref,
   ) => {
@@ -243,7 +243,7 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
           source={{ html: createPlayerHTML() }}
           style={[styles.webView, webViewStyle]}
           onMessage={handleMessage}
-          {...webviewProps}
+          {...webViewProps}
           javaScriptEnabled
           domStorageEnabled
           allowsFullscreenVideo
