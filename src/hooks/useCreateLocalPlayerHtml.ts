@@ -73,6 +73,7 @@ const useCreateLocalPlayerHtml = ({
             var isDestroyed = false;
 
             ${youtubeIframeScripts.receiveMessage}
+            ${youtubeIframeScripts.sendProgress}
 
             function cleanup() {
               isDestroyed = true;
@@ -133,7 +134,17 @@ const useCreateLocalPlayerHtml = ({
               play: () => player && player.playVideo(),
               pause: () => player && player.pauseVideo(),
               stop: () => player && player.stopVideo(),
-              seekTo: (seconds, allowSeekAhead) => player && player.seekTo(seconds, allowSeekAhead !== false),
+              seekTo: (seconds, allowSeekAhead) => {
+                if (!player) {
+                  return;
+                }
+
+                player.seekTo(seconds, allowSeekAhead !== false);
+                
+                setTimeout(() => {
+                  sendProgress();
+                }, 200);
+              },
               
               setVolume: (volume) => player && player.setVolume(volume),
               getVolume: () => player ? player.getVolume() : 0,
