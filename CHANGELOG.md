@@ -1,5 +1,14 @@
 # react-native-youtube-bridge
 
+## 0.2.1
+
+### Patch Changes
+
+- b4cdf79: fix: where onProgress is not called when seekTo is invoked
+  - add TSDoc documentation
+  - add defensive logic for cases without videoId
+  - fix issue where seekTo doesn't work properly when paused without interval
+
 ## 0.2.0
 
 ### Minor Changes

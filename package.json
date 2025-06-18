@@ -1,6 +1,6 @@
 {
   "name": "react-native-youtube-bridge",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "react-native-youtube",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
