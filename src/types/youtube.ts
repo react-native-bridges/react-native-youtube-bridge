@@ -36,7 +36,7 @@ export type YoutubePlayerProps = {
   /**
    * @platform ios, android
    */
-  webviewProps?: Omit<WebViewProps, 'ref' | 'source' | 'style' | 'onMessage'>;
+  webViewProps?: Omit<WebViewProps, 'ref' | 'source' | 'style' | 'onMessage'>;
   /**
    * @platform web
    */
