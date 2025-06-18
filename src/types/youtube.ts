@@ -84,9 +84,16 @@ export enum PlayerState {
   CUED = 5,
 }
 
+type YouTubeErrorCode = keyof typeof ERROR_CODES;
+type YouTubeErrorMessage = (typeof ERROR_CODES)[YouTubeErrorCode];
+
 export type YouTubeError = {
-  code: number;
-  message: string;
+  /**
+   * @description `2, 5, 100, 101, 150` YouTube error code.
+   * @see https://developers.google.com/youtube/iframe_api_reference#Events
+   */
+  code: YouTubeErrorCode;
+  message: YouTubeErrorMessage;
 };
 
 export const ERROR_CODES = {
@@ -94,7 +101,12 @@ export const ERROR_CODES = {
   5: 'HTML5_PLAYER_ERROR',
   100: 'VIDEO_NOT_FOUND_OR_PRIVATE',
   101: 'EMBEDDED_PLAYBACK_NOT_ALLOWED',
-  150: 'EMBEDDED_PLAYBACK_NOT_ALLOWED_SAME_AS_101',
+  150: 'EMBEDDED_RESTRICTED',
+  1000: 'FAILED_TO_PARSE_WEBVIEW_MESSAGE',
+  1001: 'WEBVIEW_LOADING_ERROR',
+  1002: 'INVALID_YOUTUBE_VIDEO_ID',
+  1003: 'FAILED_TO_LOAD_YOUTUBE_API',
+  1004: 'UNKNOWN_ERROR',
 } as const;
 
 export type PlaybackQuality = 'small' | 'medium' | 'large' | 'hd720' | 'hd1080' | 'highres';
