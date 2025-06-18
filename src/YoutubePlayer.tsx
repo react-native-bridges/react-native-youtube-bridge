@@ -169,10 +169,17 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
     );
 
     useEffect(() => {
-      if (isReady && validateVideoId(videoId)) {
-        sendCommand('loadVideoById', [videoId, startTime, endTime]);
+      if (!isReady) {
+        return;
       }
-    }, [videoId, startTime, endTime, isReady, sendCommand]);
+
+      if (!validateVideoId(videoId)) {
+        onError?.({ code: 1002, message: 'INVALID_YOUTUBE_VIDEO_ID' });
+        return;
+      }
+
+      sendCommand('loadVideoById', [videoId, startTime, endTime]);
+    }, [videoId, startTime, endTime, isReady, sendCommand, onError]);
 
     useImperativeHandle(
       ref,
