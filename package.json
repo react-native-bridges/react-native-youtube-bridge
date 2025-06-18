@@ -61,7 +61,7 @@
   },
   "homepage": "https://github.com/react-native-bridges/react-native-youtube-bridge#readme",
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "access": "public"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
