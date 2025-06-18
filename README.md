@@ -12,7 +12,7 @@ However, there are currently no actively maintained YouTube player libraries for
 - ✅ iOS, Android, and Web platform support
 - ✅ New Architecture support
 - ✅ Works without YouTube native player modules
-- ✅ Full [YouTube iframe Player API](https://developers.google.com/youtube/iframe_api_reference) feature support
+- ✅ [YouTube iframe Player API](https://developers.google.com/youtube/iframe_api_reference) feature support
 - ✅ Developer-friendly API
 - ✅ Expo support
 
@@ -48,7 +48,7 @@ function App() {
 ### Events
 The library fires [events](https://developers.google.com/youtube/iframe_api_reference#Events) to notify your application of YouTube iframe API state changes. You can subscribe to these events using callback functions.   
 
-> Note - Wrap callback functions with `useCallback` for performance optimization and to prevent abnormal behavior.
+> 🔔 Note - Wrap callback functions with `useCallback` for performance optimization and to prevent abnormal behavior.
 
 ```tsx
 function App() {
@@ -178,17 +178,9 @@ You can customize the YouTube player's styling to match your application's desig
 function App() {
   return (
     <YoutubePlayer
-      ref={playerRef}
       videoId={videoId}
       height={400}
       width={200}
-      onReady={handleReady}
-      onStateChange={handleStateChange}
-      onProgress={handleProgress}
-      onError={handleError}
-      onPlaybackRateChange={handlePlaybackRateChange}
-      onPlaybackQualityChange={handlePlaybackQualityChange}
-      onAutoplayBlocked={handleAutoplayBlocked}
       style={{
         borderRadius: 10,
       }}
