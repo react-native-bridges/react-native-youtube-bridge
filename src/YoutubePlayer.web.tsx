@@ -145,7 +145,7 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
       }
 
       if (!validateVideoId(videoId)) {
-        onError?.({ code: -2, message: 'Invalid YouTube videoId supplied' });
+        onError?.({ code: 1002, message: 'INVALID_YOUTUBE_VIDEO_ID' });
         return;
       }
 
@@ -229,9 +229,18 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
           onError: (event) => {
             console.error('YouTube player error:', event.data);
             const errorCode = event.data;
+
+            if (ERROR_CODES[errorCode]) {
+              onError?.({
+                code: errorCode,
+                message: ERROR_CODES[errorCode],
+              });
+              return;
+            }
+
             onError?.({
-              code: errorCode,
-              message: ERROR_CODES[errorCode] || `Unknown error: ${errorCode}`,
+              code: 1004,
+              message: 'UNKNOWN_ERROR',
             });
           },
           onPlaybackQualityChange: (event) => {
@@ -252,8 +261,8 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
       } catch (error) {
         console.error('Failed to create YouTube player:', error);
         onError?.({
-          code: -1,
-          message: 'Failed to load YouTube API',
+          code: 1003,
+          message: 'FAILED_TO_LOAD_YOUTUBE_API',
         });
       }
     }, [loadYouTubeAPI, onError]);

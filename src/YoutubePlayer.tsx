@@ -5,7 +5,7 @@ import YoutubePlayerWrapper from './YoutubePlayerWrapper';
 import useCreateLocalPlayerHtml from './hooks/useCreateLocalPlayerHtml';
 import type { CommandType, MessageData } from './types/message';
 import type { PlayerControls, YoutubePlayerProps } from './types/youtube';
-import { safeNumber } from './utils/validate';
+import { safeNumber, validateVideoId } from './utils/validate';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -114,7 +114,7 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
           }
         } catch (error) {
           console.error('Error parsing WebView message:', error);
-          onError?.({ code: -1, message: 'Failed to parse WebView message' });
+          onError?.({ code: 1000, message: 'FAILED_TO_PARSE_WEBVIEW_MESSAGE' });
         }
       },
       [onReady, onStateChange, onError, onProgress, onPlaybackRateChange, onPlaybackQualityChange, onAutoplayBlocked],
@@ -169,10 +169,17 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
     );
 
     useEffect(() => {
-      if (isReady) {
-        sendCommand('loadVideoById', [videoId, startTime, endTime]);
+      if (!isReady) {
+        return;
       }
-    }, [videoId, startTime, endTime, isReady, sendCommand]);
+
+      if (!validateVideoId(videoId)) {
+        onError?.({ code: 1002, message: 'INVALID_YOUTUBE_VIDEO_ID' });
+        return;
+      }
+
+      sendCommand('loadVideoById', [videoId, startTime, endTime]);
+    }, [videoId, startTime, endTime, isReady, sendCommand, onError]);
 
     useImperativeHandle(
       ref,
@@ -250,7 +257,7 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
           originWhitelist={['*']}
           onError={(error) => {
             console.error('WebView error:', error);
-            onError?.({ code: -1, message: 'WebView loading error' });
+            onError?.({ code: 1001, message: 'WEBVIEW_LOADING_ERROR' });
           }}
           // iOS specific props
           allowsLinkPreview={false}
