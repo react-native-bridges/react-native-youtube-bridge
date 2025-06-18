@@ -212,10 +212,11 @@ function App() {
 ### Useful Features
 
 #### Playback Progress Tracking
+- If `progressInterval` is provided, the `onProgress` callback will be invoked at the specified interval (in milliseconds).
+- If `progressInterval` is `undefined`, `0`, or `null`, progress tracking is disabled and `onProgress` will not be called.
 
 ```tsx
 function App() {
-  // Progress event callback called every second
   const handleProgress = useCallback((progress: ProgressData) => {
     setCurrentTime(progress.currentTime);
     setDuration(progress.duration);
@@ -225,6 +226,7 @@ function App() {
   return (
     <YoutubePlayer
       videoId={videoId}
+      progressInterval={1000}
       onProgress={handleProgress}
     />
   )

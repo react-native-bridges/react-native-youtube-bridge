@@ -212,10 +212,11 @@ function App() {
 ### 유용한 기능
 
 #### 재생 진행률 추적
+- `progressInterval`이 설정된 경우, 해당 간격(ms)마다 `onProgress` 콜백이 호출됩니다.
+- `progressInterval`이 `undefined`이거나 `0` 또는 `null`인 경우, `onProgress` 콜백은 호출되지 않습니다.
 
 ```tsx
 function App() {
-  // 1초마다 호출되는 진행률 이벤트 콜백
   const handleProgress = useCallback((progress: ProgressData) => {
     setCurrentTime(progress.currentTime);
     setDuration(progress.duration);
@@ -225,6 +226,7 @@ function App() {
   return (
     <YoutubePlayer
       videoId={videoId}
+      progressInterval={1000}
       onProgress={handleProgress}
     />
   )

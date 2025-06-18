@@ -10,6 +10,7 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
       videoId,
       width,
       height = 200,
+      progressInterval: interval,
       onReady,
       onStateChange,
       onError,
@@ -38,6 +39,7 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
     const containerRef = useRef<HTMLDivElement>(null);
     const createPlayerRef = useRef<() => void>(null);
     const progressInterval = useRef<NodeJS.Timeout | null>(null);
+    const intervalRef = useRef<number>(interval);
 
     const stopProgressTracking = useCallback(() => {
       if (progressInterval.current) {
@@ -47,6 +49,10 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
     }, []);
 
     const startProgressTracking = useCallback(() => {
+      if (!intervalRef.current) {
+        return;
+      }
+
       if (progressInterval.current) {
         clearInterval(progressInterval.current);
       }
@@ -73,7 +79,7 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
           console.error('Progress tracking error:', error);
           stopProgressTracking();
         }
-      }, 1000);
+      }, intervalRef.current);
     }, [onProgress, stopProgressTracking]);
 
     const loadYouTubeAPI = useCallback(() => {
@@ -228,6 +234,17 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
         }
       }
     }, [videoId, createPlayer]);
+
+    useEffect(() => {
+      intervalRef.current = interval;
+
+      if (interval) {
+        startProgressTracking();
+        return;
+      }
+
+      stopProgressTracking();
+    }, [interval, startProgressTracking, stopProgressTracking]);
 
     const play = useCallback(() => {
       playerRef.current?.playVideo();

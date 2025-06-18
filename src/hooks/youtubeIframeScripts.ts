@@ -1,6 +1,6 @@
 const startProgressTracking = /* js */ `
   function startProgressTracking() {
-    if (isDestroyed) {
+    if (isDestroyed || typeof window.currentInterval !== 'number' || window.currentInterval <= 0) {
       return;
     }
     
@@ -31,7 +31,7 @@ const startProgressTracking = /* js */ `
         console.error('Progress tracking error:', error);
         stopProgressTracking();
       }
-    }, 1000);
+    }, window.currentInterval);
   }
 `;
 

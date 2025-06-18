@@ -3,8 +3,9 @@ import { type DataDetectorTypes, Dimensions, StyleSheet } from 'react-native';
 import WebView, { type WebViewMessageEvent } from 'react-native-webview';
 import YoutubePlayerWrapper from './YoutubePlayerWrapper';
 import useCreateLocalPlayerHtml from './hooks/useCreateLocalPlayerHtml';
-import type { MessageData } from './types/message';
+import type { CommandType, MessageData } from './types/message';
 import type { PlayerControls, YoutubePlayerProps } from './types/youtube';
+import { safeNumber } from './utils/validate';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -14,6 +15,7 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
       videoId,
       width = screenWidth,
       height = 200,
+      progressInterval,
       onReady,
       onStateChange,
       onError,
@@ -121,8 +123,12 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
     );
 
     const sendCommand = useCallback(
-      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-      (command: string, args: (string | number | boolean | undefined)[] = [], needsResult = false): Promise<any> => {
+      (
+        command: CommandType,
+        args: (string | number | boolean | undefined)[] = [],
+        needsResult = false,
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+      ): Promise<any> => {
         return new Promise((resolve) => {
           if (!webViewRef.current || !isReady) {
             resolve(null);
@@ -222,6 +228,14 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
       };
     }, [isReady, sendCommand]);
 
+    useEffect(() => {
+      if (isReady) {
+        const safeInterval = safeNumber(progressInterval);
+
+        sendCommand('updateProgressInterval', [safeInterval]);
+      }
+    }, [progressInterval, isReady, sendCommand]);
+
     return (
       <YoutubePlayerWrapper width={width} height={height} style={style}>
         <WebView
@@ -230,14 +244,14 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
           style={[styles.webView, webViewStyle]}
           onMessage={handleMessage}
           {...webviewProps}
-          javaScriptEnabled={true}
-          originWhitelist={['*']}
-          domStorageEnabled={true}
-          mediaPlaybackRequiresUserAction={false}
-          allowsInlineMediaPlayback={true}
-          allowsFullscreenVideo={true}
-          scrollEnabled={false}
+          javaScriptEnabled
+          domStorageEnabled
+          allowsFullscreenVideo
+          allowsInlineMediaPlayback
           bounces={false}
+          scrollEnabled={false}
+          mediaPlaybackRequiresUserAction={false}
+          originWhitelist={['*']}
           onError={(error) => {
             console.error('WebView error:', error);
             onError?.({ code: -1, message: 'WebView loading error' });
