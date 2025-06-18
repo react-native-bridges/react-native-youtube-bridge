@@ -12,7 +12,7 @@ React Native에서 YouTube 플레이어를 사용하려면 복잡한 설정이 �
 - ✅ iOS, Android, Web 플랫폼 지원
 - ✅ New Architecture 지원
 - ✅ YouTube 네이티브 플레이어 모듈 없이도 사용 가능
-- ✅ [YouTube iframe Player API](https://developers.google.com/youtube/iframe_api_reference) 전체 기능 지원
+- ✅ 다양한 [YouTube iframe Player API](https://developers.google.com/youtube/iframe_api_reference) 기능 지원
 - ✅ 개발자 친화적인 API 제공
 - ✅ Expo 지원
 
@@ -48,7 +48,7 @@ function App() {
 ### 이벤트
 YouTube iframe API의 상태 변화를 애플리케이션에 전달하기 위해 [이벤트](https://developers.google.com/youtube/iframe_api_reference#Events)를 발생시킵니다. 콜백 함수를 통해 원하는 이벤트를 구독할 수 있습니다.   
 
-> 주의 - 성능 최적화 및 비정상 동작 방지를 위해 콜백 함수는 `useCallback`으로 감싸주세요.
+> 🔔 Note - 성능 최적화 및 비정상 동작 방지를 위해 콜백 함수는 `useCallback`으로 감싸주세요.
 
 ```tsx
 function App() {
@@ -178,17 +178,9 @@ YouTube 플레이어의 스타일을 원하는 대로 커스터마이징할 수 
 function App() {
   return (
     <YoutubePlayer
-      ref={playerRef}
       videoId={videoId}
       height={400}
       width={200}
-      onReady={handleReady}
-      onStateChange={handleStateChange}
-      onProgress={handleProgress}
-      onError={handleError}
-      onPlaybackRateChange={handlePlaybackRateChange}
-      onPlaybackQualityChange={handlePlaybackQualityChange}
-      onAutoplayBlocked={handleAutoplayBlocked}
       style={{
         borderRadius: 10,
       }}
