@@ -1,7 +1,7 @@
-export const validateVideoId = (videoId: string): boolean => {
+export const validateVideoId = (videoId?: string): boolean => {
   // YouTube video ID is 11 characters of alphanumeric and hyphen, underscore
   const videoIdRegex = /^[a-zA-Z0-9_-]{11}$/;
-  return videoIdRegex.test(videoId);
+  return videoIdRegex.test(videoId ?? '');
 };
 
 export const extractVideoIdFromUrl = (url: string): string | null => {

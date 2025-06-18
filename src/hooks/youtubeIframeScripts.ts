@@ -44,6 +44,29 @@ const stopProgressTracking = /* js */ `
   }
 `;
 
+const sendProgress = /* js */ `
+  function sendProgress() {
+    if (player && player.getCurrentTime) {
+      try {
+        const currentTime = player.getCurrentTime();
+        const duration = player.getDuration();
+        const percentage = duration > 0 ? (currentTime / duration) * 100 : 0;
+        const loadedFraction = player.getVideoLoadedFraction();
+        
+        window.ReactNativeWebView.postMessage(JSON.stringify({
+          type: 'progress',
+          currentTime,
+          duration,
+          percentage,
+          loadedFraction,
+        }));
+      } catch (error) {
+        console.error('Final progress error:', error);
+      }
+    }
+  }
+`;
+
 const onPlayerReady = /* js */ `
   function onPlayerReady(event) {
     if (isDestroyed) {
@@ -62,7 +85,7 @@ const onPlayerReady = /* js */ `
   }
 `;
 
-const onPlayerStateChange = /* js */ `
+const onPlayerStateChange = /* js */ `  
   function onPlayerStateChange(event) {
     if (isDestroyed) {
       return;
@@ -74,11 +97,35 @@ const onPlayerStateChange = /* js */ `
         state: event.data
       }));
 
+      if (event.data === YT.PlayerState.ENDED) {
+        stopProgressTracking();
+        sendProgress();
+        return;
+      }
+
       if (event.data === YT.PlayerState.PLAYING) {
         startProgressTracking();
-      } else {
-        stopProgressTracking();
+        return;
       }
+
+      if (event.data === YT.PlayerState.PAUSED) {
+        stopProgressTracking();
+        sendProgress();
+        return;
+      }
+
+      if (event.data === YT.PlayerState.BUFFERING) {
+        startProgressTracking();
+        return;
+      }
+
+      if (event.data === YT.PlayerState.CUED) {
+        stopProgressTracking();
+        sendProgress();
+        return;
+      }
+
+      stopProgressTracking();
     } catch (error) {
       console.error('onPlayerStateChange error:', error);
     }
@@ -229,6 +276,7 @@ export const youtubeIframeScripts = {
   startProgressTracking,
   stopProgressTracking,
   receiveMessage,
+  sendProgress,
   onPlayerReady,
   onPlayerStateChange,
   onPlayerError,

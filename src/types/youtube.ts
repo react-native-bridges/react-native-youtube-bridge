@@ -4,17 +4,33 @@ import type { WebViewProps } from 'react-native-webview';
 
 export type YoutubePlayerVars = {
   /**
-   * @description If the `muted` is not set to true when activating the `autoplay`, it may not work properly depending on browser policy. (https://developer.chrome.com/blog/autoplay)
+   * @description If the `muted` is not set to true when activating the `autoplay`,
+   * it may not work properly depending on browser policy. (https://developer.chrome.com/blog/autoplay)
    */
   autoplay?: boolean;
+  /**
+   * @description If the `controls` is set to true, the player will display the controls.
+   */
   controls?: boolean;
+  /**
+   * @description If the `loop` is set to true, the player will loop the video.
+   */
   loop?: boolean;
+  /**
+   * @description If the `muted` is set to true, the player will be muted.
+   */
   muted?: boolean;
   startTime?: number;
   endTime?: number;
   playsinline?: boolean;
-  rel?: boolean; // 관련 동영상 표시
-  origin?: string; // 보안을 위한 origin 설정
+  /**
+   * @description If the `rel` is set to true, the related videos will be displayed.
+   */
+  rel?: boolean;
+  /**
+   * @description The origin of the player.
+   */
+  origin?: string;
 };
 
 // YouTube IFrame API official documentation based
@@ -24,8 +40,6 @@ export type YoutubePlayerProps = {
   height?: DimensionValue;
   /**
    * @description The interval (in milliseconds) at which `onProgress` callback is called.
-   * Must be a positive number to enable progress tracking.
-   * If not provided or set to 0/falsy value, progress tracking is disabled.
    */
   progressInterval?: number;
   style?: StyleProp<ViewStyle>;
@@ -43,12 +57,16 @@ export type YoutubePlayerProps = {
   iframeStyle?: CSSProperties;
 
   // Events
+  /**
+   * @description Callback function called when the player is ready.
+   */
   onReady?: (playerInfo: PlayerInfo) => void;
   onStateChange?: (state: PlayerState) => void;
   onError?: (error: YouTubeError) => void;
   /**
-   * @description Callback function called at the specified `progressInterval`.
-   * Only invoked when `progressInterval` is provided as a positive number.
+   * @description Callback function called at the specified `progressInterval`
+   * or when `seekTo` is invoked. Only triggered when `progressInterval` is
+   * provided as a positive number.
    */
   onProgress?: (progress: ProgressData) => void;
   onPlaybackRateChange?: (playbackRate: number) => void;

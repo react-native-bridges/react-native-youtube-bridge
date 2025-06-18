@@ -3,6 +3,7 @@ import { useWindowDimensions } from 'react-native';
 import YoutubePlayerWrapper from './YoutubePlayerWrapper';
 import type { YouTubePlayer } from './types/iframe';
 import { ERROR_CODES, type PlayerControls, PlayerState, type YoutubePlayerProps } from './types/youtube';
+import { validateVideoId } from './utils/validate';
 
 const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
   (
@@ -40,6 +41,7 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
     const createPlayerRef = useRef<() => void>(null);
     const progressInterval = useRef<NodeJS.Timeout | null>(null);
     const intervalRef = useRef<number>(interval);
+    const seekTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     const stopProgressTracking = useCallback(() => {
       if (progressInterval.current) {
@@ -47,6 +49,24 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
         progressInterval.current = null;
       }
     }, []);
+
+    const sendProgress = useCallback(async () => {
+      if (!playerRef.current || !playerRef.current.getCurrentTime) {
+        return;
+      }
+
+      const currentTime = await playerRef.current.getCurrentTime();
+      const duration = await playerRef.current.getDuration();
+      const percentage = duration > 0 ? (currentTime / duration) * 100 : 0;
+      const loadedFraction = await playerRef.current.getVideoLoadedFraction();
+
+      onProgress?.({
+        currentTime,
+        duration,
+        percentage,
+        loadedFraction,
+      });
+    }, [onProgress]);
 
     const startProgressTracking = useCallback(() => {
       if (!intervalRef.current) {
@@ -120,7 +140,12 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
     }, []);
 
     createPlayerRef.current = () => {
-      if (!containerRef.current || !window.YT?.Player || !videoId) {
+      if (!containerRef.current || !window.YT?.Player) {
+        return;
+      }
+
+      if (!validateVideoId(videoId)) {
+        onError?.({ code: -2, message: 'Invalid YouTube videoId supplied' });
         return;
       }
 
@@ -171,10 +196,35 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
             const state = event.data;
             console.log('YouTube player state changed:', state);
             onStateChange?.(state);
+
+            if (state === PlayerState.ENDED) {
+              stopProgressTracking();
+              sendProgress();
+              return;
+            }
+
             if (state === PlayerState.PLAYING) {
               startProgressTracking();
               return;
             }
+
+            if (state === PlayerState.PAUSED) {
+              stopProgressTracking();
+              sendProgress();
+              return;
+            }
+
+            if (state === PlayerState.BUFFERING) {
+              startProgressTracking();
+              return;
+            }
+
+            if (state === PlayerState.CUED) {
+              stopProgressTracking();
+              sendProgress();
+              return;
+            }
+
             stopProgressTracking();
           },
           onError: (event) => {
@@ -225,7 +275,7 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
     }, [createPlayer, stopProgressTracking]);
 
     useEffect(() => {
-      if (playerRef.current && videoId) {
+      if (playerRef.current && validateVideoId(videoId)) {
         try {
           playerRef.current.loadVideoById(videoId);
         } catch (error) {
@@ -258,9 +308,20 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
       playerRef.current?.stopVideo();
     }, []);
 
-    const seekTo = useCallback((seconds: number, allowSeekAhead = true) => {
-      playerRef.current?.seekTo(seconds, allowSeekAhead);
-    }, []);
+    const seekTo = useCallback(
+      (seconds: number, allowSeekAhead = true) => {
+        playerRef.current?.seekTo(seconds, allowSeekAhead);
+
+        if (seekTimeoutRef.current) {
+          clearTimeout(seekTimeoutRef.current);
+        }
+
+        seekTimeoutRef.current = setTimeout(() => {
+          sendProgress();
+        }, 200);
+      },
+      [sendProgress],
+    );
 
     const setVolume = useCallback((volume: number) => {
       playerRef.current?.setVolume(volume);
