@@ -1,5 +1,11 @@
 # react-native-youtube-bridge
 
+## 0.2.2
+
+### Patch Changes
+
+- 5c8c57d: refactor: organize and constantize error codes
+
 ## 0.2.1
 
 ### Patch Changes
