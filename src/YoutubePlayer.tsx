@@ -54,8 +54,6 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
         try {
           const data = JSON.parse(event.nativeEvent.data) as MessageData;
 
-          console.log('handleMessage', data);
-
           if (data.type === 'ready') {
             const { playerInfo } = data;
 
@@ -159,8 +157,6 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
           const injectedJS = /*js*/ `
             window.__execCommand && window.__execCommand(${JSON.stringify(commandData)}); true;
           `;
-
-          console.log('Sending command:', command, injectedJS);
 
           webViewRef.current?.injectJavaScript(injectedJS);
 

@@ -194,7 +194,6 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
           },
           onStateChange: (event) => {
             const state = event.data;
-            console.log('YouTube player state changed:', state);
             onStateChange?.(state);
 
             if (state === PlayerState.ENDED) {
