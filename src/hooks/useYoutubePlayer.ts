@@ -22,20 +22,27 @@ const useYouTubePlayer = (config: YoutubePlayerConfig) => {
 
   const { startTime, endTime, autoplay, controls, loop, muted, playsinline, rel } = playerVars;
 
-  if (!coreRef.current) {
-    coreRef.current = new YouTubePlayerCore({
-      onReady: (playerInfo) => {
-        setIsReady(true);
-        onReady?.(playerInfo);
-      },
-      onStateChange,
-      onError,
-      onProgress,
-      onPlaybackRateChange,
-      onPlaybackQualityChange,
-      onAutoplayBlocked,
-    });
-  }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    if (!coreRef.current) {
+      coreRef.current = new YouTubePlayerCore({
+        onReady: (playerInfo) => {
+          setIsReady(true);
+          onReady?.(playerInfo);
+        },
+        onStateChange,
+        onError,
+        onProgress,
+        onPlaybackRateChange,
+        onPlaybackQualityChange,
+        onAutoplayBlocked,
+      });
+    }
+    return () => {
+      coreRef.current?.destroy();
+      coreRef.current = null;
+    };
+  }, []);
 
   useEffect(() => {
     const initialize = async () => {

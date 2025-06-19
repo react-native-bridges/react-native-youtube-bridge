@@ -24,15 +24,22 @@ class YouTubePlayerCore {
 
     window._ytApiPromise = new Promise<void>((resolve) => {
       if (document.querySelector('script[src*="youtube.com/iframe_api"]')) {
+        let attempts = 0;
+        const maxAttempts = 100;
+
         const checkAPI = () => {
           if (window.YT?.Player) {
             resolve();
             return;
           }
-
+          if (attempts >= maxAttempts) {
+            console.error('YouTube API failed to load after timeout');
+            resolve();
+            return;
+          }
+          attempts++;
           setTimeout(checkAPI, 100);
         };
-
         checkAPI();
         return;
       }
