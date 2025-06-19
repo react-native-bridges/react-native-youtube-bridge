@@ -84,10 +84,6 @@ class YouTubePlayerCore {
       }
     }
 
-    const playerId = `youtube-player-${config.videoId}`;
-
-    container.id = playerId;
-
     this.player = new window.YT.Player(containerId, {
       width: '100%',
       height: '100%',
