@@ -174,7 +174,7 @@ function App() {
 
         <YoutubePlayer
           ref={playerRef}
-          videoId={videoId}
+          source={videoId}
           height={Platform.OS === 'web' ? 'auto' : undefined}
           playerVars={{
             autoplay: true,

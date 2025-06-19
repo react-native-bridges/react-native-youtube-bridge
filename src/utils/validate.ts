@@ -1,23 +1,19 @@
-export const validateVideoId = (videoId?: string): boolean => {
-  // YouTube video ID is 11 characters of alphanumeric and hyphen, underscore
-  const videoIdRegex = /^[a-zA-Z0-9_-]{11}$/;
-  return videoIdRegex.test(videoId ?? '');
-};
+const MATCH_URL_YOUTUBE =
+  /(?:youtu\.be\/|youtube(?:-nocookie|education)?\.com\/(?:embed\/|v\/|watch\/|watch\?v=|watch\?.+&v=|shorts\/|live\/))((\w|-){11})/;
 
-export const extractVideoIdFromUrl = (url: string): string | null => {
-  const patterns = [
-    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
-    /youtube\.com\/v\/([^&\n?#]+)/,
-  ];
-
-  for (const pattern of patterns) {
-    const match = url.match(pattern);
-    if (match?.[1]) {
-      return match[1];
-    }
+export const extractVideoIdFromUrl = (url?: string): string | undefined => {
+  if (!url) {
+    return undefined;
   }
 
-  return null;
+  const match = url.match(MATCH_URL_YOUTUBE);
+
+  return match ? match[1] : undefined;
+};
+
+export const validateVideoId = (videoId?: string): boolean => {
+  const videoIdRegex = /^[\w-]{11}$/;
+  return videoIdRegex.test(videoId ?? '');
 };
 
 export const escapeHtml = (unsafe?: string): string => {

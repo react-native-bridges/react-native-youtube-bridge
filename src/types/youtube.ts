@@ -51,9 +51,10 @@ export type PlayerEvents = {
   onAutoplayBlocked?: () => void;
 };
 
-// YouTube IFrame API official documentation based
+export type YouTubeSource = string | { videoId: string } | { url: string };
+
 export type YoutubePlayerProps = {
-  videoId: string;
+  source: YouTubeSource;
   width?: DimensionValue;
   height?: DimensionValue;
   /**
