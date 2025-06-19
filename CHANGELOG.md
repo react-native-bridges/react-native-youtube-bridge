@@ -1,5 +1,11 @@
 # react-native-youtube-bridge
 
+## 0.2.3
+
+### Patch Changes
+
+- bf1b999: chore(package.json): remove src folder when uploading to npm (-53.5kb)
+
 ## 0.2.2
 
 ### Patch Changes
