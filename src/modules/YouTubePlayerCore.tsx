@@ -1,6 +1,10 @@
 import type { YouTubePlayer } from '../types/iframe';
-import { ERROR_CODES, type YoutubePlayerProps as PlayerConfig, type PlayerEvents, PlayerState } from '../types/youtube';
+import { ERROR_CODES, type PlayerEvents, PlayerState, type YoutubePlayerProps } from '../types/youtube';
 import { validateVideoId } from '../utils/validate';
+
+type PlayerConfig = Omit<YoutubePlayerProps, 'source'> & {
+  videoId: string;
+};
 
 class YouTubePlayerCore {
   private player: YouTubePlayer | null = null;

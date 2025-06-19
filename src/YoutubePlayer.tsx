@@ -3,6 +3,7 @@ import { type DataDetectorTypes, Dimensions, StyleSheet } from 'react-native';
 import WebView, { type WebViewMessageEvent } from 'react-native-webview';
 import YoutubePlayerWrapper from './YoutubePlayerWrapper';
 import useCreateLocalPlayerHtml from './hooks/useCreateLocalPlayerHtml';
+import useYouTubeVideoId from './hooks/useYoutubeVideoId';
 import type { CommandType, MessageData } from './types/message';
 import type { PlayerControls, YoutubePlayerProps } from './types/youtube';
 import { safeNumber, validateVideoId } from './utils/validate';
@@ -12,7 +13,7 @@ const { width: screenWidth } = Dimensions.get('window');
 const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
   (
     {
-      videoId,
+      source,
       width = screenWidth,
       height = 200,
       progressInterval,
@@ -39,6 +40,8 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
     ref,
   ) => {
     const { startTime = 0, endTime } = playerVars;
+
+    const videoId = useYouTubeVideoId(source);
 
     const webViewRef = useRef<WebView>(null);
     const [isReady, setIsReady] = useState(false);

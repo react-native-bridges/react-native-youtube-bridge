@@ -40,7 +40,11 @@ import { YoutubePlayer } from 'react-native-youtube-bridge';
 
 function App() {
   return (
-    <YoutubePlayer videoId={videoId} />
+    <YoutubePlayer 
+      source={source} // youtube videoId or url
+      // OR source={{ videoId: 'AbZH7XWDW_k' }}
+      // OR source={{ url: 'https://youtube.com/watch?v=AbZH7XWDW_k' }}
+    />
   )
 }
 ```
@@ -120,7 +124,7 @@ function App() {
     <View>
       <YoutubePlayer
         ref={playerRef}
-        videoId={videoId}
+        source={source}
       />
 
       <View style={styles.controls}>
@@ -158,7 +162,7 @@ You can customize the playback environment by configuring YouTube embedded playe
 function App() {
   return (
     <YoutubePlayer
-      videoId={videoId}
+      source={source}
       playerVars={{
         autoplay: true,
         controls: true,
@@ -178,7 +182,7 @@ You can customize the YouTube player's styling to match your application's desig
 function App() {
   return (
     <YoutubePlayer
-      videoId={videoId}
+      source={source}
       height={400}
       width={200}
       style={{
@@ -217,7 +221,7 @@ function App() {
 
   return (
     <YoutubePlayer
-      videoId={videoId}
+      source={source}
       progressInterval={1000}
       onProgress={handleProgress}
     />

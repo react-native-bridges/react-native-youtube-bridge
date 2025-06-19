@@ -17,7 +17,6 @@ const useCreateLocalPlayerHtml = ({
 }: YoutubePlayerVars & { videoId: string }) => {
   const createPlayerHTML = useCallback(() => {
     if (!validateVideoId(videoId)) {
-      console.error('Invalid YouTube video ID:', videoId);
       return '<html><body><div>Invalid video ID</div></body></html>';
     }
 
