@@ -29,7 +29,7 @@ const useYouTubeVideoId = (source: YouTubeSource, onError?: PlayerEvents['onErro
         code: 1002,
         message: ERROR_CODES[1002],
       });
-      return;
+      return '';
     }
 
     if (validateVideoId(sourceValue)) {
@@ -44,13 +44,13 @@ const useYouTubeVideoId = (source: YouTubeSource, onError?: PlayerEvents['onErro
         code: 1002,
         message: ERROR_CODES[1002],
       });
-      return;
+      return '';
     }
 
     return extractedId;
   }, [sourceValue, onError]);
 
-  return videoId ?? '';
+  return videoId;
 };
 
 export default useYouTubeVideoId;
