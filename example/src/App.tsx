@@ -32,7 +32,6 @@ function App() {
     console.log('Player is ready!');
     Alert.alert('알림', 'YouTube 플레이어가 준비되었습니다!');
 
-    // 플레이어 준비 완료 후 정보 가져오기
     console.log('rates', playerInfo.availablePlaybackRates);
     console.log('vol', playerInfo.volume);
     console.log('muted', playerInfo.muted);
