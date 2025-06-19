@@ -9,4 +9,5 @@ export {
   type PlayerControls,
   type YouTubeError,
   type PlayerInfo,
+  type PlayerEvents,
 } from './types/youtube';

@@ -33,6 +33,24 @@ export type YoutubePlayerVars = {
   origin?: string;
 };
 
+export type PlayerEvents = {
+  /**
+   * @description Callback function called when the player is ready.
+   */
+  onReady?: (playerInfo: PlayerInfo) => void;
+  onStateChange?: (state: PlayerState) => void;
+  onError?: (error: YouTubeError) => void;
+  /**
+   * @description Callback function called at the specified `progressInterval`
+   * or when `seekTo` is invoked. Only triggered when `progressInterval` is
+   * provided as a positive number.
+   */
+  onProgress?: (progress: ProgressData) => void;
+  onPlaybackRateChange?: (playbackRate: number) => void;
+  onPlaybackQualityChange?: (quality: string) => void;
+  onAutoplayBlocked?: () => void;
+};
+
 // YouTube IFrame API official documentation based
 export type YoutubePlayerProps = {
   videoId: string;
@@ -55,25 +73,14 @@ export type YoutubePlayerProps = {
    * @platform web
    */
   iframeStyle?: CSSProperties;
-
-  // Events
-  /**
-   * @description Callback function called when the player is ready.
-   */
-  onReady?: (playerInfo: PlayerInfo) => void;
-  onStateChange?: (state: PlayerState) => void;
-  onError?: (error: YouTubeError) => void;
-  /**
-   * @description Callback function called at the specified `progressInterval`
-   * or when `seekTo` is invoked. Only triggered when `progressInterval` is
-   * provided as a positive number.
-   */
-  onProgress?: (progress: ProgressData) => void;
-  onPlaybackRateChange?: (playbackRate: number) => void;
-  onPlaybackQualityChange?: (quality: string) => void;
-  onAutoplayBlocked?: () => void;
   playerVars?: YoutubePlayerVars;
-};
+} & PlayerEvents;
+
+export type YoutubePlayerConfig = {
+  videoId: string;
+  progressInterval?: number;
+  playerVars?: YoutubePlayerVars;
+} & PlayerEvents;
 
 export enum PlayerState {
   UNSTARTED = -1,

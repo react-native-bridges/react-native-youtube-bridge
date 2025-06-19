@@ -221,10 +221,8 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
 
     useEffect(() => {
       return () => {
-        // 모든 pending commands 정리
         pendingCommandsRef.current.clear();
 
-        // WebView 내부 cleanup 호출
         if (webViewRef.current && isReady) {
           sendCommand('cleanup');
         }
