@@ -1,5 +1,13 @@
 # react-native-youtube-bridge
 
+## 0.2.4
+
+### Patch Changes
+
+- a71768e: refactor(web): extract YouTubePlayerCore class for better architecture
+  - Separate business logic from React lifecycle
+  - Create framework-agnostic core with useYouTubePlayer hook
+
 ## 0.2.3
 
 ### Patch Changes
