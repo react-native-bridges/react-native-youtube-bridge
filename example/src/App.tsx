@@ -30,7 +30,7 @@ function App() {
 
   const handleReady = useCallback((playerInfo: PlayerInfo) => {
     console.log('Player is ready!');
-    Alert.alert('알림', 'YouTube 플레이어가 준비되었습니다!');
+    Alert.alert('Alert', 'YouTube player is ready!');
 
     console.log('rates', playerInfo.availablePlaybackRates);
     console.log('vol', playerInfo.volume);
@@ -55,22 +55,22 @@ function App() {
 
     switch (state) {
       case PlayerState.UNSTARTED:
-        console.log('플레이어가 시작되지 않음');
+        console.log('Player is not started');
         break;
       case PlayerState.PLAYING:
-        console.log('비디오가 재생 중입니다');
+        console.log('Video is playing');
         break;
       case PlayerState.PAUSED:
-        console.log('비디오가 일시정지되었습니다');
+        console.log('Video is paused');
         break;
       case PlayerState.BUFFERING:
-        console.log('비디오가 버퍼링 중입니다');
+        console.log('Video is buffering');
         break;
       case PlayerState.ENDED:
-        console.log('비디오 재생이 완료되었습니다');
+        console.log('Video is ended');
         break;
       case PlayerState.CUED:
-        console.log('비디오가 큐에 준비되었습니다');
+        console.log('Video is cued');
         break;
     }
   }, []);
@@ -83,7 +83,7 @@ function App() {
 
   const handleError = useCallback((error: YouTubeError) => {
     console.error('Player error:', error);
-    Alert.alert('에러', `플레이어 오류 (${error.code}): ${error.message}`);
+    Alert.alert('Error', `Player error (${error.code}): ${error.message}`);
   }, []);
 
   const handlePlaybackRateChange = useCallback((rate: number) => {
@@ -93,12 +93,10 @@ function App() {
 
   const handlePlaybackQualityChange = useCallback((quality: string) => {
     console.log('Playback quality changed:', quality);
-    Alert.alert('품질 변경', `재생 품질이 ${quality}로 변경되었습니다`);
   }, []);
 
   const handleAutoplayBlocked = useCallback(() => {
     console.log('Autoplay was blocked');
-    Alert.alert('알림', '자동재생이 브라우저에 의해 차단되었습니다');
   }, []);
 
   const changePlaybackRate = (rate: number) => {
@@ -151,12 +149,12 @@ function App() {
       );
 
       Alert.alert(
-        '플레이어 정보',
-        `현재 시간: ${formatTime(currentTime || 0)}\n` +
-          `총 길이: ${formatTime(duration || 0)}\n` +
-          `상태: ${state}\n` +
-          `로드된 비율: ${((loaded || 0) * 100).toFixed(1)}%\n` +
-          `URL: ${url || 'N/A'}`,
+        'Player info',
+        `Current time: ${formatTime(currentTime || 0)}\n` +
+          `duration: ${formatTime(duration || 0)}\n` +
+          `state: ${state}\n` +
+          `loaded: ${((loaded || 0) * 100).toFixed(1)}%\n` +
+          `url: ${url || 'N/A'}`,
       );
     } catch (error) {
       console.error('Error getting player info:', error);
@@ -169,7 +167,7 @@ function App() {
         <View style={styles.header}>
           <Text style={styles.title}>YouTube IFrame API Player</Text>
           <Text style={styles.subtitle}>Video ID: {videoId}</Text>
-          <Text style={styles.subtitle}>재생 속도: {playbackRate}x</Text>
+          <Text style={styles.subtitle}>Playback rate: {playbackRate}x</Text>
         </View>
 
         <YoutubePlayer
@@ -214,7 +212,7 @@ function App() {
             />
             <View style={[styles.bufferFill, { width: `${loadedFraction * 100}%` }]} />
           </View>
-          <Text style={styles.bufferText}>버퍼: {(loadedFraction * 100).toFixed(1)}%</Text>
+          <Text style={styles.bufferText}>Buffer: {(loadedFraction * 100).toFixed(1)}%</Text>
         </View>
 
         <View style={styles.progressContainer}>
@@ -231,30 +229,30 @@ function App() {
             style={[styles.button, styles.seekButton]}
             onPress={() => playerRef.current?.seekTo(currentTime > 10 ? currentTime - 10 : 0)}
           >
-            <Text style={styles.buttonText}>⏪ -10초</Text>
+            <Text style={styles.buttonText}>⏪ -10s</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={[styles.button, styles.playButton]} onPress={onPlay}>
-            <Text style={styles.buttonText}>{isPlaying ? '⏸️ 일시정지' : '▶️ 재생'}</Text>
+            <Text style={styles.buttonText}>{isPlaying ? '⏸️ Pause' : '▶️ Play'}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={[styles.button, styles.stopButton]} onPress={() => playerRef.current?.stop()}>
-            <Text style={styles.buttonText}>⏹️ 정지</Text>
+            <Text style={styles.buttonText}>⏹️ Stop</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={[styles.button, styles.seekButton]}
             onPress={() => playerRef.current?.seekTo(currentTime + 10, true)}
           >
-            <Text style={styles.buttonText}>⏭️ +10초</Text>
+            <Text style={styles.buttonText}>⏭️ +10s</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.volumeSection}>
-          <Text style={styles.sectionTitle}>볼륨 컨트롤</Text>
+          <Text style={styles.sectionTitle}>Volume control</Text>
           <View style={styles.volumeControls}>
             <TouchableOpacity style={[styles.volumeButton, isMuted && styles.activeButton]} onPress={toggleMute}>
-              <Text style={styles.buttonText}>{isMuted ? '🔇 음소거됨' : '🔊 음소거'}</Text>
+              <Text style={styles.buttonText}>{isMuted ? '🔇 Muted' : '🔊 Unmuted'}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.volumeButton} onPress={() => changeVolume(25)}>
@@ -269,11 +267,11 @@ function App() {
               <Text style={styles.buttonText}>100%</Text>
             </TouchableOpacity>
           </View>
-          <Text style={styles.volumeText}>현재 볼륨: {volume}%</Text>
+          <Text style={styles.volumeText}>Current volume: {volume}%</Text>
         </View>
 
         <View style={styles.speedSection}>
-          <Text style={styles.sectionTitle}>재생 속도</Text>
+          <Text style={styles.sectionTitle}>Playback rate</Text>
           <View style={styles.speedControls}>
             {availableRates.map((rate) => (
               <TouchableOpacity
@@ -289,12 +287,12 @@ function App() {
 
         <View style={styles.infoSection}>
           <TouchableOpacity style={[styles.button, styles.infoButton]} onPress={getPlayerInfo}>
-            <Text style={styles.buttonText}>📊 플레이어 정보</Text>
+            <Text style={styles.buttonText}>📊 Player info</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.videoSwitcher}>
-          <Text style={styles.switcherTitle}>다른 비디오 테스트:</Text>
+          <Text style={styles.switcherTitle}>Test other videos:</Text>
           <View style={styles.videoButtons}>
             <TouchableOpacity
               style={[styles.videoButton, videoId === 'AbZH7XWDW_k' && styles.activeVideoButton]}
