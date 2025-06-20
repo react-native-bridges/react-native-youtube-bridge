@@ -20,6 +20,11 @@ React Native에서 YouTube 플레이어를 사용하려면 복잡한 설정이 �
 > 빠른 시작을 원하신다면 [예제](/example/)를 확인해보세요.
 
 - [웹 데모](https://react-native-youtube-bridge.pages.dev/)
+- [Expo Go](https://snack.expo.dev/@harang/react-native-youtube-bridge)
+
+<p align="center">
+  <img src="./assets/example.gif" width="600" />
+</p>
 
 ## 설치
 
