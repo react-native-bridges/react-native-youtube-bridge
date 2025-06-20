@@ -1,5 +1,11 @@
 # react-native-youtube-bridge
 
+## 0.3.1
+
+### Patch Changes
+
+- 058d4c8: docs(example): update example video and expo go link
+
 ## 0.3.0
 
 ### Minor Changes
