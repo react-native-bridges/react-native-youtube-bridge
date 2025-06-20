@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import YouTubePlayerCore from '../modules/YouTubePlayerCore';
 import { ERROR_CODES, type PlayerControls, PlayerState, type YoutubePlayerConfig } from '../types/youtube';
 
@@ -9,7 +9,7 @@ const useYouTubePlayer = (config: YoutubePlayerConfig) => {
 
   const {
     videoId,
-    progressInterval = 1000,
+    progressInterval = 0,
     playerVars = {},
     onReady,
     onStateChange,
@@ -21,6 +21,11 @@ const useYouTubePlayer = (config: YoutubePlayerConfig) => {
   } = config;
 
   const { startTime, endTime, autoplay, controls, loop, muted, playsinline, rel } = playerVars;
+
+  const cleanup = useCallback(() => {
+    coreRef.current?.destroy();
+    coreRef.current = null;
+  }, []);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
@@ -38,10 +43,7 @@ const useYouTubePlayer = (config: YoutubePlayerConfig) => {
         onAutoplayBlocked,
       });
     }
-    return () => {
-      coreRef.current?.destroy();
-      coreRef.current = null;
-    };
+    return cleanup;
   }, []);
 
   useEffect(() => {
@@ -78,10 +80,6 @@ const useYouTubePlayer = (config: YoutubePlayerConfig) => {
     };
 
     initialize();
-
-    return () => {
-      coreRef.current?.destroy();
-    };
   }, [videoId, startTime, endTime, autoplay, controls, loop, muted, playsinline, rel, onError]);
 
   useEffect(() => {
@@ -149,6 +147,7 @@ const useYouTubePlayer = (config: YoutubePlayerConfig) => {
     containerRef,
     controls: playerControls,
     isReady,
+    cleanup,
   };
 };
 

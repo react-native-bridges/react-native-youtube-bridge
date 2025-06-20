@@ -14,13 +14,17 @@ const useCreateLocalPlayerHtml = ({
   muted,
   playsinline,
   rel,
-}: YoutubePlayerVars & { videoId: string }) => {
+  useInlineHtml,
+}: YoutubePlayerVars & { videoId: string; useInlineHtml: boolean }) => {
   const createPlayerHTML = useCallback(() => {
+    if (!useInlineHtml) {
+      return '';
+    }
+
     if (!validateVideoId(videoId)) {
       return '<html><body><div>Invalid video ID</div></body></html>';
     }
 
-    const safeVideoId = escapeHtml(videoId);
     const safeOrigin = escapeHtml(origin);
     const safeStartTime = safeNumber(startTime);
     const safeEndTime = endTime ? safeNumber(endTime) : undefined;
@@ -71,9 +75,6 @@ const useCreateLocalPlayerHtml = ({
             var progressInterval;
             var isDestroyed = false;
 
-            ${youtubeIframeScripts.receiveMessage}
-            ${youtubeIframeScripts.sendProgress}
-
             function cleanup() {
               isDestroyed = true;
               if (progressInterval) {
@@ -94,7 +95,7 @@ const useCreateLocalPlayerHtml = ({
                 player = new YT.Player('player', {
                   width: '100%',
                   height: '100%',
-                  videoId: '${safeVideoId}',
+                  videoId: '${videoId}',
                   playerVars: {
                     autoplay: ${autoplay ? 1 : 0},
                     controls: ${controls ? 1 : 0},
@@ -125,6 +126,9 @@ const useCreateLocalPlayerHtml = ({
                 }
               }
             };
+
+            ${youtubeIframeScripts.receiveMessage}
+            ${youtubeIframeScripts.sendProgress}
 
             ${youtubeIframeScripts.startProgressTracking}
             ${youtubeIframeScripts.stopProgressTracking}
@@ -197,34 +201,12 @@ const useCreateLocalPlayerHtml = ({
               },
               cleanup: cleanup,
             };
-
-            window.addEventListener('message', function(event) {
-              if (isDestroyed) {
-                return;
-              }
-              
-              try {
-                const message = JSON.parse(event.data);
-                if (window.playerCommands[message.command]) {
-                  const result = window.playerCommands[message.command](...(message.args || []));
-                  if (message.id && window.ReactNativeWebView) {
-                    window.ReactNativeWebView.postMessage(JSON.stringify({
-                      type: 'commandResult',
-                      id: message.id,
-                      result: result
-                    }));
-                  }
-                }
-              } catch (error) {
-                console.error('Error processing message:', error);
-              }
-            });
           })();
         </script>
       </body>
     </html>
   `;
-  }, [videoId, origin, startTime, endTime, autoplay, controls, loop, muted, playsinline, rel]);
+  }, [videoId, origin, startTime, endTime, autoplay, controls, loop, muted, playsinline, rel, useInlineHtml]);
 
   return createPlayerHTML;
 };
