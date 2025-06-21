@@ -20,7 +20,7 @@ const useYouTubePlayer = (config: YoutubePlayerConfig) => {
     onAutoplayBlocked,
   } = config;
 
-  const { startTime, endTime, autoplay, controls, loop, muted, playsinline, rel } = playerVars;
+  const { startTime, endTime, autoplay, controls, loop, muted, playsinline, rel, origin } = playerVars;
 
   const cleanup = useCallback(() => {
     coreRef.current?.destroy();
@@ -68,6 +68,7 @@ const useYouTubePlayer = (config: YoutubePlayerConfig) => {
             rel,
             startTime,
             endTime,
+            origin,
           },
         });
       } catch (error) {
@@ -80,7 +81,7 @@ const useYouTubePlayer = (config: YoutubePlayerConfig) => {
     };
 
     initialize();
-  }, [videoId, startTime, endTime, autoplay, controls, loop, muted, playsinline, rel, onError]);
+  }, [videoId, startTime, endTime, autoplay, controls, loop, muted, playsinline, rel, origin, onError]);
 
   useEffect(() => {
     if (isReady && videoId && coreRef.current) {
