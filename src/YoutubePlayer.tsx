@@ -7,6 +7,7 @@ import useYouTubeVideoId from './hooks/useYoutubeVideoId';
 import type { CommandType, MessageData } from './types/message';
 import type { PlayerControls, YoutubePlayerProps } from './types/youtube';
 import { safeNumber, validateVideoId } from './utils/validate';
+import { getYoutubeWebViewUrl } from './utils/youtube';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -17,6 +18,7 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
       width = screenWidth,
       height = 200,
       progressInterval,
+      useInlineHtml = true,
       onReady,
       onStateChange,
       onError,
@@ -39,7 +41,7 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
     },
     ref,
   ) => {
-    const { startTime = 0, endTime } = playerVars;
+    const { startTime, endTime } = playerVars;
 
     const videoId = useYouTubeVideoId(source);
 
@@ -50,7 +52,11 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
 
     const dataDetectorTypes = useMemo(() => ['none'] as DataDetectorTypes[], []);
 
-    const createPlayerHTML = useCreateLocalPlayerHtml({ videoId, ...playerVars });
+    const createPlayerHTML = useCreateLocalPlayerHtml({ videoId, useInlineHtml, ...playerVars });
+    const webViewUrl = useMemo(
+      () => getYoutubeWebViewUrl(videoId, useInlineHtml, playerVars),
+      [videoId, useInlineHtml, playerVars],
+    );
 
     const handleMessage = useCallback(
       (event: WebViewMessageEvent) => {
@@ -243,12 +249,6 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
     return (
       <YoutubePlayerWrapper width={width} height={height} style={style}>
         <WebView
-          ref={webViewRef}
-          source={{ html: createPlayerHTML() }}
-          style={[styles.webView, webViewStyle]}
-          onMessage={handleMessage}
-          {...webViewProps}
-          javaScriptEnabled
           domStorageEnabled
           allowsFullscreenVideo
           allowsInlineMediaPlayback
@@ -256,16 +256,23 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
           scrollEnabled={false}
           mediaPlaybackRequiresUserAction={false}
           originWhitelist={['*']}
-          onError={(error) => {
-            console.error('WebView error:', error);
-            onError?.({ code: 1001, message: 'WEBVIEW_LOADING_ERROR' });
-          }}
+          style={[styles.webView, webViewStyle]}
           // iOS specific props
           allowsLinkPreview={false}
           dataDetectorTypes={dataDetectorTypes}
           // Android specific props
           mixedContentMode="compatibility"
           thirdPartyCookiesEnabled={false}
+          webviewDebuggingEnabled={__DEV__}
+          {...webViewProps}
+          ref={webViewRef}
+          javaScriptEnabled
+          source={useInlineHtml ? { html: createPlayerHTML() } : { uri: webViewUrl }}
+          onMessage={handleMessage}
+          onError={(error) => {
+            console.error('WebView error:', error);
+            onError?.({ code: 1001, message: 'WEBVIEW_LOADING_ERROR' });
+          }}
         />
       </YoutubePlayerWrapper>
     );

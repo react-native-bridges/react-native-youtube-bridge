@@ -174,6 +174,7 @@ function App() {
           ref={playerRef}
           source={videoId}
           height={Platform.OS === 'web' ? 'auto' : undefined}
+          useInlineHtml={false}
           playerVars={{
             autoplay: true,
             controls: true,

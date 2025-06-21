@@ -47,7 +47,7 @@ export type PlayerEvents = {
    */
   onProgress?: (progress: ProgressData) => void;
   onPlaybackRateChange?: (playbackRate: number) => void;
-  onPlaybackQualityChange?: (quality: string) => void;
+  onPlaybackQualityChange?: (quality: PlaybackQuality) => void;
   onAutoplayBlocked?: () => void;
 };
 
@@ -61,6 +61,12 @@ export type YoutubePlayerProps = {
    * @description The interval (in milliseconds) at which `onProgress` callback is called.
    */
   progressInterval?: number;
+  /**
+   * @description If the `useInlineHtml` is set to true, the player will use inline HTML.
+   * @default true
+   * @platform ios, android
+   */
+  useInlineHtml?: boolean;
   style?: StyleProp<ViewStyle>;
   /**
    * @platform ios, android

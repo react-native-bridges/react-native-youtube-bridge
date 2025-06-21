@@ -85,7 +85,7 @@ const onPlayerReady = /* js */ `
   }
 `;
 
-const onPlayerStateChange = /* js */ `  
+const onPlayerStateChange = /* js */ `
   function onPlayerStateChange(event) {
     if (isDestroyed) {
       return;
