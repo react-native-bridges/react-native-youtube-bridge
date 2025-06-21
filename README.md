@@ -15,11 +15,12 @@ However, there are currently no actively maintained YouTube player libraries for
 - ✅ [YouTube iframe Player API](https://developers.google.com/youtube/iframe_api_reference) feature support
 - ✅ Developer-friendly API
 - ✅ Expo support
+- ✅ Flexible rendering modes (Inline HTML & WebView)
 
 ## Example
 > For a quick start, check out the [example](/example/).
 
-- [Web Demo](https://react-native-youtube-bridge.pages.dev/) 
+- [Web Demo](https://react-native-youtube-bridge-example.pages.dev/)
 - [Expo Go](https://snack.expo.dev/@harang/react-native-youtube-bridge)
 
 <p align="center">
@@ -210,9 +211,7 @@ function App() {
 }
 ```
 
-### Useful Features
-
-#### Playback Progress Tracking
+### Playback Progress Tracking
 - If `progressInterval` is provided, the `onProgress` callback will be invoked at the specified interval (in milliseconds).
 - If `progressInterval` is `undefined`, `0`, or `null`, progress tracking is disabled and `onProgress` will not be called.
 
@@ -232,6 +231,37 @@ function App() {
     />
   )
 }
+```
+
+### Player Rendering & Source Configuration (ios, android)
+
+**Inline HTML vs WebView Mode**   
+Control YouTube player rendering method and configure source URLs for compatibility.
+
+1. **Inline HTML Mode** (`useInlineHtml: true`) renders the player by loading HTML directly within the app. (default)
+2. **WebView Mode** (`useInlineHtml: false`) loads an external player page. The default URI is https://react-native-youtube-bridge.pages.dev.
+
+> [!NOTE]
+> **webViewUrl Usage**
+> - When `useInlineHtml: true`: Set as the `baseUrl` for WebView source HTML.
+> - When `useInlineHtml: false`: Overrides the WebView source `uri`.
+>
+> **Embed Restriction Solution**: If you encounter `embed not allowed` errors with YouTube iframe when using inline HTML mode and videos don't load properly, switch to WebView mode to load YouTube iframe through an external player.
+
+```tsx
+// Inline HTML (default)
+<YoutubePlayer
+ source={source}
+ useInlineHtml
+/>
+
+// External WebView with custom player page
+<YoutubePlayer
+ source={source}
+ useInlineHtml={false}
+ // default: https://react-native-youtube-bridge.pages.dev
+ webViewUrl="https://your-custom-player.com"
+/>
 ```
 
 ## Contributing

@@ -15,11 +15,12 @@ React Native에서 YouTube 플레이어를 사용하려면 복잡한 설정이 �
 - ✅ 다양한 [YouTube iframe Player API](https://developers.google.com/youtube/iframe_api_reference) 기능 지원
 - ✅ 개발자 친화적인 API 제공
 - ✅ Expo 지원
+- ✅ 유연한 렌더링 모드 (인라인 HTML & 웹뷰)
 
 ## 예제
 > 빠른 시작을 원하신다면 [예제](/example/)를 확인해보세요.
 
-- [웹 데모](https://react-native-youtube-bridge.pages.dev/)
+- [웹 데모](https://react-native-youtube-bridge-example.pages.dev/)
 - [Expo Go](https://snack.expo.dev/@harang/react-native-youtube-bridge)
 
 <p align="center">
@@ -210,9 +211,7 @@ function App() {
 }
 ```
 
-### 유용한 기능
-
-#### 재생 진행률 추적
+### 재생 진행률 추적
 - `progressInterval`이 설정된 경우, 해당 간격(ms)마다 `onProgress` 콜백이 호출됩니다.
 - `progressInterval`이 `undefined`이거나 `0` 또는 `null`인 경우, `onProgress` 콜백은 호출되지 않습니다.
 
@@ -232,6 +231,37 @@ function App() {
     />
   )
 }
+```
+
+### 플레이어 렌더링 및 소스 설정 (ios, android)
+
+**인라인 HTML vs 웹뷰 모드**   
+YouTube 플레이어 렌더링 방식을 제어하고 호환성을 위한 소스 URL을 설정합니다.
+
+1. **인라인 HTML 모드** (`useInlineHtml: true`)는 앱 내에서 직접 HTML을 로드하여 플레이어를 렌더링합니다. (default)
+2. **웹뷰 모드** (`useInlineHtml: false`)는 외부 플레이어 페이지를 로드합니다. 기본 URI는 https://react-native-youtube-bridge.pages.dev 입니다.
+
+> [!NOTE]
+> **webViewUrl 활용법**
+> - `useInlineHtml: true`인 경우: WebView source의 HTML `baseUrl`로 설정됩니다.
+> - `useInlineHtml: false`인 경우: WebView source의 `uri`를 override합니다.
+>
+> **임베드 제한 해결**: 인라인 HTML 사용 시 YouTube iframe에서 `embed not allowed` 오류가 발생하여 영상이 정상적으로 로드되지 않는다면, 웹뷰 모드로 전환하여 외부 플레이어를 통해 YouTube iframe을 로드해주세요.
+
+```tsx
+// 인라인 HTML (default)
+<YoutubePlayer
+  source={source}
+  useInlineHtml
+/>
+
+// 커스텀 플레이어 페이지를 사용한 외부 웹뷰
+<YoutubePlayer
+  source={source}
+  useInlineHtml={false}
+  // default: https://react-native-youtube-bridge.pages.dev
+  webViewUrl="https://your-custom-player.com"
+/>
 ```
 
 ## 기여하기

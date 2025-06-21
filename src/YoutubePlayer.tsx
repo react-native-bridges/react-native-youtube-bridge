@@ -15,6 +15,7 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
   (
     {
       source,
+      webViewUrl: webViewBaseUrl,
       width = screenWidth,
       height = 200,
       progressInterval,
@@ -54,8 +55,8 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
 
     const createPlayerHTML = useCreateLocalPlayerHtml({ videoId, useInlineHtml, ...playerVars });
     const webViewUrl = useMemo(
-      () => getYoutubeWebViewUrl(videoId, useInlineHtml, playerVars),
-      [videoId, useInlineHtml, playerVars],
+      () => getYoutubeWebViewUrl(videoId, useInlineHtml, playerVars, webViewBaseUrl),
+      [videoId, useInlineHtml, playerVars, webViewBaseUrl],
     );
 
     const handleMessage = useCallback(
@@ -267,7 +268,7 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
           {...webViewProps}
           ref={webViewRef}
           javaScriptEnabled
-          source={useInlineHtml ? { html: createPlayerHTML() } : { uri: webViewUrl }}
+          source={useInlineHtml ? { html: createPlayerHTML(), baseUrl: webViewBaseUrl } : { uri: webViewUrl }}
           onMessage={handleMessage}
           onError={(error) => {
             console.error('WebView error:', error);
