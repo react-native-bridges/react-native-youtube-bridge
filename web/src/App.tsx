@@ -160,7 +160,7 @@ function App() {
           return;
         }
 
-        if (message.id && window.ReactNativeWebView && result) {
+        if (message.id && window.ReactNativeWebView) {
           window.ReactNativeWebView.postMessage(
             JSON.stringify({
               type: 'commandResult',

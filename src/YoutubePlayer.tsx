@@ -263,7 +263,7 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
           // Android specific props
           mixedContentMode="compatibility"
           thirdPartyCookiesEnabled={false}
-          webviewDebuggingEnabled
+          webviewDebuggingEnabled={__DEV__}
           {...webViewProps}
           ref={webViewRef}
           javaScriptEnabled
