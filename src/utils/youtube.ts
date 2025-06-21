@@ -1,13 +1,19 @@
 import type { YoutubePlayerVars } from '../types/youtube';
+import { DEFAULT_EXTERNAL_WEB_URL } from './constants';
 
-export const getYoutubeWebViewUrl = (videoId: string, useInlineHtml: boolean, playerVars: YoutubePlayerVars) => {
+export const getYoutubeWebViewUrl = (
+  videoId: string,
+  useInlineHtml: boolean,
+  playerVars: YoutubePlayerVars,
+  webViewBaseUrl?: string,
+) => {
   if (useInlineHtml) {
     return '';
   }
 
   const { startTime, autoplay, controls, loop, muted, playsinline, rel, endTime } = playerVars;
 
-  const url = new URL('http://localhost:5173/');
+  const url = new URL(webViewBaseUrl || DEFAULT_EXTERNAL_WEB_URL);
 
   url.searchParams.set('videoId', videoId);
   startTime && url.searchParams.set('startTime', startTime.toString());

@@ -62,11 +62,20 @@ export type YoutubePlayerProps = {
    */
   progressInterval?: number;
   /**
-   * @description If the `useInlineHtml` is set to true, the player will use inline HTML.
+   * @description If set to true, the player will use inline HTML.
+   * When false, the player will use a webview with the default URI (https://react-native-youtube-bridge.pages.dev).
+   * To use a custom webview, set `webViewUrl` to your own URL.
    * @default true
    * @platform ios, android
    */
   useInlineHtml?: boolean;
+  /**
+   * @description The URL for the WebView source.
+   * When `useInlineHtml` is `true`, this value is set as the `baseUrl` for HTML content.
+   * When `useInlineHtml` is `false`, this value overrides the default URI for the WebView source (https://react-native-youtube-bridge.pages.dev).
+   * @platform ios, android
+   */
+  webViewUrl?: string;
   style?: StyleProp<ViewStyle>;
   /**
    * @platform ios, android
@@ -75,11 +84,15 @@ export type YoutubePlayerProps = {
   /**
    * @platform ios, android
    */
-  webViewProps?: Omit<WebViewProps, 'ref' | 'source' | 'style' | 'onMessage'>;
+  webViewProps?: Omit<WebViewProps, 'ref' | 'source' | 'style' | 'onMessage' | 'javaScriptEnabled' | 'onError'>;
   /**
    * @platform web
    */
   iframeStyle?: CSSProperties;
+  /**
+   * @description YouTube Embedded Players and Player Parameters
+   * @see https://developers.google.com/youtube/player_parameters
+   */
   playerVars?: YoutubePlayerVars;
 } & PlayerEvents;
 
