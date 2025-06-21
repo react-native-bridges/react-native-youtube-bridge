@@ -14,7 +14,7 @@ export const useWebView = (): UseWebViewReturn => {
 
   const sendMessage = useCallback((message: MessageData): boolean => {
     if (!isWebViewAvailable(window)) {
-      console.warn('WebView를 사용할 수 없습니다');
+      console.warn('WebView is not available');
       return false;
     }
 
@@ -27,7 +27,7 @@ export const useWebView = (): UseWebViewReturn => {
       window.ReactNativeWebView.postMessage(JSON.stringify(messageWithTimestamp));
       return true;
     } catch (error) {
-      console.error('WebView 메시지 전송 실패:', error);
+      console.error('Failed to send WebView message:', error);
       return false;
     }
   }, []);

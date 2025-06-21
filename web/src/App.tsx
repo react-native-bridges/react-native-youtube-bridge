@@ -87,8 +87,6 @@ function App() {
 
   useEffect(() => {
     onMessage((message) => {
-      console.log('message', message);
-
       if (message.command === 'updateProgressInterval') {
         const args = message.args || [];
 
