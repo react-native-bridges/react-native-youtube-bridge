@@ -15,6 +15,7 @@ function App() {
   const muted = urlParams.get('muted') === 'true';
   const playsinline = urlParams.get('playsinline') === 'true';
   const rel = urlParams.get('rel') === 'true';
+  const origin = urlParams.get('origin') ?? '';
 
   const [progressInterval, setProgressInterval] = useState<number>(0);
 
@@ -30,6 +31,7 @@ function App() {
     videoId: youtubeVideoId,
     progressInterval,
     playerVars: {
+      origin,
       controls,
       autoplay,
       muted,

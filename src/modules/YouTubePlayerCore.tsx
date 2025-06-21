@@ -100,6 +100,7 @@ class YouTubePlayerCore {
         end: config.playerVars?.endTime,
         playsinline: config.playerVars?.playsinline ? 1 : 0,
         rel: config.playerVars?.rel ? 1 : 0,
+        origin: config.playerVars?.origin,
         enablejsapi: 1,
       },
       events: {
