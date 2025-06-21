@@ -1,5 +1,13 @@
 # react-native-youtube-bridge
 
+## 0.4.1
+
+### Patch Changes
+
+- ea4af1b: fix: add missing origin parameter for YouTube iframe API security
+  - Pass webViewUrl as origin parameter to resolve iframe API restrictions
+  - Fix embed access issues when enablejsapi=1 is used
+
 ## 0.4.0
 
 ### Minor Changes
