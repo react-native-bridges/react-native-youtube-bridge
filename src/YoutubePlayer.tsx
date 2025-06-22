@@ -268,7 +268,11 @@ const YoutubePlayer = forwardRef<PlayerControls, YoutubePlayerProps>(
           {...webViewProps}
           ref={webViewRef}
           javaScriptEnabled
-          source={useInlineHtml ? { html: createPlayerHTML(), baseUrl: webViewBaseUrl } : { uri: webViewUrl }}
+          source={
+            useInlineHtml
+              ? { html: createPlayerHTML(), baseUrl: webViewBaseUrl }
+              : { ...(webViewProps?.source ?? {}), uri: webViewUrl }
+          }
           onMessage={handleMessage}
           onError={(error) => {
             console.error('WebView error:', error);
