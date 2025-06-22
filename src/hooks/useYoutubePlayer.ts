@@ -27,7 +27,7 @@ const useYouTubePlayer = (config: YoutubePlayerConfig) => {
     coreRef.current = null;
   }, []);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  // biome-ignore lint/correctness/useExhaustiveDependencies: initialize only once
   useEffect(() => {
     if (!coreRef.current) {
       coreRef.current = new YouTubePlayerCore({
@@ -46,6 +46,7 @@ const useYouTubePlayer = (config: YoutubePlayerConfig) => {
     return cleanup;
   }, []);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: update only playerVars
   useEffect(() => {
     const initialize = async () => {
       if (!containerRef.current) {
@@ -81,7 +82,7 @@ const useYouTubePlayer = (config: YoutubePlayerConfig) => {
     };
 
     initialize();
-  }, [videoId, startTime, endTime, autoplay, controls, loop, muted, playsinline, rel, origin, onError]);
+  }, [videoId, startTime, endTime, autoplay, controls, loop, muted, playsinline, rel, origin]);
 
   useEffect(() => {
     if (isReady && videoId && coreRef.current) {
