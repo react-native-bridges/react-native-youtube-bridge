@@ -1,5 +1,11 @@
 # react-native-youtube-bridge
 
+## 0.4.3
+
+### Patch Changes
+
+- cc61a8d: fix: override webview source props (method, body, header)
+
 ## 0.4.2
 
 ### Patch Changes
