@@ -1,5 +1,11 @@
 # react-native-youtube-bridge
 
+## 0.4.2
+
+### Patch Changes
+
+- ae3777a: fix(web): prevent player rerender when onError is not wrapped with useCallback
+
 ## 0.4.1
 
 ### Patch Changes
