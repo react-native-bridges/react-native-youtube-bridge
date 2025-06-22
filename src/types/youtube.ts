@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react';
 import type { DimensionValue, StyleProp, ViewStyle } from 'react-native';
 import type { WebViewProps } from 'react-native-webview';
+import type { WebViewSourceUri } from 'react-native-webview/lib/WebViewTypes';
 
 export type YoutubePlayerVars = {
   /**
@@ -84,7 +85,9 @@ export type YoutubePlayerProps = {
   /**
    * @platform ios, android
    */
-  webViewProps?: Omit<WebViewProps, 'ref' | 'source' | 'style' | 'onMessage' | 'javaScriptEnabled' | 'onError'>;
+  webViewProps?: Omit<WebViewProps, 'ref' | 'source' | 'style' | 'onMessage' | 'javaScriptEnabled' | 'onError'> & {
+    source?: Omit<WebViewSourceUri, 'uri'>;
+  };
   /**
    * @platform web
    */

@@ -182,6 +182,9 @@ function App() {
             rel: false,
             muted: true,
           }}
+          webViewProps={{
+            renderToHardwareTextureAndroid: true,
+          }}
           progressInterval={progressInterval}
           onReady={handleReady}
           onStateChange={handleStateChange}
