@@ -21,6 +21,9 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+    "paths": {
+      "@react-native-youtube-bridge/web": ["../packages/web/src/index.ts"]
+    },
   },
   "include": ["src"]
 }

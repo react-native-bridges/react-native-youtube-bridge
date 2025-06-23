@@ -1,0 +1,57 @@
+{
+  "name": "@react-native-youtube-bridge/web",
+  "version": "0.0.1",
+  "description": "Web implementation for react-native-youtube-bridge",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist", "package.json"],
+  "scripts": {
+    "dev": "vite",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -b && vite build"
+  },
+  "keywords": [
+    "react-native",
+    "ios",
+    "android",
+    "youtube",
+    "react-native-youtube",
+    "react-native-youtube-bridge",
+    "youtube-iframe-api",
+    "react-native-youtube-iframe"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/react-native-bridges/react-native-youtube-bridge.git"
+  },
+  "author": "saseungmin <dbd02169@naver.com> (https://github.com/saseungmin)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/react-native-bridges/react-native-youtube-bridge/issues"
+  },
+  "homepage": "https://github.com/react-native-bridges/react-native-youtube-bridge#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@react-native-youtube-bridge/core": "workspace:*",
+    "@react-native-youtube-bridge/react": "workspace:*"
+  },
+  "devDependencies": {
+    "react": "19.0.0",
+    "@types/react": "^19.0.12",
+    "@vitejs/plugin-react-swc": "^3.9.0",
+    "vite": "^6.3.5"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0"
+  }
+}

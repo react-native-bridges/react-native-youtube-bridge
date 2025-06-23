@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "react-native-builder-bob": "^0.40.12"
+    "babel-plugin-module-resolver": "^5.0.2"
   },
   "private": true
 }

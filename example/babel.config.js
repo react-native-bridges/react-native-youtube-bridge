@@ -1,16 +1,21 @@
-const path = require('node:path');
-const { getConfig } = require('react-native-builder-bob/babel-config');
-const pkg = require('../package.json');
-
-const root = path.resolve(__dirname, '..');
-
 module.exports = (api) => {
   api.cache(true);
 
-  return getConfig(
-    {
-      presets: ['babel-preset-expo'],
-    },
-    { root, pkg },
-  );
+  return {
+    presets: ['babel-preset-expo'],
+    plugins: [
+      [
+        'module-resolver',
+        {
+          root: ['./'],
+          alias: {
+            'react-native-youtube-bridge': '../packages/react-native-youtube-bridge/src/index',
+            '@react-native-youtube-bridge/core': '../packages/core/src/index',
+            '@react-native-youtube-bridge/react': '../packages/react/src/index',
+          },
+          extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
+        },
+      ],
+    ],
+  };
 };
