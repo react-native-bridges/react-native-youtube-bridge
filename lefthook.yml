@@ -6,7 +6,7 @@ pre-commit:
       run: bun run lint
     types:
       glob: "*.{js,ts, jsx, tsx}"
-      run: npx tsc
+      run: bun run typecheck
 commit-msg:
   parallel: true
   commands:

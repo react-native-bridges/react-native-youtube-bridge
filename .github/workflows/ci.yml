@@ -23,6 +23,11 @@ jobs:
       - name: Lint files
         run: bun run lint
 
+      - name: Build dependencies first
+        run: |
+          bun run workspace:core build
+          bun run workspace:react build
+
       - name: Typecheck files
         run: bun run typecheck
 
@@ -48,7 +53,7 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Build package
-        run: bun run prepare
+        run: bun run build
 
   build-web:
     runs-on: ubuntu-latest

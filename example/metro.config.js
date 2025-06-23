@@ -36,6 +36,4 @@ function createMonorepoMetroConfig(dirname, options = {}) {
   return config;
 }
 
-module.exports = createMonorepoMetroConfig(__dirname, {
-  packageName: 'react-native-youtube-bridge',
-});
+module.exports = createMonorepoMetroConfig(__dirname);

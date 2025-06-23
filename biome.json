@@ -6,9 +6,9 @@
     "useIgnoreFile": false
   },
   "files": {
-    "include": ["src/**/*", "example/src/**/*"],
+    "include": ["src/**/*", "example/src/**/*", "packages/**/*"],
     "ignoreUnknown": false,
-    "ignore": ["lib", "node_modules", "ios", "android"]
+    "ignore": ["lib", "node_modules", "ios", "android", "dist"]
   },
   "formatter": {
     "enabled": true,

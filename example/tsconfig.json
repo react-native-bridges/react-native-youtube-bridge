@@ -2,7 +2,7 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "paths": {
-      "react-native-youtube-bridge": ["../src/index"],
+      "react-native-youtube-bridge": ["../packages/react-native-youtube-bridge/src/index"]
     }
   }
 }
