@@ -24,7 +24,7 @@ However, there are currently no actively maintained YouTube player libraries for
 - [Expo Go](https://snack.expo.dev/@harang/react-native-youtube-bridge)
 
 <p align="center">
-  <img src="./assets/example.gif" width="600" />
+  <img src="../../assets/example.gif" width="600" />
 </p>
 
 ## Installation
