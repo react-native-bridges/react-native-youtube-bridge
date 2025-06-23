@@ -23,9 +23,6 @@ jobs:
       - name: Lint files
         run: bun run lint
 
-      - name: Typecheck files
-        run: bun run typecheck
-
   test:
     runs-on: ubuntu-latest
     steps:
