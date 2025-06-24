@@ -3,7 +3,7 @@
   "description": "🎥 Easy-to-use YouTube player for React Native with cross-platform support",
   "private": true,
   "scripts": {
-    "example": "pnpm --filter example",
+    "example": "pnpm --filter example run",
     "test": "jest",
     "clear": "rimraf --glob **/dist",
     "typecheck": "pnpm --filter @react-native-youtube-bridge/core typecheck && pnpm --filter @react-native-youtube-bridge/react typecheck && pnpm --filter @react-native-youtube-bridge/web typecheck && pnpm --filter react-native-youtube-bridge typecheck",
