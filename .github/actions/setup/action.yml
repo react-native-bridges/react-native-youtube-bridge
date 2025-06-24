@@ -1,5 +1,5 @@
 name: Setup
-description: Setup Bun and install dependencies
+description: Setup Pnpm and install dependencies
 
 inputs:
   working-directory:
@@ -10,32 +10,34 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Setup Bun
-      uses: oven-sh/setup-bun@v2
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
       with:
-        bun-version: latest
+        version: 10.11.0
 
-    - name: Restore dependencies
-      id: bun-cache
-      uses: actions/cache/restore@v4
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
       with:
-        path: |
-          ${{ inputs.working-directory }}/node_modules
-          ~/.bun/install/cache
-        key: ${{ runner.os }}-bun-${{ inputs.working-directory }}-${{ hashFiles(format('{0}/bun.lock', inputs.working-directory)) }}-${{ hashFiles(format('{0}/package.json', inputs.working-directory)) }}
+        node-version-file: '.nvmrc'
+        cache: 'pnpm'
+        cache-dependency-path: ${{ inputs.working-directory }}/pnpm-lock.yaml
+        registry-url: 'https://registry.npmjs.org'
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - name: Setup pnpm cache
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles(format('{0}/pnpm-lock.yaml', inputs.working-directory)) }}
         restore-keys: |
-          ${{ runner.os }}-bun-${{ inputs.working-directory }}-${{ hashFiles(format('{0}/bun.lock', inputs.working-directory)) }}-
+          ${{ runner.os }}-pnpm-store-
 
     - name: Install dependencies
-      run: bun install --frozen-lockfile
       working-directory: ${{ inputs.working-directory }}
       shell: bash
-
-    - name: Cache dependencies
-      if: steps.bun-cache.outputs.cache-hit != 'true'
-      uses: actions/cache/save@v4
-      with:
-        path: |
-          ${{ inputs.working-directory }}/node_modules
-          ~/.bun/install/cache
-        key: ${{ steps.bun-cache.outputs.cache-primary-key }}
+      run: |
+        pnpm install --frozen-lockfile --prefer-offline

@@ -21,15 +21,15 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Lint files
-        run: bun run lint
+        run: pnpm run lint
 
       - name: Build dependencies first
         run: |
-          bun run workspace:core build
-          bun run workspace:react build
+          pnpm --filter @react-native-youtube-bridge/core build
+          pnpm --filter @react-native-youtube-bridge/react build
 
       - name: Typecheck files
-        run: bun run typecheck
+        run: pnpm run typecheck
 
   test:
     runs-on: ubuntu-latest
@@ -41,7 +41,7 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Run unit tests
-        run: bun run test --maxWorkers=2 --coverage
+        run: pnpm run test --maxWorkers=2 --coverage
 
   build-library:
     runs-on: ubuntu-latest
@@ -53,7 +53,7 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Build package
-        run: bun run build
+        run: pnpm run build
 
   build-web:
     runs-on: ubuntu-latest
@@ -64,11 +64,5 @@ jobs:
       - name: Setup Root
         uses: ./.github/actions/setup
 
-      - name: Setup Example
-        uses: ./.github/actions/setup
-        with:
-          working-directory: example
-
       - name: Build example for Web
-        run: |
-          bun run example expo export --platform web --clear
+        run: pnpm run example web:build

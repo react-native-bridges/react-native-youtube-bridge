@@ -80,9 +80,7 @@
   },
   "jest": {
     "preset": "react-native",
-    "modulePathIgnorePatterns": [
-      "<rootDir>/lib/"
-    ]
+    "modulePathIgnorePatterns": ["<rootDir>/lib/"]
   },
   "react-native-builder-bob": {
     "source": "src",

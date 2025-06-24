@@ -12,10 +12,7 @@
       "require": "./dist/index.js"
     }
   },
-  "files": [
-    "dist",
-    "package.json"
-  ],
+  "files": ["dist", "package.json"],
   "scripts": {
     "build": "tsdown",
     "typecheck": "tsc --noEmit"
