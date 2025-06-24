@@ -11,7 +11,7 @@ on:
       - checks_requested
 
 jobs:
-  lint:
+  lint-and-typecheck:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
