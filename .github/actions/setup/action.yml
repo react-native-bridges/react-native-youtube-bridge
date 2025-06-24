@@ -21,7 +21,6 @@ runs:
         node-version-file: '.nvmrc'
         cache: 'pnpm'
         cache-dependency-path: ${{ inputs.working-directory }}/pnpm-lock.yaml
-        registry-url: 'https://registry.npmjs.org'
 
     - name: Get pnpm store directory
       shell: bash
