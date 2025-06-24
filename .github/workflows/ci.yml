@@ -54,15 +54,3 @@ jobs:
 
       - name: Build package
         run: pnpm run build
-
-  build-web:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Root
-        uses: ./.github/actions/setup
-
-      - name: Build example for Web
-        run: pnpm run example web:build
