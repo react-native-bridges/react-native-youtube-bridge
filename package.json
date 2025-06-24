@@ -9,7 +9,7 @@
     "typecheck": "pnpm -r run typecheck",
     "build": "pnpm -r run build",
     "lint": "biome format packages/** --write",
-    "release": "changeset version && changeset publish"
+    "changeset": "changeset"
   },
   "keywords": [
     "react-native",
