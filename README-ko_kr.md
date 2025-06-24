@@ -264,6 +264,22 @@ YouTube 플레이어 렌더링 방식을 제어하고 호환성을 위한 소스
 />
 ```
 
+**커스텀 플레이어 페이지**
+
+직접 제작한 커스텀 플레이어 페이지를 사용하려면, `@react-native-youtube-bridge/web`을 활용하여 React 기반의 플레이어 페이지를 구축할 수 있습니다.
+
+```tsx
+import { YoutubePlayer } from '@react-native-youtube-bridge/web';
+
+function CustomPlayerPage() {
+  return <YoutubePlayer />;
+}
+
+export default CustomPlayerPage;
+```
+
+> 자세한 내용은 [웹 플레이어 가이드](./packages/web/)를 참고해 주세요.
+
 ## 기여하기
 
 리포지토리 기여 방법과 개발 워크플로우를 알아보려면 [기여 가이드](CONTRIBUTING.md)를 참고하세요.
