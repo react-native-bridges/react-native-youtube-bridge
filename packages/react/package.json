@@ -1,6 +1,6 @@
 {
   "name": "@react-native-youtube-bridge/react",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "React implementation for react-native-youtube-bridge",
   "private": true,
   "main": "dist/index.js",
@@ -13,7 +13,10 @@
       "require": "./dist/index.js"
     }
   },
-  "files": ["dist", "package.json"],
+  "files": [
+    "dist",
+    "package.json"
+  ],
   "scripts": {
     "build": "tsdown",
     "typecheck": "tsc --noEmit"
