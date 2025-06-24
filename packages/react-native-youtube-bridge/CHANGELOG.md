@@ -1,5 +1,17 @@
 # react-native-youtube-bridge
 
+## 1.0.2
+
+### Patch Changes
+
+- d2b1b03: fix: migrate from bun to pnpm to resolve workspace dependency resolution issues
+  - Bun changeset publish fails to resolve workspace dependencies
+  - Migrated from bun to pnpm for stable monorepo workflow
+  - Updated CI/CD configurations for pnpm compatibility
+- Updated dependencies [d2b1b03]
+  - @react-native-youtube-bridge/core@1.0.2
+  - @react-native-youtube-bridge/react@1.0.2
+
 ## 1.0.1
 
 ### Patch Changes

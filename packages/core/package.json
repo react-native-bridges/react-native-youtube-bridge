@@ -1,6 +1,6 @@
 {
   "name": "@react-native-youtube-bridge/core",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Core package for react-native-youtube-bridge",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -12,7 +12,10 @@
       "require": "./dist/index.js"
     }
   },
-  "files": ["dist", "package.json"],
+  "files": [
+    "dist",
+    "package.json"
+  ],
   "scripts": {
     "build": "tsdown",
     "typecheck": "tsc --noEmit"
