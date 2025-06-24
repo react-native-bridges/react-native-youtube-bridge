@@ -239,7 +239,9 @@ function App() {
 YouTube 플레이어 렌더링 방식을 제어하고 호환성을 위한 소스 URL을 설정합니다.
 
 1. **인라인 HTML 모드** (`useInlineHtml: true`)는 앱 내에서 직접 HTML을 로드하여 플레이어를 렌더링합니다. (default)
-2. **웹뷰 모드** (`useInlineHtml: false`)는 외부 플레이어 페이지를 로드합니다. 기본 URI는 https://react-native-youtube-bridge.pages.dev 입니다.
+2. **웹뷰 모드** (`useInlineHtml: false`)는 외부 플레이어 페이지를 로드합니다.
+   - 기본 URI는 https://react-native-youtube-bridge.pages.dev 입니다.
+   - 직접 제작한 커스텀 플레이어 페이지를 외부 웹뷰로 사용하려면, `@react-native-youtube-bridge/web`으로 플레이어를 구축한 후 `webViewUrl`에 해당 URL을 설정하세요. 자세한 구현 방법은 [웹 플레이어 가이드](../web/)를 참고해 주세요.
 
 > [!NOTE]
 > **webViewUrl 활용법**
@@ -264,9 +266,25 @@ YouTube 플레이어 렌더링 방식을 제어하고 호환성을 위한 소스
 />
 ```
 
+**커스텀 플레이어 페이지**
+
+직접 제작한 커스텀 플레이어 페이지를 사용하려면, `@react-native-youtube-bridge/web`을 활용하여 React 기반의 플레이어 페이지를 구축할 수 있습니다.
+
+```tsx
+import { YoutubePlayer } from '@react-native-youtube-bridge/web';
+
+function CustomPlayerPage() {
+  return <YoutubePlayer />;
+}
+
+export default CustomPlayerPage;
+```
+
+> 자세한 내용은 [웹 플레이어 가이드](../web/)를 참고해 주세요.
+
 ## 기여하기
 
-리포지토리 기여 방법과 개발 워크플로우를 알아보려면 [기여 가이드](CONTRIBUTING.md)를 참고하세요.
+리포지토리 기여 방법과 개발 워크플로우를 알아보려면 [기여 가이드](/CONTRIBUTING.md)를 참고하세요.
 
 ## 라이선스
 
