@@ -1,6 +1,6 @@
 {
   "name": "@react-native-youtube-bridge/web",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Web implementation for react-native-youtube-bridge",
   "main": "dist/web.mjs",
   "exports": {
@@ -8,7 +8,10 @@
       "import": "./dist/web.mjs"
     }
   },
-  "files": ["dist", "package.json"],
+  "files": [
+    "dist",
+    "package.json"
+  ],
   "scripts": {
     "dev": "vite",
     "typecheck": "tsc --noEmit",
