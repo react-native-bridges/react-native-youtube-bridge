@@ -264,6 +264,22 @@ Control YouTube player rendering method and configure source URLs for compatibil
 />
 ```
 
+**Custom Player Page**
+
+To use your own custom player page, you can build a React-based player using `@react-native-youtube-bridge/web`.
+
+```tsx
+import { YoutubePlayer } from '@react-native-youtube-bridge/web';
+
+function CustomPlayerPage() {
+  return <YoutubePlayer />;
+}
+
+export default CustomPlayerPage;
+```
+
+> For more details, please refer to the [Web Player Guide](./packages/web/).
+
 ## Contributing
 
 See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
