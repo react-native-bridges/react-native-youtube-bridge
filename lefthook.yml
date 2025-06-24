@@ -3,10 +3,10 @@ pre-commit:
   commands:
     lint:
       glob: "*.{js,ts,jsx,tsx}"
-      run: bun run lint
+      run: pnpm run lint
     types:
-      glob: "*.{js,ts, jsx, tsx}"
-      run: bun run typecheck
+      glob: "*.{js,ts,jsx,tsx}"
+      run: pnpm run typecheck
 commit-msg:
   parallel: true
   commands:

@@ -83,3 +83,6 @@ dist/
 # expo native
 example/ios/
 example/android/
+
+# coverage
+coverage/
