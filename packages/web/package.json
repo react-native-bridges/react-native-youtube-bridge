@@ -2,14 +2,10 @@
   "name": "@react-native-youtube-bridge/web",
   "version": "0.0.1",
   "description": "Web implementation for react-native-youtube-bridge",
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/web.mjs",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "import": "./dist/web.mjs"
     }
   },
   "files": ["dist", "package.json"],
