@@ -282,6 +282,32 @@ export default CustomPlayerPage;
 
 > 자세한 내용은 [웹 플레이어 가이드](../web/)를 참고해 주세요.
 
+### YouTube oEmbed API
+`useYoutubeOEmbed` 훅을 통해 YouTube 비디오의 메타데이터를 가져올 수 있습니다.   
+이 훅은 YouTube URL만 지원합니다.
+
+```tsx
+import { useYoutubeOEmbed } from 'react-native-youtube-bridge';
+
+function App() {
+  const { oEmbed, isLoading, error } = useYoutubeOEmbed('https://www.youtube.com/watch?v=AbZH7XWDW_k');
+
+  if (isLoading) return <Text>Loading...</Text>;
+  if (error) return <Text>Error: {error.message}</Text>;
+  if (!oEmbed) return null;
+
+  return (
+    <>
+      <Text>{oEmbed.title}</Text>
+      <Image 
+        source={{ uri: oEmbed?.thumbnail_url }} 
+        style={{ width: oEmbed?.thumbnail_width, height: oEmbed?.thumbnail_height }} 
+      />
+    </>
+  )
+}
+```
+
 ## 기여하기
 
 리포지토리 기여 방법과 개발 워크플로우를 알아보려면 [기여 가이드](/CONTRIBUTING.md)를 참고하세요.
