@@ -282,6 +282,32 @@ export default CustomPlayerPage;
 
 > For more details, please refer to the [Web Player Guide](../web/).
 
+### YouTube oEmbed API
+Use the `useYoutubeOEmbed` hook to fetch YouTube video metadata.  
+This hook only supports YouTube URLs.
+
+```tsx
+import { useYoutubeOEmbed } from 'react-native-youtube-bridge';
+
+function App() {
+ const { oEmbed, isLoading, error } = useYoutubeOEmbed('https://www.youtube.com/watch?v=AbZH7XWDW_k');
+
+ if (isLoading) return <Text>Loading...</Text>;
+ if (error) return <Text>Error: {error.message}</Text>;
+ if (!oEmbed) return null;
+
+ return (
+   <>
+     <Text>{oEmbed.title}</Text>
+     <Image 
+       source={{ uri: oEmbed?.thumbnail_url }} 
+       style={{ width: oEmbed?.thumbnail_width, height: oEmbed?.thumbnail_height }} 
+     />
+   </>
+ )
+}
+```
+
 ## Contributing
 
 See the [contributing guide](/CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
