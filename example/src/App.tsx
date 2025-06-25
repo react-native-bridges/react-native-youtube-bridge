@@ -7,6 +7,7 @@ import {
   type ProgressData,
   type YouTubeError,
   YoutubePlayer,
+  useYoutubeOEmbed,
 } from 'react-native-youtube-bridge';
 
 const formatTime = (seconds: number): string => {
@@ -27,6 +28,9 @@ function App() {
   const [isMuted, setIsMuted] = useState(false);
   const [videoId, setVideoId] = useState('AbZH7XWDW_k');
   const [progressInterval, setProgressInterval] = useState(1000);
+  const { oEmbed, isLoading, error } = useYoutubeOEmbed('https://www.youtube.com/watch?v=AbZH7XWDW_k');
+
+  console.log('oEmbed', oEmbed, isLoading, error);
 
   const handleReady = useCallback((playerInfo: PlayerInfo) => {
     console.log('Player is ready!');

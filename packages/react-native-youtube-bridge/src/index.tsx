@@ -11,3 +11,4 @@ export {
   type PlayerEvents,
   type PlayerControls,
 } from '@react-native-youtube-bridge/core';
+export { useYoutubeOEmbed } from '@react-native-youtube-bridge/react';
