@@ -1,5 +1,11 @@
 # @react-native-youtube-bridge/react
 
+## 1.1.0
+
+### Minor Changes
+
+- 46ce91a: feat(hook): add useYoutubeOEmbed hook for fetching YouTube video metadata
+
 ## 1.0.2
 
 ### Patch Changes
