@@ -3,10 +3,10 @@ pre-commit:
   commands:
     lint:
       glob: "*.{js,ts,jsx,tsx}"
-      run: pnpm run lint
+      run: npx biome format --write {staged_files}
     types:
       glob: "*.{js,ts,jsx,tsx}"
-      run: pnpm run typecheck
+      run: npx tsc
 commit-msg:
   parallel: true
   commands:
