@@ -1,13 +1,28 @@
 import type { PlayerEvents, YouTubeSource, YoutubePlayerVars } from '@react-native-youtube-bridge/core';
 import type { CSSProperties } from 'react';
-import type { DimensionValue, StyleProp, ViewStyle } from 'react-native';
+import type { StyleProp, ViewStyle } from 'react-native';
 import type { WebViewProps } from 'react-native-webview';
 import type { WebViewSourceUri } from 'react-native-webview/lib/WebViewTypes';
 
 export type YoutubePlayerProps = {
+  /**
+   * @description The source of the video to play.
+   * @example
+   * ```ts
+   * source: 'https://www.youtube.com/watch?v=AbZH7XWDW_k'
+   * source: { videoId: 'AbZH7XWDW_k' }
+   * source: { url: 'https://www.youtube.com/watch?v=AbZH7XWDW_k' }
+   * ```
+   */
   source: YouTubeSource;
-  width?: DimensionValue;
-  height?: DimensionValue;
+  /**
+   * @description The width of the player.
+   */
+  width?: number | 'auto' | `${number}%`;
+  /**
+   * @description The height of the player.
+   */
+  height?: number | 'auto' | `${number}%`;
   /**
    * @description The interval (in milliseconds) at which `onProgress` callback is called.
    */
@@ -29,16 +44,19 @@ export type YoutubePlayerProps = {
   webViewUrl?: string;
   style?: StyleProp<ViewStyle>;
   /**
+   * @description The style of the WebView.
    * @platform ios, android
    */
   webViewStyle?: StyleProp<ViewStyle>;
   /**
+   * @description The props of the WebView.
    * @platform ios, android
    */
   webViewProps?: Omit<WebViewProps, 'ref' | 'source' | 'style' | 'onMessage' | 'javaScriptEnabled' | 'onError'> & {
     source?: Omit<WebViewSourceUri, 'uri'>;
   };
   /**
+   * @description The style of the iframe wrapper.
    * @platform web
    */
   iframeStyle?: CSSProperties;
