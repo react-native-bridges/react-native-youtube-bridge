@@ -1,5 +1,16 @@
 # react-native-youtube-bridge
 
+## 1.1.2
+
+### Patch Changes
+
+- e0ae7e0: docs: add comprehensive TSDoc for YoutubePlayer props and events
+  - Improve documentation for player events (`onReady`, `onStateChange`, etc.)
+  - Add detailed descriptions for player parameters and configuration
+- Updated dependencies [e0ae7e0]
+  - @react-native-youtube-bridge/core@1.0.3
+  - @react-native-youtube-bridge/react@1.1.1
+
 ## 1.1.1
 
 ### Patch Changes
