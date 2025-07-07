@@ -1,5 +1,12 @@
 # example
 
+## 1.1.3
+
+### Patch Changes
+
+- Updated dependencies [4037df5]
+  - react-native-youtube-bridge@1.1.3
+
 ## 1.1.2
 
 ### Patch Changes
