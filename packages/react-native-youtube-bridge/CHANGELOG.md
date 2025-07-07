@@ -1,5 +1,15 @@
 # react-native-youtube-bridge
 
+## 1.1.3
+
+### Patch Changes
+
+- 4037df5: chore: include src folder in package.json files
+
+  - Add src to files array for better debugging experience
+  - Enables accurate source maps and stack traces for library users
+  - Follows React Native library best practices
+
 ## 1.1.2
 
 ### Patch Changes
