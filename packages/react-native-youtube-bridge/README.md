@@ -24,7 +24,7 @@ However, there are currently no actively maintained YouTube player libraries for
 - [Expo Go](https://snack.expo.dev/@harang/react-native-youtube-bridge)
 
 <p align="center">
-  <img src="../../assets/example.gif" width="600" />
+  <img src="https://raw.githubusercontent.com/react-native-bridges/react-native-youtube-bridge/main/assets/example.gif" width="600" />
 </p>
 
 ## Installation
@@ -241,7 +241,7 @@ Control YouTube player rendering method and configure source URLs for compatibil
 1. **Inline HTML Mode** (`useInlineHtml: true`) renders the player by loading HTML directly within the app. (default)
 2. **WebView Mode** (`useInlineHtml: false`) loads an external player page.
    - The default URI is https://react-native-youtube-bridge.pages.dev.
-   - To use your own custom player page as an external WebView, build your player with `@react-native-youtube-bridge/web` and set the URL in the `webViewUrl` property. For detailed implementation instructions, please refer to the [Web Player Guide](../web/).
+   - To use your own custom player page as an external WebView, build your player with `@react-native-youtube-bridge/web` and set the URL in the `webViewUrl` property. For detailed implementation instructions, please refer to the [Web Player Guide](https://github.com/react-native-bridges/react-native-youtube-bridge/tree/main/packages/web).
 
 > [!NOTE]
 > **webViewUrl Usage**
@@ -280,7 +280,7 @@ function CustomPlayerPage() {
 export default CustomPlayerPage;
 ```
 
-> For more details, please refer to the [Web Player Guide](../web/).
+> For more details, please refer to the [Web Player Guide](https://github.com/react-native-bridges/react-native-youtube-bridge/tree/main/packages/web).
 
 ### YouTube oEmbed API
 Use the `useYoutubeOEmbed` hook to fetch YouTube video metadata.  
