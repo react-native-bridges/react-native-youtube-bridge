@@ -1,5 +1,11 @@
 # react-native-youtube-bridge
 
+## 1.1.4
+
+### Patch Changes
+
+- ba12f3d: fix: resolve broken links in README files
+
 ## 1.1.3
 
 ### Patch Changes
