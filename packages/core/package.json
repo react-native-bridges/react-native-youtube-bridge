@@ -18,6 +18,7 @@
   ],
   "scripts": {
     "build": "tsdown",
+    "dev": "tsdown --watch ./src",
     "typecheck": "tsc --noEmit"
   },
   "keywords": [
