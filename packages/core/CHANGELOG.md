@@ -1,5 +1,11 @@
 # @react-native-youtube-bridge/core
 
+## 2.0.0
+
+### Major Changes
+
+- 6432a30: feat: create Store Class for YouTube iframe state using useSyncExternalStore
+
 ## 1.0.3
 
 ### Patch Changes
