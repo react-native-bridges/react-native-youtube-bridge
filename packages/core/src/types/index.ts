@@ -191,3 +191,15 @@ export type PlayerControls = {
   // Player size
   setSize: (width: number, height: number) => void;
 };
+
+export type YoutubePlayerEvents = {
+  ready: PlayerInfo;
+  statechange: PlayerState;
+  error: YouTubeError;
+  progress: ProgressData;
+  playbackRateChange: number;
+  playbackQualityChange: PlaybackQuality;
+  autoplayBlocked: undefined;
+};
+
+export type YoutubeEventType = keyof YoutubePlayerEvents;
