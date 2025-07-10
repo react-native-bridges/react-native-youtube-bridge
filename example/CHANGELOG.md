@@ -1,5 +1,11 @@
 # example
 
+## 1.1.5
+
+### Patch Changes
+
+- react-native-youtube-bridge@1.1.5
+
 ## 1.1.4
 
 ### Patch Changes

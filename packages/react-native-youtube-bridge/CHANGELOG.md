@@ -1,5 +1,13 @@
 # react-native-youtube-bridge
 
+## 1.1.5
+
+### Patch Changes
+
+- Updated dependencies [6432a30]
+  - @react-native-youtube-bridge/core@2.0.0
+  - @react-native-youtube-bridge/react@1.1.2
+
 ## 1.1.4
 
 ### Patch Changes
