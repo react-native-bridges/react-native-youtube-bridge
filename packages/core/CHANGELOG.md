@@ -1,5 +1,29 @@
 # @react-native-youtube-bridge/core
 
+## 2.1.0
+
+### Minor Changes
+
+- 601dbe0: feat: support optional YouTube source for dynamic loading
+
+  - Extend YouTubeSource type to accept undefined values
+  - Add defensive logic for undefined source handling
+  - Enable async video ID loading patterns
+  - Maintain backward compatibility with existing usage
+
+  New usage pattern:
+
+  ```tsx
+  type YouTubeSource =
+    | string
+    | { videoId: string | undefined }
+    | { url: string | undefined }
+    | undefined;
+
+  const [videoId, setVideoId] = useState<string | undefined>();
+  const player = useYouTubePlayer(videoId); // Now supports undefined
+  ```
+
 ## 2.0.0
 
 ### Major Changes
