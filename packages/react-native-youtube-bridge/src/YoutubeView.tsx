@@ -105,7 +105,7 @@ function YoutubeView({
 
   useEffect(() => {
     if (isReady && webViewRef.current) {
-      const controller = WebviewYoutubePlayerController.getInstance(webViewRef);
+      const controller = WebviewYoutubePlayerController.createInstance(webViewRef);
 
       playerRef.current = controller;
 

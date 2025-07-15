@@ -14,14 +14,8 @@ class WebYoutubePlayerController {
   private progressIntervalMs = 1000;
   private seekTimeout: NodeJS.Timeout | null = null;
 
-  private static instance: WebYoutubePlayerController | null = null;
-
-  static getInstance(): WebYoutubePlayerController {
-    if (!WebYoutubePlayerController.instance) {
-      WebYoutubePlayerController.instance = new WebYoutubePlayerController();
-    }
-
-    return WebYoutubePlayerController.instance;
+  static createInstance(): WebYoutubePlayerController {
+    return new WebYoutubePlayerController();
   }
 
   static async initialize(): Promise<void> {
@@ -55,7 +49,7 @@ class WebYoutubePlayerController {
         return;
       }
 
-      window.window.onYouTubeIframeAPIReady = () => {
+      window.onYouTubeIframeAPIReady = () => {
         resolve();
       };
 
@@ -379,8 +373,6 @@ class WebYoutubePlayerController {
       }
       this.player = null;
     }
-
-    WebYoutubePlayerController.instance = null;
   }
 }
 

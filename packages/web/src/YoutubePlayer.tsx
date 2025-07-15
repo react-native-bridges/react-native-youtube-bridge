@@ -37,7 +37,7 @@ function YoutubePlayer() {
     WebYoutubePlayerController.initialize().then(() => {
       setIsInitialized(true);
 
-      const controller = WebYoutubePlayerController.getInstance();
+      const controller = WebYoutubePlayerController.createInstance();
       playerRef.current = controller;
     });
   }, []);

@@ -5,20 +5,13 @@ class WebviewYoutubePlayerController {
   private webViewRef: React.RefObject<WebView | null>;
   private commandId = 0;
   private pendingCommands: Map<string, (result: unknown) => void> = new Map();
-  private static instance: WebviewYoutubePlayerController | null = null;
 
   constructor(webViewRef: React.RefObject<WebView | null>) {
     this.webViewRef = webViewRef;
   }
 
-  static getInstance(webViewRef: React.RefObject<WebView | null>): WebviewYoutubePlayerController {
-    if (!WebviewYoutubePlayerController.instance) {
-      WebviewYoutubePlayerController.instance = new WebviewYoutubePlayerController(webViewRef);
-    } else {
-      WebviewYoutubePlayerController.instance.webViewRef = webViewRef;
-    }
-
-    return WebviewYoutubePlayerController.instance;
+  static createInstance(webViewRef: React.RefObject<WebView | null>): WebviewYoutubePlayerController {
+    return new WebviewYoutubePlayerController(webViewRef);
   }
 
   getPendingCommands(): Map<string, (result: unknown) => void> {
@@ -161,6 +154,11 @@ class WebviewYoutubePlayerController {
     });
   }
 
+  /**
+   * Updates player event callbacks. No-op in WebView implementation.
+   * This method exists for interface compatibility with web implementation.
+   * @param _newCallbacks - Event callbacks (ignored in WebView)
+   */
   updateCallbacks(_newCallbacks: Partial<PlayerEvents>): void {
     // no-op only for web
   }
@@ -168,8 +166,6 @@ class WebviewYoutubePlayerController {
   async destroy(): Promise<void> {
     this.pendingCommands.clear();
     await this.cleanup();
-
-    WebviewYoutubePlayerController.instance = null;
   }
 }
 
