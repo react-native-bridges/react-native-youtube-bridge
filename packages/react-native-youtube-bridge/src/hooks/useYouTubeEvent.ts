@@ -58,12 +58,27 @@ function useYouTubeEvent<T extends keyof YoutubePlayerEvents>(
 ): YoutubePlayerEvents[T] | null | undefined {
   const isProgress = eventType === 'progress';
   const isCallback = typeof callbackOrThrottleOrDefaultValue === 'function';
-  const throttleMs = isProgress
-    ? typeof callbackOrThrottleOrDefaultValue === 'number'
+
+  const getThrottleMs = (): number | undefined => {
+    if (!isProgress) {
+      return undefined;
+    }
+
+    return typeof callbackOrThrottleOrDefaultValue === 'number'
       ? callbackOrThrottleOrDefaultValue
-      : DEFAULT_PROGRESS_INTERVAL
-    : undefined;
-  const defaultValue = isCallback || isProgress ? null : (callbackOrThrottleOrDefaultValue ?? null);
+      : DEFAULT_PROGRESS_INTERVAL;
+  };
+
+  const getDefaultValue = () => {
+    if (isCallback || isProgress) {
+      return null;
+    }
+
+    return callbackOrThrottleOrDefaultValue ?? null;
+  };
+
+  const throttleMs = getThrottleMs();
+  const defaultValue = getDefaultValue();
 
   const callbackRef = useRef<EventCallback<YoutubePlayerEvents[T]> | null>(
     isCallback ? callbackOrThrottleOrDefaultValue : null,
