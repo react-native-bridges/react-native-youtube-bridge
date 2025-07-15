@@ -1,161 +1,61 @@
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import {
-  ERROR_CODES,
-  type PlayerControls,
-  PlayerState,
-  type YoutubePlayerConfig,
-  YoutubePlayerCore,
+  YoutubePlayer,
+  type YouTubeError,
+  type YoutubePlayerVars,
+  type YouTubeSource,
 } from '@react-native-youtube-bridge/core';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import useYouTubeVideoId from './useYoutubeVideoId';
 
-const useYouTubePlayer = (config: YoutubePlayerConfig) => {
-  const coreRef = useRef<YoutubePlayerCore | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [isReady, setIsReady] = useState(false);
+/**
+ * @param source - The source of the Youtube video.
+ * @param config - The config for the Youtube player.
+ * @returns The Youtube player instance.
+ */
+const useYouTubePlayer = (source: YouTubeSource, config?: YoutubePlayerVars): YoutubePlayer => {
+  const playerRef = useRef<YoutubePlayer | null>(null);
+  const previousVideoId = useRef<string | null | undefined>(undefined);
+  const isFastRefresh = useRef(false);
 
-  const {
-    videoId,
-    progressInterval = 0,
-    playerVars = {},
-    onReady,
-    onStateChange,
-    onError,
-    onProgress,
-    onPlaybackRateChange,
-    onPlaybackQualityChange,
-    onAutoplayBlocked,
-  } = config;
-
-  const { startTime, endTime, autoplay, controls, loop, muted, playsinline, rel, origin } = playerVars;
-
-  const cleanup = useCallback(() => {
-    coreRef.current?.destroy();
-    coreRef.current = null;
+  const onError = useCallback((error: YouTubeError) => {
+    console.error('Invalid YouTube source: ', error);
+    playerRef.current?.emit('error', error);
   }, []);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: initialize only once
-  useEffect(() => {
-    if (!coreRef.current) {
-      coreRef.current = new YoutubePlayerCore({
-        onReady: (playerInfo) => {
-          setIsReady(true);
-          onReady?.(playerInfo);
-        },
-        onStateChange,
-        onError,
-        onProgress,
-        onPlaybackRateChange,
-        onPlaybackQualityChange,
-        onAutoplayBlocked,
-      });
+  const videoId = useYouTubeVideoId(source, onError);
+
+  if (playerRef.current == null) {
+    playerRef.current = new YoutubePlayer(videoId, config);
+  }
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: only once
+  const player = useMemo(() => {
+    let newPlayer = playerRef.current;
+
+    if (!newPlayer || previousVideoId.current !== videoId) {
+      playerRef.current?.destroy();
+      newPlayer = new YoutubePlayer(videoId, config);
+      playerRef.current = newPlayer;
+      previousVideoId.current = videoId;
+      return newPlayer;
     }
-    return cleanup;
-  }, []);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: update only playerVars
+    isFastRefresh.current = true;
+
+    return newPlayer;
+  }, [videoId, JSON.stringify(config)]);
+
   useEffect(() => {
-    const initialize = async () => {
-      if (!containerRef.current) {
-        return;
-      }
+    isFastRefresh.current = false;
 
-      try {
-        await YoutubePlayerCore.loadAPI();
-        const containerId = `youtube-player-${videoId}`;
-        containerRef.current.id = containerId;
-
-        coreRef.current?.createPlayer(containerId, {
-          videoId,
-          playerVars: {
-            autoplay,
-            controls,
-            loop,
-            muted,
-            playsinline,
-            rel,
-            startTime,
-            endTime,
-            origin,
-          },
-        });
-      } catch (error) {
-        console.error('Failed to create YouTube player:', error);
-        onError?.({
-          code: 1003,
-          message: ERROR_CODES[1003],
-        });
+    return () => {
+      if (playerRef.current && !isFastRefresh.current) {
+        playerRef.current?.destroy();
       }
     };
+  }, []);
 
-    initialize();
-  }, [videoId, startTime, endTime, autoplay, controls, loop, muted, playsinline, rel, origin]);
-
-  useEffect(() => {
-    if (isReady && videoId && coreRef.current) {
-      try {
-        coreRef.current.loadVideoById(videoId, startTime, endTime);
-      } catch (error) {
-        console.warn('Error loading new video:', error);
-      }
-    }
-  }, [videoId, isReady, startTime, endTime]);
-
-  useEffect(() => {
-    if (coreRef.current) {
-      coreRef.current.setProgressInterval(progressInterval);
-    }
-  }, [progressInterval]);
-
-  useEffect(() => {
-    coreRef.current?.updateCallbacks({
-      onReady: (playerInfo) => {
-        setIsReady(true);
-        onReady?.(playerInfo);
-      },
-      onStateChange,
-      onError,
-      onProgress,
-      onPlaybackRateChange,
-      onPlaybackQualityChange,
-      onAutoplayBlocked,
-    });
-  }, [onReady, onStateChange, onError, onProgress, onPlaybackRateChange, onPlaybackQualityChange, onAutoplayBlocked]);
-
-  const playerControls = useMemo(
-    (): PlayerControls => ({
-      play: () => coreRef.current?.play(),
-      pause: () => coreRef.current?.pause(),
-      stop: () => coreRef.current?.stop(),
-      seekTo: (seconds: number, allowSeekAhead?: boolean) =>
-        coreRef.current?.seekTo(seconds, allowSeekAhead) ?? Promise.resolve(),
-      getCurrentTime: () => coreRef.current?.getCurrentTime() ?? Promise.resolve(0),
-      getDuration: () => coreRef.current?.getDuration() ?? Promise.resolve(0),
-      setVolume: (volume: number) => coreRef.current?.setVolume(volume),
-      getVolume: () => coreRef.current?.getVolume() ?? Promise.resolve(0),
-      mute: () => coreRef.current?.mute(),
-      unMute: () => coreRef.current?.unMute(),
-      isMuted: () => coreRef.current?.isMuted() ?? Promise.resolve(false),
-      getVideoUrl: () => coreRef.current?.getVideoUrl() ?? Promise.resolve(''),
-      getVideoEmbedCode: () => coreRef.current?.getVideoEmbedCode() ?? Promise.resolve(''),
-      getPlaybackRate: () => coreRef.current?.getPlaybackRate() ?? Promise.resolve(1),
-      setPlaybackRate: (rate: number) => coreRef.current?.setPlaybackRate(rate),
-      getAvailablePlaybackRates: () => coreRef.current?.getAvailablePlaybackRates() ?? Promise.resolve([1]),
-      getPlayerState: () => coreRef.current?.getPlayerState() ?? Promise.resolve(PlayerState.UNSTARTED),
-      getVideoLoadedFraction: () => coreRef.current?.getVideoLoadedFraction() ?? Promise.resolve(0),
-      loadVideoById: (videoId: string, startSeconds?: number, endSeconds?: number) =>
-        coreRef.current?.loadVideoById(videoId, startSeconds, endSeconds),
-      cueVideoById: (videoId: string, startSeconds?: number, endSeconds?: number) =>
-        coreRef.current?.cueVideoById(videoId, startSeconds, endSeconds),
-      setSize: (width: number, height: number) => coreRef.current?.setSize(width, height),
-    }),
-    [],
-  );
-
-  return {
-    containerRef,
-    controls: playerControls,
-    isReady,
-    cleanup,
-  };
+  return player;
 };
 
 export default useYouTubePlayer;

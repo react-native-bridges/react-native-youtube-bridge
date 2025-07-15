@@ -194,7 +194,7 @@ export type PlayerControls = {
 
 export type YoutubePlayerEvents = {
   ready: PlayerInfo;
-  statechange: PlayerState;
+  stateChange: PlayerState;
   error: YouTubeError;
   progress: ProgressData;
   playbackRateChange: number;
@@ -203,3 +203,5 @@ export type YoutubePlayerEvents = {
 };
 
 export type YoutubeEventType = keyof YoutubePlayerEvents;
+
+export type EventCallback<Data = any> = (data: Data) => any;

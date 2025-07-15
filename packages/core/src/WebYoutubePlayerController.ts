@@ -7,18 +7,24 @@ type PlayerConfig = Omit<YoutubePlayerConfig, 'source'> & {
   videoId: string;
 };
 
-class YoutubePlayerCore {
+class WebYoutubePlayerController {
   private player: YouTubePlayer | null = null;
   private progressInterval: NodeJS.Timeout | null = null;
   private callbacks: PlayerEvents = {};
   private progressIntervalMs = 1000;
   private seekTimeout: NodeJS.Timeout | null = null;
 
-  constructor(callbacks: PlayerEvents = {}) {
-    this.callbacks = callbacks;
+  private static instance: WebYoutubePlayerController | null = null;
+
+  static getInstance(): WebYoutubePlayerController {
+    if (!WebYoutubePlayerController.instance) {
+      WebYoutubePlayerController.instance = new WebYoutubePlayerController();
+    }
+
+    return WebYoutubePlayerController.instance;
   }
 
-  static async loadAPI(): Promise<void> {
+  static async initialize(): Promise<void> {
     if (typeof window === 'undefined' || window.YT?.Player) {
       return Promise.resolve();
     }
@@ -234,6 +240,10 @@ class YoutubePlayerCore {
     });
   }
 
+  getPlayer(): YouTubePlayer | null {
+    return this.player;
+  }
+
   play(): void {
     this.player?.playVideo();
   }
@@ -314,8 +324,8 @@ class YoutubePlayerCore {
     return playerState ?? PlayerState.UNSTARTED;
   }
 
-  setPlaybackRate(suggestedRate: number): void {
-    this.player?.setPlaybackRate(suggestedRate);
+  async setPlaybackRate(suggestedRate: number): Promise<void> {
+    await this.player?.setPlaybackRate(suggestedRate);
   }
 
   async getVideoLoadedFraction(): Promise<number> {
@@ -335,7 +345,7 @@ class YoutubePlayerCore {
     this.player?.setSize(width, height);
   }
 
-  setProgressInterval(intervalMs: number): void {
+  updateProgressInterval(intervalMs: number): void {
     this.progressIntervalMs = intervalMs;
     if (this.progressInterval) {
       this.stopProgressTracking();
@@ -369,7 +379,9 @@ class YoutubePlayerCore {
       }
       this.player = null;
     }
+
+    WebYoutubePlayerController.instance = null;
   }
 }
 
-export default YoutubePlayerCore;
+export default WebYoutubePlayerController;

@@ -7,7 +7,7 @@ export const getYoutubeWebViewUrl = (
   playerVars: YoutubePlayerVars,
   webViewBaseUrl?: string,
 ) => {
-  if (useInlineHtml) {
+  if (useInlineHtml || !videoId) {
     return '';
   }
 

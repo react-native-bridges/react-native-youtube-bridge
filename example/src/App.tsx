@@ -1,12 +1,10 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Alert, Platform, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {
-  type PlayerControls,
-  type PlayerInfo,
   PlayerState,
-  type ProgressData,
-  type YouTubeError,
-  YoutubePlayer,
+  YoutubeView,
+  useYouTubeEvent,
+  useYouTubePlayer,
   useYoutubeOEmbed,
 } from 'react-native-youtube-bridge';
 
@@ -17,12 +15,7 @@ const formatTime = (seconds: number): string => {
 };
 
 function App() {
-  const playerRef = useRef<PlayerControls>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [loadedFraction, setLoadedFraction] = useState(0);
-  const [playbackRate, setPlaybackRate] = useState(1);
   const [availableRates, setAvailableRates] = useState<number[]>([1]);
   const [volume, setVolume] = useState(100);
   const [isMuted, setIsMuted] = useState(false);
@@ -30,9 +23,81 @@ function App() {
   const [progressInterval, setProgressInterval] = useState(1000);
   const { oEmbed, isLoading, error } = useYoutubeOEmbed(`https://www.youtube.com/watch?v=${videoId}`);
 
-  console.log('oEmbed', oEmbed, isLoading, error);
+  const player = useYouTubePlayer(videoId, {
+    autoplay: true,
+    controls: true,
+    playsinline: true,
+    rel: false,
+    muted: true,
+  });
 
-  const handleReady = useCallback((playerInfo: PlayerInfo) => {
+  const changePlaybackRate = (rate: number) => {
+    player.setPlaybackRate(rate);
+  };
+
+  const changeVolume = (newVolume: number) => {
+    player.setVolume(newVolume);
+    setVolume(newVolume);
+  };
+
+  const toggleMute = useCallback(() => {
+    if (isMuted) {
+      player.unMute();
+      setIsMuted(false);
+      return;
+    }
+
+    player.mute();
+    setIsMuted(true);
+  }, [player, isMuted]);
+
+  const onPlay = useCallback(() => {
+    if (isPlaying) {
+      player.pause();
+      return;
+    }
+
+    player.play();
+  }, [player, isPlaying]);
+
+  const getPlayerInfo = async () => {
+    const [currentTime, duration, url, state, loaded] = await Promise.all([
+      player.getCurrentTime(),
+      player.getDuration(),
+      player.getVideoUrl(),
+      player.getPlayerState(),
+      player.getVideoLoadedFraction(),
+    ]);
+
+    console.log(
+      `
+        currentTime: ${currentTime}
+        duration: ${duration}
+        url: ${url}
+        state: ${state}
+        loaded: ${loaded}
+        `,
+    );
+
+    Alert.alert(
+      'Player info',
+      `Current time: ${formatTime(currentTime || 0)}\n` +
+        `duration: ${formatTime(duration || 0)}\n` +
+        `state: ${state}\n` +
+        `loaded: ${((loaded || 0) * 100).toFixed(1)}%\n` +
+        `url: ${url || 'N/A'}`,
+    );
+  };
+
+  const playbackRate = useYouTubeEvent(player, 'playbackRateChange', 1);
+  const playbackQuality = useYouTubeEvent(player, 'playbackQualityChange');
+  const progress = useYouTubeEvent(player, 'progress', progressInterval);
+
+  const currentTime = progress?.currentTime ?? 0;
+  const duration = progress?.duration ?? 0;
+  const loadedFraction = progress?.loadedFraction ?? 0;
+
+  useYouTubeEvent(player, 'ready', (playerInfo) => {
     console.log('Player is ready!');
     Alert.alert('Alert', 'YouTube player is ready!');
 
@@ -51,9 +116,9 @@ function App() {
     if (playerInfo?.muted !== undefined) {
       setIsMuted(playerInfo.muted);
     }
-  }, []);
+  });
 
-  const handleStateChange = useCallback((state: PlayerState) => {
+  useYouTubeEvent(player, 'stateChange', (state) => {
     console.log('Player state changed:', state);
     setIsPlaying(state === PlayerState.PLAYING);
 
@@ -77,93 +142,21 @@ function App() {
         console.log('Video is cued');
         break;
     }
-  }, []);
+  });
 
-  const handleProgress = useCallback((progress: ProgressData) => {
-    setCurrentTime(progress.currentTime);
-    setDuration(progress.duration);
-    setLoadedFraction(progress.loadedFraction);
-  }, []);
+  useYouTubeEvent(player, 'autoplayBlocked', () => {
+    console.log('Autoplay was blocked');
+  });
 
-  const handleError = useCallback((error: YouTubeError) => {
+  useYouTubeEvent(player, 'error', (error) => {
     console.error('Player error:', error);
     Alert.alert('Error', `Player error (${error.code}): ${error.message}`);
-  }, []);
+  });
 
-  const handlePlaybackRateChange = useCallback((rate: number) => {
-    console.log('Playback rate changed:', rate);
-    setPlaybackRate(rate);
-  }, []);
-
-  const handlePlaybackQualityChange = useCallback((quality: string) => {
-    console.log('Playback quality changed:', quality);
-  }, []);
-
-  const handleAutoplayBlocked = useCallback(() => {
-    console.log('Autoplay was blocked');
-  }, []);
-
-  const changePlaybackRate = (rate: number) => {
-    playerRef.current?.setPlaybackRate(rate);
-  };
-
-  const changeVolume = (newVolume: number) => {
-    playerRef.current?.setVolume(newVolume);
-    setVolume(newVolume);
-  };
-
-  const toggleMute = useCallback(() => {
-    if (isMuted) {
-      playerRef.current?.unMute();
-      setIsMuted(false);
-      return;
-    }
-
-    playerRef.current?.mute();
-    setIsMuted(true);
-  }, [isMuted]);
-
-  const onPlay = useCallback(() => {
-    if (isPlaying) {
-      playerRef.current?.pause();
-      return;
-    }
-
-    playerRef.current?.play();
-  }, [isPlaying]);
-
-  const getPlayerInfo = async () => {
-    try {
-      const [currentTime, duration, url, state, loaded] = await Promise.all([
-        playerRef.current?.getCurrentTime(),
-        playerRef.current?.getDuration(),
-        playerRef.current?.getVideoUrl(),
-        playerRef.current?.getPlayerState(),
-        playerRef.current?.getVideoLoadedFraction(),
-      ]);
-
-      console.log(
-        `
-        currentTime: ${currentTime}
-        duration: ${duration}
-        url: ${url}
-        state: ${state}
-        loaded: ${loaded}
-        `,
-      );
-
-      Alert.alert(
-        'Player info',
-        `Current time: ${formatTime(currentTime || 0)}\n` +
-          `duration: ${formatTime(duration || 0)}\n` +
-          `state: ${state}\n` +
-          `loaded: ${((loaded || 0) * 100).toFixed(1)}%\n` +
-          `url: ${url || 'N/A'}`,
-      );
-    } catch (error) {
-      console.error('Error getting player info:', error);
-    }
-  };
+  useEffect(() => {
+    console.log('oEmbed', oEmbed, isLoading, error);
+    console.log('playbackQuality', playbackQuality);
+  }, [oEmbed, isLoading, error, playbackQuality]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -173,30 +166,13 @@ function App() {
           <Text style={styles.subtitle}>Video ID: {videoId}</Text>
           <Text style={styles.subtitle}>Playback rate: {playbackRate}x</Text>
         </View>
-
-        <YoutubePlayer
-          ref={playerRef}
-          source={videoId}
+        <YoutubeView
+          useInlineHtml
+          player={player}
           height={Platform.OS === 'web' ? 'auto' : undefined}
-          useInlineHtml={false}
-          playerVars={{
-            autoplay: true,
-            controls: true,
-            playsinline: true,
-            rel: false,
-            muted: true,
-          }}
           webViewProps={{
             renderToHardwareTextureAndroid: true,
           }}
-          progressInterval={progressInterval}
-          onReady={handleReady}
-          onStateChange={handleStateChange}
-          onProgress={handleProgress}
-          onError={handleError}
-          onPlaybackRateChange={handlePlaybackRateChange}
-          onPlaybackQualityChange={handlePlaybackQualityChange}
-          onAutoplayBlocked={handleAutoplayBlocked}
           style={{
             maxHeight: 400,
           }}
@@ -235,7 +211,7 @@ function App() {
         <View style={styles.controls}>
           <TouchableOpacity
             style={[styles.button, styles.seekButton]}
-            onPress={() => playerRef.current?.seekTo(currentTime > 10 ? currentTime - 10 : 0)}
+            onPress={() => player.seekTo(currentTime > 10 ? currentTime - 10 : 0)}
           >
             <Text style={styles.buttonText}>⏪ -10s</Text>
           </TouchableOpacity>
@@ -244,13 +220,13 @@ function App() {
             <Text style={styles.buttonText}>{isPlaying ? '⏸️ Pause' : '▶️ Play'}</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.button, styles.stopButton]} onPress={() => playerRef.current?.stop()}>
+          <TouchableOpacity style={[styles.button, styles.stopButton]} onPress={() => player.stop()}>
             <Text style={styles.buttonText}>⏹️ Stop</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={[styles.button, styles.seekButton]}
-            onPress={() => playerRef.current?.seekTo(currentTime + 10, true)}
+            onPress={() => player.seekTo(currentTime + 10, true)}
           >
             <Text style={styles.buttonText}>⏭️ +10s</Text>
           </TouchableOpacity>
