@@ -34,10 +34,20 @@ function YoutubeView({
   }, [player]);
 
   const createPlayerHTML = useCreateLocalPlayerHtml({ videoId, useInlineHtml, ...playerVars });
-  const webViewUrl = useMemo(
-    () => getYoutubeWebViewUrl(videoId, useInlineHtml, playerVars, webViewBaseUrl),
-    [videoId, useInlineHtml, playerVars, webViewBaseUrl],
-  );
+  const webViewUrl = getYoutubeWebViewUrl(videoId, useInlineHtml, playerVars, webViewBaseUrl);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: webViewProps.source is intentionally excluded to prevent unnecessary re-renders
+  const webViewSource = useMemo(() => {
+    if (useInlineHtml) {
+      return { html: createPlayerHTML(), ...(webViewBaseUrl ? { baseUrl: webViewBaseUrl } : {}) };
+    }
+
+    if (webViewUrl) {
+      return { ...(webViewProps?.source ?? {}), uri: webViewUrl };
+    }
+
+    return undefined;
+  }, [useInlineHtml, createPlayerHTML, webViewBaseUrl, webViewUrl]);
 
   const handleMessage = useCallback(
     (event: WebViewMessageEvent) => {
@@ -149,11 +159,7 @@ function YoutubeView({
         {...webViewProps}
         ref={webViewRef}
         javaScriptEnabled
-        source={
-          useInlineHtml
-            ? { html: createPlayerHTML(), baseUrl: webViewBaseUrl }
-            : { ...(webViewProps?.source ?? {}), uri: webViewUrl }
-        }
+        source={webViewSource}
         onMessage={handleMessage}
         onError={(error) => {
           console.error('WebView error:', error);

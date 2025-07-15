@@ -2,13 +2,13 @@ import type { YoutubePlayerVars } from '@react-native-youtube-bridge/core';
 import { DEFAULT_EXTERNAL_WEB_URL } from './constants';
 
 export const getYoutubeWebViewUrl = (
-  videoId: string,
+  videoId: string | null | undefined,
   useInlineHtml: boolean,
   playerVars: YoutubePlayerVars,
   webViewBaseUrl?: string,
 ) => {
   if (useInlineHtml || !videoId) {
-    return '';
+    return undefined;
   }
 
   const baseUrl = webViewBaseUrl || DEFAULT_EXTERNAL_WEB_URL;

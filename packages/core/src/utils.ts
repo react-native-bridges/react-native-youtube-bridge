@@ -10,9 +10,13 @@ export const extractVideoIdFromUrl = (url?: string): string | undefined => {
   return match ? match[1] : undefined;
 };
 
-export const validateVideoId = (videoId?: string): boolean => {
+export const validateVideoId = (videoId?: string | null): boolean => {
+  if (!videoId) {
+    return false;
+  }
+
   const videoIdRegex = /^[\w-]{11}$/;
-  return videoIdRegex.test(videoId ?? '');
+  return videoIdRegex.test(videoId);
 };
 
 export const escapeHtml = (unsafe?: string): string => {

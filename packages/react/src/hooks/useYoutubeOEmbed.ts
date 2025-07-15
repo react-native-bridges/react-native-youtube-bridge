@@ -21,12 +21,16 @@ type OEmbed = {
  * @param url - The URL of the YouTube video.
  * @returns The oEmbed data, loading state, and error.
  */
-const useYoutubeOEmbed = (url: string) => {
+const useYoutubeOEmbed = (url?: string) => {
   const [oEmbed, setOEmbed] = useState<OEmbed>();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
+    if (!url) {
+      return;
+    }
+
     const controller = new AbortController();
 
     setError(null);
@@ -61,9 +65,7 @@ const useYoutubeOEmbed = (url: string) => {
       }
     };
 
-    if (url) {
-      fetchOEmbed();
-    }
+    fetchOEmbed();
 
     return () => {
       controller.abort();

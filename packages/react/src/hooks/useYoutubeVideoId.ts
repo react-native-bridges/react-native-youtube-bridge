@@ -7,9 +7,13 @@ import {
 } from '@react-native-youtube-bridge/core';
 import { useMemo } from 'react';
 
-const useYouTubeVideoId = (source: YouTubeSource, onError?: PlayerEvents['onError']): string => {
+const useYouTubeVideoId = (source: YouTubeSource, onError?: PlayerEvents['onError']): string | null | undefined => {
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   const sourceValue = useMemo(() => {
+    if (!source) {
+      return;
+    }
+
     if (typeof source === 'string') {
       return source;
     }
@@ -24,17 +28,27 @@ const useYouTubeVideoId = (source: YouTubeSource, onError?: PlayerEvents['onErro
 
     return null;
   }, [
-    typeof source === 'string' ? source : 'videoId' in source ? source.videoId : 'url' in source ? source.url : null,
+    typeof source === 'string'
+      ? source
+      : source && 'videoId' in source
+        ? source.videoId
+        : source && 'url' in source
+          ? source.url
+          : null,
   ]);
 
   const videoId = useMemo(() => {
-    if (!sourceValue) {
+    if (sourceValue === null) {
       console.error('Invalid YouTube source: ', sourceValue);
       onError?.({
         code: 1002,
         message: ERROR_CODES[1002],
       });
-      return '';
+      return null;
+    }
+
+    if (sourceValue === undefined) {
+      return undefined;
     }
 
     if (validateVideoId(sourceValue)) {
@@ -49,7 +63,7 @@ const useYouTubeVideoId = (source: YouTubeSource, onError?: PlayerEvents['onErro
         code: 1002,
         message: ERROR_CODES[1002],
       });
-      return '';
+      return null;
     }
 
     return extractedId;

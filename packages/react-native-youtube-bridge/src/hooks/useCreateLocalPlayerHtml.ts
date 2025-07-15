@@ -15,14 +15,14 @@ const useCreateLocalPlayerHtml = ({
   playsinline,
   rel,
   useInlineHtml,
-}: YoutubePlayerVars & { videoId: string; useInlineHtml: boolean }) => {
+}: YoutubePlayerVars & { videoId: string | null | undefined; useInlineHtml: boolean }) => {
   const createPlayerHTML = useCallback(() => {
-    if (!useInlineHtml) {
+    if (!useInlineHtml || videoId === undefined) {
       return '';
     }
 
     if (!validateVideoId(videoId)) {
-      return '<html><body><div>Invalid video ID</div></body></html>';
+      return '<html><body><div style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; color: #fff;">Invalid YouTube ID</div></body></html>';
     }
 
     const safeOrigin = escapeHtml(origin);
