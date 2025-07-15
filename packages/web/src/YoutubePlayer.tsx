@@ -43,7 +43,7 @@ function YoutubePlayer() {
   }, []);
 
   useEffect(() => {
-    if (!isInitialized || !containerRef.current) {
+    if (!isInitialized || !containerRef.current || !youtubeVideoId) {
       return;
     }
 

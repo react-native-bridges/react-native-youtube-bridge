@@ -3,7 +3,7 @@ import type { ERROR_CODES } from '../constants';
 type YouTubeErrorCode = keyof typeof ERROR_CODES;
 type YouTubeErrorMessage = (typeof ERROR_CODES)[YouTubeErrorCode];
 
-export type YouTubeSource = string | { videoId: string } | { url: string };
+export type YouTubeSource = string | { videoId: string | undefined } | { url: string | undefined } | undefined;
 
 export type ProgressData = {
   currentTime: number;

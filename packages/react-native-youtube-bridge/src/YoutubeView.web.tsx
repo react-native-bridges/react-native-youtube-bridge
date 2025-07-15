@@ -27,6 +27,10 @@ function YoutubeView({ player, height, width, style, iframeStyle }: YoutubeViewP
 
     const videoId = player.getVideoId();
 
+    if (!videoId) {
+      return;
+    }
+
     const containerId = `youtube-player-${videoId}`;
     containerRef.current.id = containerId;
     const options = player.getOptions();

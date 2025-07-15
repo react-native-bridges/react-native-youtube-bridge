@@ -20,15 +20,15 @@ class YoutubePlayer {
 
   private progressInterval: number | null = null;
 
-  private videoId: string;
+  private videoId: string | null | undefined;
   private options: YoutubePlayerVars;
 
-  constructor(videoId: string, options?: YoutubePlayerVars) {
+  constructor(videoId: string | null | undefined, options?: YoutubePlayerVars) {
     this.videoId = videoId;
     this.options = options ?? {};
   }
 
-  getVideoId(): string {
+  getVideoId(): string | null | undefined {
     return this.videoId;
   }
 
