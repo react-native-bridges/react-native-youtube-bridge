@@ -1,6 +1,4 @@
-import type { PlayerControls } from '@react-native-youtube-bridge/core';
-import type { YoutubePlayerProps } from './types/youtube';
-import YoutubePlayerComponent from './YoutubePlayer';
+import type { YoutubeViewProps } from './types/youtube';
 
 export {
   ERROR_CODES,
@@ -13,9 +11,11 @@ export {
   type PlayerEvents,
   type PlayerControls,
 } from '@react-native-youtube-bridge/core';
+export type { default as YoutubePlayer } from './modules/YoutubePlayer';
 export { useYoutubeOEmbed } from '@react-native-youtube-bridge/react';
 
-export const YoutubePlayer: React.ForwardRefExoticComponent<YoutubePlayerProps & React.RefAttributes<PlayerControls>> =
-  YoutubePlayerComponent;
+export { default as useYouTubeEvent } from './hooks/useYouTubeEvent';
+export { default as useYouTubePlayer } from './hooks/useYouTubePlayer';
+export { default as YoutubeView } from './YoutubeView';
 
-export type { YoutubePlayerProps };
+export type { YoutubeViewProps };

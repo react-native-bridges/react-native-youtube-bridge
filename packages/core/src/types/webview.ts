@@ -15,8 +15,9 @@ interface ErrorMessageData {
   error: YouTubeError;
 }
 
-interface ProgressMessageData extends ProgressData {
+interface ProgressMessageData {
   type: 'progress';
+  progress: ProgressData;
 }
 
 interface PlaybackRateChangeMessageData {

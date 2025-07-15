@@ -1,1 +1,1 @@
-export { useYouTubePlayer, useYouTubeVideoId, useYoutubeOEmbed } from './hooks';
+export { useYouTubeVideoId, useYoutubeOEmbed } from './hooks';

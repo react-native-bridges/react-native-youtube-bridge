@@ -22,10 +22,12 @@ const startProgressTracking = /* js */ `
         
         window.ReactNativeWebView.postMessage(JSON.stringify({
           type: 'progress',
-          currentTime,
-          duration,
-          percentage,
-          loadedFraction,
+          progress: {
+            currentTime,
+            duration,
+            percentage,
+            loadedFraction,
+          },
         }));
       } catch (error) {
         console.error('Progress tracking error:', error);
@@ -55,10 +57,12 @@ const sendProgress = /* js */ `
         
         window.ReactNativeWebView.postMessage(JSON.stringify({
           type: 'progress',
-          currentTime,
-          duration,
-          percentage,
-          loadedFraction,
+          progress: {
+            currentTime,
+            duration,
+            percentage,
+            loadedFraction,
+          },
         }));
       } catch (error) {
         console.error('Final progress error:', error);
@@ -72,11 +76,24 @@ const onPlayerReady = /* js */ `
     if (isDestroyed) {
       return;
     }
+
+    const playerInfo = event.target.playerInfo;
     
     try {
       window.ReactNativeWebView.postMessage(JSON.stringify({
         type: 'ready',
-        playerInfo: event.target.playerInfo
+        playerInfo: {
+          availablePlaybackRates: playerInfo.availablePlaybackRates,
+          availableQualityLevels: playerInfo.availableQualityLevels,
+          currentTime: playerInfo.currentTime,
+          duration: playerInfo.duration,
+          muted: playerInfo.muted,
+          playbackQuality: playerInfo.playbackQuality,
+          playbackRate: playerInfo.playbackRate,
+          playerState: playerInfo.playerState,
+          size: playerInfo.size,
+          volume: playerInfo.volume,
+        }
       }));
       startProgressTracking();
     } catch (error) {

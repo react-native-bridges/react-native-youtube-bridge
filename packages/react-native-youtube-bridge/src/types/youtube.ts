@@ -3,6 +3,7 @@ import type { CSSProperties } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import type { WebViewProps } from 'react-native-webview';
 import type { WebViewSourceUri } from 'react-native-webview/lib/WebViewTypes';
+import type YoutubePlayer from '../modules/YoutubePlayer';
 
 export type YoutubePlayerProps = {
   /**
@@ -66,3 +67,17 @@ export type YoutubePlayerProps = {
    */
   playerVars?: YoutubePlayerVars;
 } & PlayerEvents;
+
+export type YoutubeViewProps = {
+  player: YoutubePlayer;
+  width?: number | 'auto' | `${number}%`;
+  height?: number | 'auto' | `${number}%`;
+  style?: StyleProp<ViewStyle>;
+  iframeStyle?: CSSProperties;
+  useInlineHtml?: boolean;
+  webViewUrl?: string;
+  webViewStyle?: StyleProp<ViewStyle>;
+  webViewProps?: Omit<WebViewProps, 'ref' | 'source' | 'style' | 'onMessage' | 'javaScriptEnabled' | 'onError'> & {
+    source?: Omit<WebViewSourceUri, 'uri'>;
+  };
+};

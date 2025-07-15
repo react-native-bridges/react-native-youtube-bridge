@@ -1,7 +1,10 @@
-import { useYouTubePlayer, useYouTubeVideoId } from '@react-native-youtube-bridge/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+import { useYouTubeVideoId } from '@react-native-youtube-bridge/react';
+import { WebYoutubePlayerController } from '@react-native-youtube-bridge/core';
 
 import { useWebView } from './hooks/useWebView';
+import { parseTimeParam } from './utils';
 
 import './YoutubePlayer.css';
 
@@ -18,75 +21,116 @@ function YoutubePlayer() {
   const rel = urlParams.get('rel') === 'true';
   const origin = urlParams.get('origin') ?? '';
 
-  const [progressInterval, setProgressInterval] = useState<number>(0);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const { sendMessage, onMessage } = useWebView();
 
   const youtubeVideoId = useYouTubeVideoId(videoId);
 
-  const {
-    containerRef,
-    controls: playerControls,
-    cleanup,
-  } = useYouTubePlayer({
-    videoId: youtubeVideoId,
-    progressInterval,
-    playerVars: {
-      origin,
-      controls,
-      autoplay,
-      muted,
-      playsinline,
-      loop,
-      rel,
-      startTime: Number.isNaN(Number(startTime)) ? 0 : Number(startTime),
-      endTime: Number.isNaN(Number(endTime)) ? undefined : Number(endTime),
-    },
-    onReady: (playerInfo) => {
-      sendMessage({
-        type: 'ready',
-        playerInfo,
-      });
-    },
-    onStateChange: (state) => {
-      sendMessage({
-        type: 'stateChange',
-        state,
-      });
-    },
-    onError: (error) => {
-      sendMessage({
-        type: 'error',
-        error,
-      });
-    },
-    onPlaybackRateChange: (playbackRate) => {
-      sendMessage({
-        type: 'playbackRateChange',
-        playbackRate,
-      });
-    },
-    onPlaybackQualityChange: (playbackQuality) => {
-      sendMessage({
-        type: 'playbackQualityChange',
-        quality: playbackQuality,
-      });
-    },
-    onAutoplayBlocked: () => {
-      sendMessage({
-        type: 'autoplayBlocked',
-      });
-    },
-    onProgress: (progress) => {
-      sendMessage({
-        type: 'progress',
-        currentTime: progress.currentTime,
-        duration: progress.duration,
-        percentage: progress.percentage,
-        loadedFraction: progress.loadedFraction,
-      });
-    },
-  });
+  const startTimeNumber = parseTimeParam(startTime, 0);
+  const endTimeNumber = parseTimeParam(endTime);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const playerRef = useRef<WebYoutubePlayerController | null>(null);
+
+  useEffect(() => {
+    WebYoutubePlayerController.initialize().then(() => {
+      setIsInitialized(true);
+
+      const controller = WebYoutubePlayerController.createInstance();
+      playerRef.current = controller;
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!isInitialized || !containerRef.current) {
+      return;
+    }
+
+    const containerId = `youtube-player-${youtubeVideoId}`;
+    containerRef.current.id = containerId;
+
+    playerRef.current?.updateCallbacks({
+      onReady: (playerInfo) => {
+        sendMessage({
+          type: 'ready',
+          playerInfo,
+        });
+      },
+      onStateChange: (state) => {
+        sendMessage({
+          type: 'stateChange',
+          state,
+        });
+      },
+      onError: (error) => {
+        sendMessage({
+          type: 'error',
+          error,
+        });
+      },
+      onPlaybackRateChange: (playbackRate) => {
+        sendMessage({
+          type: 'playbackRateChange',
+          playbackRate,
+        });
+      },
+      onPlaybackQualityChange: (playbackQuality) => {
+        sendMessage({
+          type: 'playbackQualityChange',
+          quality: playbackQuality,
+        });
+      },
+      onAutoplayBlocked: () => {
+        sendMessage({
+          type: 'autoplayBlocked',
+        });
+      },
+      onProgress: (progress) => {
+        sendMessage({
+          type: 'progress',
+          progress,
+        });
+      },
+    });
+
+    playerRef.current?.createPlayer(containerId, {
+      videoId: youtubeVideoId,
+      playerVars: {
+        origin,
+        controls,
+        autoplay,
+        muted,
+        playsinline,
+        loop,
+        rel,
+        startTime: startTimeNumber,
+        endTime: endTimeNumber,
+      },
+    });
+  }, [
+    sendMessage,
+    isInitialized,
+    youtubeVideoId,
+    origin,
+    controls,
+    autoplay,
+    muted,
+    playsinline,
+    loop,
+    rel,
+    startTimeNumber,
+    endTimeNumber,
+  ]);
+
+  useEffect(() => {
+    return () => {
+      if (playerRef.current) {
+        playerRef.current?.destroy();
+        playerRef.current = null;
+      }
+    };
+  }, []);
 
   useEffect(() => {
     onMessage((message) => {
@@ -95,17 +139,22 @@ function YoutubePlayer() {
 
         const interval = Number(args[0]) > 0 ? Number(args[0]) : 0;
 
-        setProgressInterval(interval);
+        playerRef.current?.updateProgressInterval(interval);
+        return;
+      }
+
+      if (!playerRef.current) {
         return;
       }
 
       if (message.command === 'cleanup') {
-        cleanup();
+        playerRef.current?.destroy();
+        playerRef.current = null;
         return;
       }
 
-      if (message.command in playerControls) {
-        const command = playerControls[message.command];
+      if (message.command in playerRef.current) {
+        const command = playerRef.current[message.command];
         const args = message.args || [];
 
         if (typeof command !== 'function') {
@@ -128,11 +177,11 @@ function YoutubePlayer() {
             return;
           }
 
-          playerControls.setVolume(volume);
+          playerRef.current?.setVolume(volume);
           return;
         }
 
-        const result = (command as (...args: unknown[]) => unknown)(...args);
+        const result = (command as (...args: unknown[]) => unknown).apply(playerRef.current, args);
 
         if (result instanceof Promise) {
           result
@@ -172,7 +221,7 @@ function YoutubePlayer() {
         }
       }
     });
-  }, [onMessage, playerControls, cleanup]);
+  }, [onMessage]);
 
   return (
     <div id="player-container">
