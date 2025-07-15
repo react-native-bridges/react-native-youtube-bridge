@@ -2,6 +2,9 @@
 
 > [English](./README.md) | 한국어
 
+> [!note]
+> **V1 사용자:** [V1 문서](/packages/react-native-youtube-bridge/docs/v1.md) | [V2 마이그레이션 가이드](/packages/react-native-youtube-bridge/docs/migration-v2.md)
+
 ## 개요
 React Native에서 YouTube 플레이어를 사용하려면 복잡한 설정이 필요합니다.   
 하지만 현재 지속적으로 유지보수되고 있는 React Native용 YouTube 플레이어 라이브러리가 없는 상황입니다. (가장 인기 있는 react-native-youtube-iframe의 [최근 릴리즈는 2023년 07월 02일](https://github.com/LonelyCpp/react-native-youtube-iframe/releases/tag/v2.3.0))   
@@ -13,7 +16,8 @@ React Native에서 YouTube 플레이어를 사용하려면 복잡한 설정이 �
 - ✅ New Architecture 지원
 - ✅ YouTube 네이티브 플레이어 모듈 없이도 사용 가능
 - ✅ 다양한 [YouTube iframe Player API](https://developers.google.com/youtube/iframe_api_reference) 기능 지원
-- ✅ 개발자 친화적인 API 제공
+- ✅ 다중 인스턴스 지원 - 여러 플레이어를 독립적으로 관리 가능
+- ✅ Expo의 접근 방식과 매우 유사한 직관적이고 사용하기 쉬운 Hook 기반 API 제공
 - ✅ Expo 지원
 - ✅ 유연한 렌더링 모드 (인라인 HTML & 웹뷰)
 
@@ -42,96 +46,91 @@ bun add react-native-youtube-bridge
 ## 사용법
 
 ```tsx
-import { YoutubePlayer } from 'react-native-youtube-bridge';
+import { YoutubeView, useYouTubePlayer } from 'react-native-youtube-bridge';
 
 function App() {
+  const videoIdOrUrl = 'AbZH7XWDW_k'
+
+  // OR useYouTubePlayer({ videoId: 'AbZH7XWDW_k' })
+  // OR useYouTubePlayer({ url: 'https://youtube.com/watch?v=AbZH7XWDW_k' })
+  const player = useYouTubePlayer(videoIdOrUrl);
+
   return (
-    <YoutubePlayer 
-      source={source} // youtube videoId or url
-      // OR source={{ videoId: 'AbZH7XWDW_k' }}
-      // OR source={{ url: 'https://youtube.com/watch?v=AbZH7XWDW_k' }}
-    />
-  )
+    <YoutubeView player={player} />
+  );
 }
 ```
 
 ### 이벤트
-YouTube iframe API의 상태 변화를 애플리케이션에 전달하기 위해 [이벤트](https://developers.google.com/youtube/iframe_api_reference#Events)를 발생시킵니다. 콜백 함수를 통해 원하는 이벤트를 구독할 수 있습니다.   
+YouTube iframe API의 상태 변화를 애플리케이션에 전달하기 위해 [이벤트](https://developers.google.com/youtube/iframe_api_reference#Events)를 발생시킵니다.   
 
-> 🔔 Note - 성능 최적화 및 비정상 동작 방지를 위해 콜백 함수는 `useCallback`으로 감싸주세요.
+`useYouTubeEvent` hook을 사용하여 완벽한 타입 추론을 지원하며, 두 가지 방법으로 이벤트를 쉽게 감지하여 사용할 수 있습니다.
 
 ```tsx
+import { YoutubeView, useYouTubeEvent, useYouTubePlayer } from 'react-native-youtube-bridge';
+
 function App() {
-  const playerRef = useRef<PlayerControls>(null);
+  const player = useYouTubePlayer(videoIdOrUrl);
 
-  const handleReady = useCallback(() => {
-    console.log('플레이어 준비 완료!');
-  }, []);
+  const playbackRate = useYouTubeEvent(player, 'playbackRateChange', 1);
+  const progress = useYouTubeEvent(player, 'progress', progressInterval);
 
-  const handleStateChange = useCallback((state: PlayerState) => {
-    console.log('플레이어 상태 변경:', state);
-  }, []);
+  useYouTubeEvent(player, 'ready', (playerInfo) => {
+    console.log('Player is ready!');
+    Alert.alert('Alert', 'YouTube player is ready!');
+  });
 
-  const handlePlaybackRateChange = useCallback((rate: number) => {
-    console.log('재생 속도 변경:', rate);
-  }, []);
+  useYouTubeEvent(player, 'autoplayBlocked', () => {
+    console.log('Autoplay was blocked');
+  });
 
-  const handlePlaybackQualityChange = useCallback((quality: string) => {
-    console.log('재생 품질 변경:', quality);
-  }, []);
-
-  const handleAutoplayBlocked = useCallback(() => {
-    console.log('자동 재생이 차단되었습니다');
-  }, []);
-
-  const handleError = useCallback((error: YouTubeError) => {
-    console.error('플레이어 오류:', error);
-  }, []);
+  useYouTubeEvent(player, 'error', (error) => {
+    console.error('Player error:', error);
+    Alert.alert('Error', `Player error (${error.code}): ${error.message}`);
+  });
 
   return (
-    <YoutubePlayer
-      onReady={handleReady}
-      onStateChange={handleStateChange}
-      onError={handleError}
-      onPlaybackRateChange={handlePlaybackRateChange}
-      onPlaybackQualityChange={handlePlaybackQualityChange}
-      onAutoplayBlocked={handleAutoplayBlocked}
-    />
-  )
+    <YoutubeView player={player} />
+  );
 }
 ```
 
+`useYouTubeEvent` hook은 callback으로 값을 전달받는 방식과 state로 값을 바로 사용할 수 있는 두 가지 방법을 제공합니다.
+1. Callback 방식: 의존성에 따라 리렌더링이 필요한 경우 4번째 인자에 dependency array를 주입해주면 됩니다.
+2. State 방식:
+   1. `progress` event의 경우 3번째 인자에 interval 값을 설정할 수 있습니다. (기본값: 1000ms)
+   2. 나머지 event의 경우 3번째 인자에 기본 값을 설정할 수 있습니다.
+
 ### 기능
-YouTube iframe API의 [함수들](https://developers.google.com/youtube/iframe_api_reference#Functions)을 `ref`를 통해 호출하여 음소거, 재생, 볼륨 조절 등 다양한 플레이어 기능을 제어할 수 있습니다.   
+YouTube iframe API의 [함수들](https://developers.google.com/youtube/iframe_api_reference#Functions)을 `useYouTubePlayer`를 통해 반환된 player 인스턴스 메서드를 호출하여 음소거, 재생, 볼륨 조절 등 다양한 플레이어 기능을 제어할 수 있습니다.   
 
 ```tsx
+import { YoutubeView, useYouTubePlayer } from 'react-native-youtube-bridge';
+
 function App() {
-  const playerRef = useRef<PlayerControls>(null);
+  const player = useYouTubePlayer(videoIdOrUrl);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
 
   const onPlay = useCallback(() => {
     if (isPlaying) {
-      playerRef.current?.pause();
+      player.pause();
       return;
     }
 
-    playerRef.current?.play();
+    player.play();
   }, [isPlaying]);
 
-  const seekTo = useCallback((time: number, allowSeekAhead: boolean) => {
-    playerRef.current?.seekTo(time, allowSeekAhead);
-  }, []);
+  const seekTo = (time: number, allowSeekAhead: boolean) => {
+    player.seekTo(time, allowSeekAhead);
+  };
 
-  const stop = () => playerRef.current?.stop();
+  const stop = () => player.stop();
 
   return (
     <View>
-      <YoutubePlayer
-        ref={playerRef}
-        source={source}
-      />
+      <YoutubeView player={player} />
 
       <View style={styles.controls}>
         <TouchableOpacity
@@ -161,23 +160,24 @@ function App() {
 }
 ```
 
-### 플레이어 매개변수
-YouTube 내장 플레이어의 [매개변수](https://developers.google.com/youtube/player_parameters#Parameters)를 설정하여 재생 환경을 맞춤화할 수 있습니다.
+### 초기 플레이어 매개변수
+YouTube 내장 플레이어의 [매개변수](https://developers.google.com/youtube/player_parameters#Parameters)를 설정하여 초기 재생 환경을 맞춤화할 수 있습니다.
 
 ```tsx
+import { YoutubeView, useYouTubePlayer } from 'react-native-youtube-bridge';
+
 function App() {
+  const player = useYouTubePlayer(videoIdOrUrl, {
+    autoplay: true,
+    controls: true,
+    playsinline: true,
+    rel: false,
+    muted: true,
+  });
+
   return (
-    <YoutubePlayer
-      source={source}
-      playerVars={{
-        autoplay: true,
-        controls: true,
-        playsinline: true,
-        rel: false,
-        muted: true,
-      }}
-    />
-  )
+    <YoutubeView player={player} />
+  );
 }
 ```
 
@@ -187,8 +187,8 @@ YouTube 플레이어의 스타일을 원하는 대로 커스터마이징할 수 
 ```tsx
 function App() {
   return (
-    <YoutubePlayer
-      source={source}
+    <YoutubeView
+      player={player}
       height={400}
       width={200}
       style={{
@@ -212,23 +212,20 @@ function App() {
 ```
 
 ### 재생 진행률 추적
-- `progressInterval`이 설정된 경우, 해당 간격(ms)마다 `onProgress` 콜백이 호출됩니다.
-- `progressInterval`이 `undefined`이거나 `0` 또는 `null`인 경우, `onProgress` 콜백은 호출되지 않습니다.
+- `useYouTubeEvent` hook을 사용하여 `progress` 이벤트의 리스너를 등록하여 재생 진행률을 추적할 수 있습니다.
+- 세 번째 인자에 interval 값을 설정하여 해당 간격(ms)마다 이벤트가 호출됩니다.
+- interval을 원치 않으면 `0`으로 설정하면 됩니다.
+- 기본값은 1000ms입니다.
 
 ```tsx
 function App() {
-  const handleProgress = useCallback((progress: ProgressData) => {
-    setCurrentTime(progress.currentTime);
-    setDuration(progress.duration);
-    setLoadedFraction(progress.loadedFraction);
-  }, []);
+  const progressInterval = 1000;
+
+  const player = useYouTubePlayer(videoIdOrUrl);
+  const progress = useYouTubeEvent(player, 'progress', progressInterval);
 
   return (
-    <YoutubePlayer
-      source={source}
-      progressInterval={1000}
-      onProgress={handleProgress}
-    />
+    <YoutubeView player={player} />
   )
 }
 ```
@@ -252,14 +249,14 @@ YouTube 플레이어 렌더링 방식을 제어하고 호환성을 위한 소스
 
 ```tsx
 // 인라인 HTML (default)
-<YoutubePlayer
-  source={source}
+<YoutubeView
+  player={player}
   useInlineHtml
 />
 
 // 커스텀 플레이어 페이지를 사용한 외부 웹뷰
-<YoutubePlayer
-  source={source}
+<YoutubeView
+  player={player}
   useInlineHtml={false}
   // default: https://react-native-youtube-bridge.pages.dev
   webViewUrl="https://your-custom-player.com"
