@@ -36,7 +36,7 @@ function YoutubeView({
   const createPlayerHTML = useCreateLocalPlayerHtml({ videoId, useInlineHtml, ...playerVars });
   const webViewUrl = getYoutubeWebViewUrl(videoId, useInlineHtml, playerVars, webViewBaseUrl);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  // biome-ignore lint/correctness/useExhaustiveDependencies: webViewProps.source is intentionally excluded to prevent unnecessary re-renders
   const webViewSource = useMemo(() => {
     if (useInlineHtml) {
       return { html: createPlayerHTML(), ...(webViewBaseUrl ? { baseUrl: webViewBaseUrl } : {}) };
