@@ -1,11 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
-import {
-  YoutubePlayer,
-  type YouTubeError,
-  type YoutubePlayerVars,
-  type YouTubeSource,
-} from '@react-native-youtube-bridge/core';
-import useYouTubeVideoId from './useYoutubeVideoId';
+import type { YouTubeError, YoutubePlayerVars, YouTubeSource } from '@react-native-youtube-bridge/core';
+import { useYouTubeVideoId } from '@react-native-youtube-bridge/react';
+
+import YoutubePlayer from '../modules/YoutubePlayer';
 
 /**
  * @param source - The source of the Youtube video.

@@ -10,10 +10,12 @@ export {
   type PlayerInfo,
   type PlayerEvents,
   type PlayerControls,
-  type YoutubePlayer,
 } from '@react-native-youtube-bridge/core';
-export { useYoutubeOEmbed, useYouTubeEvent, useYouTubePlayer } from '@react-native-youtube-bridge/react';
+export type { default as YoutubePlayer } from './modules/YoutubePlayer';
+export { useYoutubeOEmbed } from '@react-native-youtube-bridge/react';
 
+export { default as useYouTubeEvent } from './hooks/useYouTubeEvent';
+export { default as useYouTubePlayer } from './hooks/useYouTubePlayer';
 export { default as YoutubeView } from './YoutubeView';
 
 export type { YoutubeViewProps };

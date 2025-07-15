@@ -1,10 +1,17 @@
-import type { YoutubeEventType, YoutubePlayerEvents, YoutubePlayerVars, EventCallback } from './types';
+import type {
+  YoutubePlayerEvents,
+  YoutubePlayerVars,
+  EventCallback,
+  WebYoutubePlayerController,
+} from '@react-native-youtube-bridge/core';
+
 import type WebviewYoutubePlayerController from './WebviewYoutubePlayerController';
-import type WebYoutubePlayerController from './WebYoutubePlayerController';
 
 export const INTERNAL_SET_CONTROLLER_INSTANCE = Symbol('setControllerInstance');
 export const INTERNAL_UPDATE_PROGRESS_INTERVAL = Symbol('updateProgressInterval');
 export const INTERNAL_SET_PROGRESS_INTERVAL = Symbol('setProgressInterval');
+
+type YoutubeEventType = keyof YoutubePlayerEvents;
 
 class YoutubePlayer {
   private listeners = new Map<YoutubeEventType, Set<EventCallback>>();

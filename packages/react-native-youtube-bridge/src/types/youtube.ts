@@ -1,8 +1,9 @@
-import type { PlayerEvents, YouTubeSource, YoutubePlayer, YoutubePlayerVars } from '@react-native-youtube-bridge/core';
+import type { PlayerEvents, YouTubeSource, YoutubePlayerVars } from '@react-native-youtube-bridge/core';
 import type { CSSProperties } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import type { WebViewProps } from 'react-native-webview';
 import type { WebViewSourceUri } from 'react-native-webview/lib/WebViewTypes';
+import type YoutubePlayer from '../modules/YoutubePlayer';
 
 export type YoutubePlayerProps = {
   /**

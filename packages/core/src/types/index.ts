@@ -202,6 +202,4 @@ export type YoutubePlayerEvents = {
   autoplayBlocked: undefined;
 };
 
-export type YoutubeEventType = keyof YoutubePlayerEvents;
-
 export type EventCallback<Data = any> = (data: Data) => any;

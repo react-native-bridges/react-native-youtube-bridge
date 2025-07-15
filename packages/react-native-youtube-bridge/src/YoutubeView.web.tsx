@@ -1,10 +1,8 @@
-import {
-  INTERNAL_SET_CONTROLLER_INSTANCE,
-  INTERNAL_UPDATE_PROGRESS_INTERVAL,
-  WebYoutubePlayerController,
-} from '@react-native-youtube-bridge/core';
 import { useEffect, useRef, useState } from 'react';
 import { useWindowDimensions } from 'react-native';
+import { WebYoutubePlayerController } from '@react-native-youtube-bridge/core';
+
+import { INTERNAL_SET_CONTROLLER_INSTANCE, INTERNAL_UPDATE_PROGRESS_INTERVAL } from './modules/YoutubePlayer';
 import YoutubeViewWrapper from './YoutubeViewWrapper';
 import type { YoutubeViewProps } from './types/youtube';
 

@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import {
-  INTERNAL_SET_PROGRESS_INTERVAL,
-  type EventCallback,
-  type YoutubePlayer,
-  type YoutubePlayerEvents,
-} from '@react-native-youtube-bridge/core';
+import type { EventCallback, YoutubePlayerEvents } from '@react-native-youtube-bridge/core';
+
+import type YoutubePlayer from '../modules/YoutubePlayer';
+import { INTERNAL_SET_PROGRESS_INTERVAL } from '../modules/YoutubePlayer';
 
 const DEFAULT_PROGRESS_INTERVAL = 1000;
 

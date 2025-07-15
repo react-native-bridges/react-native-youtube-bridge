@@ -1,16 +1,14 @@
-import {
-  INTERNAL_SET_CONTROLLER_INSTANCE,
-  INTERNAL_UPDATE_PROGRESS_INTERVAL,
-  type MessageData,
-  WebviewYoutubePlayerController,
-} from '@react-native-youtube-bridge/core';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { type DataDetectorTypes, Dimensions, StyleSheet } from 'react-native';
 import WebView, { type WebViewMessageEvent } from 'react-native-webview';
+import type { MessageData } from '@react-native-youtube-bridge/core';
+
 import YoutubeViewWrapper from './YoutubeViewWrapper';
 import useCreateLocalPlayerHtml from './hooks/useCreateLocalPlayerHtml';
 import type { YoutubeViewProps } from './types/youtube';
 import { getYoutubeWebViewUrl } from './utils/youtube';
+import WebviewYoutubePlayerController from './modules/WebviewYoutubePlayerController';
+import { INTERNAL_SET_CONTROLLER_INSTANCE, INTERNAL_UPDATE_PROGRESS_INTERVAL } from './modules/YoutubePlayer';
 
 const { width: screenWidth } = Dimensions.get('window');
 
