@@ -152,10 +152,10 @@ class YoutubePlayer {
     return this.controller?.setSize(width, height);
   }
   destroy() {
-    this.controller?.destroy();
-    this.progressInterval = null;
     this.listeners.clear();
+    this.controller?.destroy();
     this.controller = null;
+    this.progressInterval = null;
   }
 }
 

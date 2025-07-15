@@ -4,6 +4,7 @@ import { useYouTubeVideoId } from '@react-native-youtube-bridge/react';
 import { WebYoutubePlayerController } from '@react-native-youtube-bridge/core';
 
 import { useWebView } from './hooks/useWebView';
+import { parseTimeParam } from './utils';
 
 import './YoutubePlayer.css';
 
@@ -26,8 +27,8 @@ function YoutubePlayer() {
 
   const youtubeVideoId = useYouTubeVideoId(videoId);
 
-  const startTimeNumber = Number.isNaN(Number(startTime)) ? 0 : Number(startTime);
-  const endTimeNumber = Number.isNaN(Number(endTime)) ? undefined : Number(endTime);
+  const startTimeNumber = parseTimeParam(startTime, 0);
+  const endTimeNumber = parseTimeParam(endTime);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<WebYoutubePlayerController | null>(null);
@@ -46,7 +47,7 @@ function YoutubePlayer() {
       return;
     }
 
-    const containerId = 'youtube-player-container';
+    const containerId = `youtube-player-${youtubeVideoId}`;
     containerRef.current.id = containerId;
 
     playerRef.current?.updateCallbacks({
@@ -107,13 +108,6 @@ function YoutubePlayer() {
         endTime: endTimeNumber,
       },
     });
-
-    return () => {
-      if (playerRef.current) {
-        playerRef.current?.destroy();
-        playerRef.current = null;
-      }
-    };
   }, [
     sendMessage,
     isInitialized,
@@ -128,6 +122,15 @@ function YoutubePlayer() {
     startTimeNumber,
     endTimeNumber,
   ]);
+
+  useEffect(() => {
+    return () => {
+      if (playerRef.current) {
+        playerRef.current?.destroy();
+        playerRef.current = null;
+      }
+    };
+  }, []);
 
   useEffect(() => {
     onMessage((message) => {

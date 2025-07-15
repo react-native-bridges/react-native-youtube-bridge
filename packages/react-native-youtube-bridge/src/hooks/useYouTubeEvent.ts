@@ -83,7 +83,7 @@ function useYouTubeEvent<T extends keyof YoutubePlayerEvents>(
     }
   }, [throttleMs, player]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  // biome-ignore lint/correctness/useExhaustiveDependencies: defaultValue is intentionally excluded to prevent unnecessary re-subscriptions
   useEffect(() => {
     if (!player) {
       return;

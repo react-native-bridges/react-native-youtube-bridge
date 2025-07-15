@@ -165,9 +165,9 @@ class WebviewYoutubePlayerController {
     // no-op only for web
   }
 
-  destroy(): void {
+  async destroy(): Promise<void> {
     this.pendingCommands.clear();
-    this.cleanup();
+    await this.cleanup();
 
     WebviewYoutubePlayerController.instance = null;
   }
