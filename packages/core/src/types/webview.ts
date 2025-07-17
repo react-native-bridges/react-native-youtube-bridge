@@ -1,4 +1,4 @@
-import type { PlaybackQuality, PlayerInfo, PlayerState, ProgressData, YouTubeError } from '.';
+import type { PlaybackQuality, PlayerInfo, PlayerState, ProgressData, YoutubeError } from '.';
 
 interface ReadyMessageData {
   type: 'ready';
@@ -12,7 +12,7 @@ interface StateChangeMessageData {
 
 interface ErrorMessageData {
   type: 'error';
-  error: YouTubeError;
+  error: YoutubeError;
 }
 
 interface ProgressMessageData {

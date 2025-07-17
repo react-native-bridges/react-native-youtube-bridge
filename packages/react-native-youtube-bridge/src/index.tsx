@@ -6,10 +6,10 @@ export {
   type YoutubePlayerVars,
   type ProgressData,
   type PlaybackQuality,
-  type YouTubeError,
+  type YoutubeError,
   type PlayerInfo,
-  type PlayerEvents,
-  type PlayerControls,
+  type YoutubePlayerEvents,
+  type YoutubeSource,
 } from '@react-native-youtube-bridge/core';
 export type { default as YoutubePlayer } from './modules/YoutubePlayer';
 export { useYoutubeOEmbed } from '@react-native-youtube-bridge/react';

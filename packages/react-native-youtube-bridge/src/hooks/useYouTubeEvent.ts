@@ -9,7 +9,13 @@ const DEFAULT_PROGRESS_INTERVAL = 1000;
 /**
  * @param player - The Youtube player instance.
  * @param eventType - The type of event to subscribe to. `progress` event is not supported.
+ * @param defaultValue - The default value to return if the event is not triggered.
  * @returns The event data.
+ * @example
+ * ```ts
+ * const player = useYouTubePlayer('AbZH7XWDW_k');
+ * const playbackRate = useYouTubeEvent(player, 'playbackRateChange', 1);
+ * ```
  */
 function useYouTubeEvent<T extends Exclude<keyof YoutubePlayerEvents, 'progress'>>(
   player: YoutubePlayer,
@@ -23,6 +29,16 @@ function useYouTubeEvent<T extends Exclude<keyof YoutubePlayerEvents, 'progress'
  * @param callback - The callback to call when the event is triggered.
  * @param deps - The dependencies to watch for changes.
  * @returns void
+ * @example
+ * ```ts
+ * const player = useYouTubePlayer('AbZH7XWDW_k');
+ * useYouTubeEvent(player, 'ready', (playerInfo) => {
+ *   console.log('Player is ready!');
+ *   console.log('rates', playerInfo.availablePlaybackRates);
+ *   console.log('vol', playerInfo.volume);
+ *   console.log('muted', playerInfo.muted);
+ * });
+ * ```
  */
 function useYouTubeEvent<T extends keyof YoutubePlayerEvents>(
   player: YoutubePlayer,
@@ -36,6 +52,11 @@ function useYouTubeEvent<T extends keyof YoutubePlayerEvents>(
  * @param eventType - `progress` event only.
  * @param throttleMs - The throttle time in milliseconds (default 1000ms).
  * @returns The event data.
+ * @example
+ * ```ts
+ * const player = useYouTubePlayer('AbZH7XWDW_k');
+ * const progress = useYouTubeEvent(player, 'progress', 1000);
+ * ```
  */
 function useYouTubeEvent(
   player: YoutubePlayer,
