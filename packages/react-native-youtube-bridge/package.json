@@ -1,6 +1,6 @@
 {
   "name": "react-native-youtube-bridge",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "🎥 Easy-to-use YouTube player for React Native with cross-platform support",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/index.d.ts",

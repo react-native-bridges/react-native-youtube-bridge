@@ -1,5 +1,20 @@
 # react-native-youtube-bridge
 
+## 2.1.1
+
+### Patch Changes
+
+- 8607fb1: feat: add `YoutubePlayerEvents`, `YoutubeSource` types and enhance TSDoc documentation
+
+  - Add `YoutubePlayerEvents`, `YoutubeSource` type definition
+  - Enhance TSDoc with comprehensive parameter descriptions and examples
+  - Change type name `YouTubeError` to `YoutubeError`
+  - Remove unused v1 export `PlayerEvents`, `PlayerControls`, `YoutubePlayerProps` type
+
+- Updated dependencies [8607fb1]
+  - @react-native-youtube-bridge/core@2.1.1
+  - @react-native-youtube-bridge/react@2.1.1
+
 ## 2.1.0
 
 ### Minor Changes
