@@ -15,4 +15,4 @@ export {
 export type { MessageData } from './types/webview';
 export { default as WebYoutubePlayerController } from './WebYoutubePlayerController';
 export { escapeHtml, extractVideoIdFromUrl, safeNumber, validateVideoId } from './utils';
-export { ERROR_CODES } from './constants';
+export { ERROR_CODES, MATCH_URL_YOUTUBE } from './constants';

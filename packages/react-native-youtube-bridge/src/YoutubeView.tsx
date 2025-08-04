@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { type DataDetectorTypes, Dimensions, StyleSheet } from 'react-native';
+import { type DataDetectorTypes, Dimensions, StyleSheet, Linking } from 'react-native';
 import WebView, { type WebViewMessageEvent } from 'react-native-webview';
-import type { MessageData } from '@react-native-youtube-bridge/core';
+import type { ShouldStartLoadRequest } from 'react-native-webview/lib/WebViewTypes';
+import { type MessageData, MATCH_URL_YOUTUBE } from '@react-native-youtube-bridge/core';
 
 import YoutubeViewWrapper from './YoutubeViewWrapper';
 import useCreateLocalPlayerHtml from './hooks/useCreateLocalPlayerHtml';
@@ -113,6 +114,15 @@ function YoutubeView({
     [player],
   );
 
+  const handleShouldStartLoadWithRequest = useCallback((request: ShouldStartLoadRequest) => {
+    if (MATCH_URL_YOUTUBE.test(request.url) && !request.url.includes('/embed/')) {
+      Linking.openURL(request.url);
+      return false;
+    }
+
+    return true;
+  }, []);
+
   useEffect(() => {
     if (isReady && webViewRef.current) {
       const controller = WebviewYoutubePlayerController.createInstance(webViewRef);
@@ -156,6 +166,7 @@ function YoutubeView({
         mixedContentMode="compatibility"
         thirdPartyCookiesEnabled={false}
         webviewDebuggingEnabled={__DEV__}
+        onShouldStartLoadWithRequest={handleShouldStartLoadWithRequest}
         {...webViewProps}
         ref={webViewRef}
         javaScriptEnabled
