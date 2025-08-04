@@ -1,5 +1,11 @@
 # @react-native-youtube-bridge/core
 
+## 2.1.2
+
+### Patch Changes
+
+- 3645311: feat: export `MATCH_URL_YOUTUBE` regex constant
+
 ## 2.1.1
 
 ### Patch Changes
