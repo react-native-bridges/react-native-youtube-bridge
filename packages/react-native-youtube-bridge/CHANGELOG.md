@@ -1,5 +1,19 @@
 # react-native-youtube-bridge
 
+## 2.1.2
+
+### Patch Changes
+
+- 3645311: fix: prevent YouTube website from loading inside video player
+
+  - YouTube logo clicks now open in external browser instead of WebView
+  - Add default `onShouldStartLoadWithRequest` handler to intercept navigation
+  - Maintain embed video playback while redirecting external YouTube links
+
+- Updated dependencies [3645311]
+  - @react-native-youtube-bridge/core@2.1.2
+  - @react-native-youtube-bridge/react@2.1.2
+
 ## 2.1.1
 
 ### Patch Changes
