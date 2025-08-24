@@ -40,7 +40,9 @@ const useYouTubePlayer = (source: YoutubeSource, config?: YoutubePlayerVars): Yo
   const isFastRefresh = useRef(false);
 
   const onError = useCallback((error: YoutubeError) => {
-    console.error('Invalid YouTube source: ', error);
+    if (__DEV__) {
+      console.error('Invalid YouTube source: ', error);
+    }
     playerRef.current?.emit('error', error);
   }, []);
 

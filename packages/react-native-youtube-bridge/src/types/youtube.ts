@@ -54,6 +54,9 @@ export type YoutubeViewProps = {
    * The URL for the WebView source.
    * @remark
    * When `useInlineHtml` is `true`, this value is set as the `baseUrl` for HTML content.
+   * In this case, the origin of `webViewUrl` MUST match the YouTube IFrame API `origin`
+   * (e.g. baseUrl `https://localhost/` ⇄ origin `https://localhost`).
+   *
    * When `useInlineHtml` is `false`, this value overrides the default URI for the WebView source (https://react-native-youtube-bridge.pages.dev).
    * @platform ios, android
    */
