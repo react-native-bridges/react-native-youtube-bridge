@@ -40,7 +40,10 @@ function YoutubeView({
   // biome-ignore lint/correctness/useExhaustiveDependencies: webViewProps.source is intentionally excluded to prevent unnecessary re-renders
   const webViewSource = useMemo(() => {
     if (useInlineHtml) {
-      return { html: createPlayerHTML(), ...(webViewBaseUrl ? { baseUrl: webViewBaseUrl } : {}) };
+      return {
+        html: createPlayerHTML(),
+        baseUrl: webViewBaseUrl ?? 'https://localhost/',
+      };
     }
 
     if (webViewUrl) {
@@ -107,7 +110,9 @@ function YoutubeView({
           return;
         }
       } catch (error) {
-        console.error('Error parsing WebView message:', error);
+        if (__DEV__) {
+          console.error('Error parsing WebView message:', error);
+        }
         player.emit('error', { code: 1000, message: 'FAILED_TO_PARSE_WEBVIEW_MESSAGE' });
       }
     },
@@ -159,12 +164,9 @@ function YoutubeView({
         mediaPlaybackRequiresUserAction={false}
         originWhitelist={['*']}
         style={[styles.webView, webViewStyle]}
-        // iOS specific props
         allowsLinkPreview={false}
         dataDetectorTypes={dataDetectorTypes}
-        // Android specific props
         mixedContentMode="compatibility"
-        thirdPartyCookiesEnabled={false}
         webviewDebuggingEnabled={__DEV__}
         onShouldStartLoadWithRequest={handleShouldStartLoadWithRequest}
         {...webViewProps}
@@ -173,7 +175,9 @@ function YoutubeView({
         source={webViewSource}
         onMessage={handleMessage}
         onError={(error) => {
-          console.error('WebView error:', error);
+          if (__DEV__) {
+            console.error('WebView error:', error);
+          }
           player.emit('error', { code: 1001, message: 'WEBVIEW_LOADING_ERROR' });
         }}
       />

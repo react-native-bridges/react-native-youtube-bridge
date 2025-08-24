@@ -293,10 +293,10 @@ function App() {
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.videoButton, videoId === 'fJ9rUzIMcZQ' && styles.activeVideoButton]}
-              onPress={() => setVideoId('fJ9rUzIMcZQ')}
+              style={[styles.videoButton, videoId === 'dvgZkm1xWPE' && styles.activeVideoButton]}
+              onPress={() => setVideoId('dvgZkm1xWPE')}
             >
-              <Text style={styles.videoButtonText}>Bohemian Rhapsody</Text>
+              <Text style={styles.videoButtonText}>Viva la Vida</Text>
             </TouchableOpacity>
 
             <TouchableOpacity

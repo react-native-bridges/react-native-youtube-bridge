@@ -166,6 +166,11 @@ export type YoutubePlayerVars = {
   rel?: boolean;
   /**
    * This parameter provides an extra security measure for the IFrame API and is only supported for IFrame embeds.
+   *
+   * @remark
+   * - When `useInlineHtml` is `true` (iOS/Android inline WebView), if not provided, the library defaults this to `https://localhost` and sets the WebView `baseUrl` accordingly so that the document origin and this value match.
+   * - When `useInlineHtml` is `false` (remote WebView), if not provided, the external page URL defaults to `https://react-native-youtube-bridge.pages.dev` and this value follows that URL. If you pass a custom `webViewUrl` (base URL), `origin` should follow that same origin.
+   * - In all cases, this value MUST exactly match the document's origin that hosts the iframe for the YouTube IFrame API to function correctly.
    */
   origin?: string;
 };
