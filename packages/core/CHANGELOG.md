@@ -1,5 +1,11 @@
 # @react-native-youtube-bridge/core
 
+## 2.1.3
+
+### Patch Changes
+
+- a4784e6: chore: update TSDoc for `playerVars.origin` prop
+
 ## 2.1.2
 
 ### Patch Changes

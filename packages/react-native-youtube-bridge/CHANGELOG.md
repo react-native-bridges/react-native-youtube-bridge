@@ -1,5 +1,31 @@
 # react-native-youtube-bridge
 
+## 2.1.3
+
+### Patch Changes
+
+- 9ba4156: fix: resolve YouTube 101/150 errors by aligning WebView baseUrl and IFrame origin in inline mode
+
+  - Wrap certain dev logs with `__DEV__` so they only run in development
+  - Add TSDoc for `webViewUrl` prop
+
+  Notes:
+
+  - When using a custom baseUrl like `https://your-domain.com/`, the IFrame API `origin` must be `https://your-domain.com` (port must match).
+  - Use a trailing slash for `baseUrl` (e.g., `https://localhost/`), but never for `origin` (scheme + host [+ port] only).
+
+- 3f6f6df: fix: align inline baseUrl with IFrame origin
+
+  - add trailing-slash handling for WebView baseUrl in inline mode
+  - propagate origin/playerVars into local HTML
+  - refine YoutubeView WebView source resolution
+
+- 3f6f6df: docs: update TSDoc for webViewUrl/inline behavior
+- Updated dependencies [9ba4156]
+- Updated dependencies [a4784e6]
+  - @react-native-youtube-bridge/core@2.1.3
+  - @react-native-youtube-bridge/react@2.1.3
+
 ## 2.1.2
 
 ### Patch Changes
