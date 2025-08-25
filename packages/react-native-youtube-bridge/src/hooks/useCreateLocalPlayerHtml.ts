@@ -25,7 +25,7 @@ const useCreateLocalPlayerHtml = ({
       return '<html><body><div style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; color: #fff;">Invalid YouTube ID</div></body></html>';
     }
 
-    const safeOrigin = escapeHtml(origin) ?? 'https://localhost';
+    const safeOrigin = escapeHtml(origin) || 'https://localhost';
     const safeStartTime = safeNumber(startTime);
     const safeEndTime = endTime ? safeNumber(endTime) : undefined;
 
