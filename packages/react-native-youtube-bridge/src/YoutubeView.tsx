@@ -40,9 +40,12 @@ function YoutubeView({
   // biome-ignore lint/correctness/useExhaustiveDependencies: webViewProps.source is intentionally excluded to prevent unnecessary re-renders
   const webViewSource = useMemo(() => {
     if (useInlineHtml) {
+      const webViewBaseUrlWithSlash =
+        webViewBaseUrl && (webViewBaseUrl.endsWith('/') ? webViewBaseUrl : `${webViewBaseUrl}/`);
+
       return {
         html: createPlayerHTML(),
-        baseUrl: webViewBaseUrl ?? 'https://localhost/',
+        baseUrl: webViewBaseUrlWithSlash || 'https://localhost/',
       };
     }
 
@@ -111,7 +114,7 @@ function YoutubeView({
         }
       } catch (error) {
         if (__DEV__) {
-          console.error('Error parsing WebView message:', error);
+          console.error('Error parsing WebView message:', error, event?.nativeEvent?.data);
         }
         player.emit('error', { code: 1000, message: 'FAILED_TO_PARSE_WEBVIEW_MESSAGE' });
       }
