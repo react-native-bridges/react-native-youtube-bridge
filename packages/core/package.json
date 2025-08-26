@@ -1,6 +1,6 @@
 {
   "name": "@react-native-youtube-bridge/core",
-  "version": "2.1.3",
+  "version": "2.1.4",
   "description": "Core package for react-native-youtube-bridge",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
