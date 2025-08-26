@@ -119,14 +119,14 @@ export type PlayerEvents = {
 export type YoutubePlayerVars = {
   /**
    * This parameter specifies whether the initial video will automatically start to play when the player loads.
-   * @remark
+   * @remarks
    * - If the `muted` is not set to true when activating the `autoplay`,
    * - it may not work properly depending on browser policy. (https://developer.chrome.com/blog/autoplay)
    */
   autoplay?: boolean;
   /**
    * This parameter indicates whether the video player controls are displayed.
-   * @remark
+   * @remarks
    * - `controls: false` - Player controls do not display in the player.
    * - `controls: true` (default) - Player controls display in the player.
    * @defaultValue true
@@ -152,7 +152,7 @@ export type YoutubePlayerVars = {
   /**
    * This parameter controls whether videos play inline or fullscreen on iOS.
    *
-   * @remark
+   * @remarks
    * Valid values are:
    * - `playsinline: false` - Results in fullscreen playback. This is currently the default value, though the default is subject to change.
    * - `playsinline: true` - Results in inline playback for mobile browsers and for WebViews created with the `allowsInlineMediaPlayback` property set to `YES`.
@@ -160,14 +160,14 @@ export type YoutubePlayerVars = {
   playsinline?: boolean;
   /**
    * Prior to the change, this parameter indicates whether the player should show related videos when playback of the initial video ends.
-   * @remark
+   * @remarks
    * After the change, you will not be able to disable related videos. Instead, if the `rel` parameter is set to `false, related videos will come from the same channel as the video that was just played.
    */
   rel?: boolean;
   /**
    * This parameter provides an extra security measure for the IFrame API and is only supported for IFrame embeds.
    *
-   * @remark
+   * @remarks
    * - When `useInlineHtml` is `true` (iOS/Android inline WebView), if not provided, the library defaults this to `https://localhost` and sets the WebView `baseUrl` accordingly so that the document origin and this value match.
    * - When `useInlineHtml` is `false` (remote WebView), if not provided, the external page URL defaults to `https://react-native-youtube-bridge.pages.dev` and this value follows that URL. If you pass a custom `webViewUrl` (base URL), `origin` should follow that same origin.
    * - In all cases, this value MUST exactly match the document's origin that hosts the iframe for the YouTube IFrame API to function correctly.

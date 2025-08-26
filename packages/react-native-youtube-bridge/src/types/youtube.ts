@@ -43,7 +43,7 @@ export type YoutubeViewProps = {
   iframeStyle?: CSSProperties;
   /**
    * If set to true, the player will use inline HTML.
-   * @remark
+   * @remarks
    * When false, the player will use a webview with the default URI (https://react-native-youtube-bridge.pages.dev).
    * To use a custom webview, set `webViewUrl` to your own URL.
    * @defaultValue true
@@ -52,7 +52,7 @@ export type YoutubeViewProps = {
   useInlineHtml?: boolean;
   /**
    * The URL for the WebView source.
-   * @remark
+   * @remarks
    * When `useInlineHtml` is `true`, this value is set as the `baseUrl` for HTML content.
    * In this case, the origin of `webViewUrl` MUST exactly match the YouTube IFrame API `origin`.
    * - Include the port when applicable (e.g. baseUrl `https://localhost:8081/` ⇄ origin `https://localhost:8081`).
