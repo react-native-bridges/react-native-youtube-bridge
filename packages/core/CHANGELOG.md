@@ -1,5 +1,16 @@
 # @react-native-youtube-bridge/core
 
+## 2.1.4
+
+### Patch Changes
+
+- 390538e: chore(docs): replace @remark with @remarks per TSDoc spec
+
+  - TSDoc specifies the tag name as `@remarks` (not `@remark`).
+  - This aligns our comments with the spec and improves tooling support.
+  - No runtime behavior changes.
+  - Ref: https://tsdoc.org/pages/tags/remarks/
+
 ## 2.1.3
 
 ### Patch Changes
