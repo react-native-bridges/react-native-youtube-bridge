@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": null,
+  "plugins": ["react", "typescript", "eslint", "import", "unicorn"],
   "categories": {
     "correctness": "error",
     "perf": "error",
@@ -8,6 +8,8 @@
     "suspicious": "error"
   },
   "rules": {
+    "react/react-in-jsx-scope": "off",
+    "import/no-unassigned-import": ["error", { "allow": ["**/*.css"] }],
     "unicorn/require-post-message-target-origin": "off"
   },
   "settings": {
@@ -39,6 +41,7 @@
   "overrides": [
     {
       "files": ["packages/**/src/__tests__/*.test.tsx"],
+      "plugins": ["jest"],
       "env": {
         "jest": true
       }

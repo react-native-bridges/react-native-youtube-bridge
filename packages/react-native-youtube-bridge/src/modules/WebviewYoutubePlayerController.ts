@@ -1,5 +1,5 @@
 import type { PlayerEvents } from '@react-native-youtube-bridge/core';
-import type WebView from 'react-native-webview';
+import { type WebView } from 'react-native-webview';
 
 class WebviewYoutubePlayerController {
   private webViewRef: React.RefObject<WebView | null>;

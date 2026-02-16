@@ -1,7 +1,7 @@
 import { type MessageData, MATCH_URL_YOUTUBE } from '@react-native-youtube-bridge/core';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { type DataDetectorTypes, Dimensions, StyleSheet, Linking } from 'react-native';
-import WebView, { type WebViewMessageEvent } from 'react-native-webview';
+import { WebView, type WebViewMessageEvent } from 'react-native-webview';
 import type { ShouldStartLoadRequest } from 'react-native-webview/lib/WebViewTypes';
 
 import useCreateLocalPlayerHtml from './hooks/useCreateLocalPlayerHtml';
@@ -40,7 +40,6 @@ function YoutubeView({
   const createPlayerHTML = useCreateLocalPlayerHtml({ videoId, useInlineHtml, ...playerVars });
   const webViewUrl = getYoutubeWebViewUrl(videoId, useInlineHtml, playerVars, webViewBaseUrl);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: webViewProps.source is intentionally excluded to prevent unnecessary re-renders
   const webViewSource = useMemo(() => {
     if (useInlineHtml) {
       const webViewBaseUrlWithSlash =
@@ -57,6 +56,7 @@ function YoutubeView({
     }
 
     return undefined;
+    // oxlint-disable-next-line eslint-plugin-react-hooks/exhaustive-deps
   }, [useInlineHtml, createPlayerHTML, webViewBaseUrl, webViewUrl]);
 
   const handleMessage = useCallback(

@@ -56,7 +56,6 @@ const useYouTubePlayer = (source: YoutubeSource, config?: YoutubePlayerVars): Yo
     playerRef.current = new YoutubePlayer(videoId, config);
   }
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: videoId changes trigger re-creation
   const player = useMemo(() => {
     let newPlayer = playerRef.current;
 
@@ -71,6 +70,7 @@ const useYouTubePlayer = (source: YoutubeSource, config?: YoutubePlayerVars): Yo
     isFastRefresh.current = true;
 
     return newPlayer;
+    // oxlint-disable-next-line eslint-plugin-react-hooks/exhaustive-deps
   }, [videoId]);
 
   useEffect(() => {

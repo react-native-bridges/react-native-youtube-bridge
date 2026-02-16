@@ -11,7 +11,6 @@ const useYouTubeVideoId = (
   source: YoutubeSource,
   onError?: PlayerEvents['onError'],
 ): string | null | undefined => {
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   const sourceValue = useMemo(() => {
     if (!source) {
       return;
@@ -31,6 +30,7 @@ const useYouTubeVideoId = (
 
     return null;
   }, [
+    // oxlint-disable-next-line eslint-plugin-react-hooks/exhaustive-deps
     typeof source === 'string'
       ? source
       : source && 'videoId' in source
