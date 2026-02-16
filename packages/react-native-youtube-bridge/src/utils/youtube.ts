@@ -20,10 +20,10 @@ export const getYoutubeWebViewUrl = (
   const url = new URL(baseUrl);
 
   url.searchParams.set('videoId', videoId);
-  if (startTime) {
+  if (startTime != null) {
     url.searchParams.set('startTime', startTime.toString());
   }
-  if (endTime) {
+  if (endTime != null) {
     url.searchParams.set('endTime', endTime.toString());
   }
   url.searchParams.set('origin', origin || baseUrl);
