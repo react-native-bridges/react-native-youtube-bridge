@@ -121,7 +121,7 @@
 
   ```jsx
   // Imperative, ref-based API
-  const playerRef = useRef < PlayerControls > null;
+  const playerRef = useRef<PlayerControls>(null);
 
   <YoutubePlayer
     ref={playerRef}

@@ -162,7 +162,7 @@ useYouTubeEvent(player, 'error', (error) => {
 **Before (v1):**
 
 ```jsx
-const playerRef = useRef < PlayerControls > null;
+const playerRef = useRef<PlayerControls>(null);
 
 // Player methods
 const play = () => playerRef.current?.play();
