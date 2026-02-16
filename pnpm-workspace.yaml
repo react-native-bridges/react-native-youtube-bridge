@@ -4,3 +4,5 @@ packages:
 onlyBuiltDependencies:
   - '@swc/core'
   - 'esbuild'
+catalog:
+  tsdown: '0.20.3'
