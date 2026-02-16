@@ -1,5 +1,15 @@
 # react-native-youtube-bridge
 
+## 2.1.5
+
+### Patch Changes
+
+- 4993ebb: chore: reformat code with oxfmt
+- Updated dependencies [fd60a82]
+- Updated dependencies [4993ebb]
+  - @react-native-youtube-bridge/react@2.1.5
+  - @react-native-youtube-bridge/core@2.1.5
+
 ## 2.1.4
 
 ### Patch Changes
@@ -121,7 +131,7 @@
 
   ```jsx
   // Imperative, ref-based API
-  const playerRef = useRef<PlayerControls>(null);
+  const playerRef = useRef < PlayerControls > null;
 
   <YoutubePlayer
     ref={playerRef}
