@@ -7,7 +7,10 @@ import {
 } from '@react-native-youtube-bridge/core';
 import { useMemo } from 'react';
 
-const useYouTubeVideoId = (source: YoutubeSource, onError?: PlayerEvents['onError']): string | null | undefined => {
+const useYouTubeVideoId = (
+  source: YoutubeSource,
+  onError?: PlayerEvents['onError'],
+): string | null | undefined => {
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   const sourceValue = useMemo(() => {
     if (!source) {

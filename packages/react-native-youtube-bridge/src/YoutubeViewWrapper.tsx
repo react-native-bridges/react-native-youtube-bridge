@@ -1,5 +1,11 @@
 import type { ReactNode } from 'react';
-import { type DimensionValue, type StyleProp, StyleSheet, View, type ViewStyle } from 'react-native';
+import {
+  type DimensionValue,
+  type StyleProp,
+  StyleSheet,
+  View,
+  type ViewStyle,
+} from 'react-native';
 
 type YoutubeViewWrapperProps = {
   children: ReactNode;

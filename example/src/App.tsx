@@ -1,5 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Alert, Platform, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Alert,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {
   PlayerState,
   YoutubeView,
@@ -21,7 +30,9 @@ function App() {
   const [isMuted, setIsMuted] = useState(false);
   const [videoId, setVideoId] = useState('AbZH7XWDW_k');
   const [progressInterval, setProgressInterval] = useState(1000);
-  const { oEmbed, isLoading, error } = useYoutubeOEmbed(`https://www.youtube.com/watch?v=${videoId}`);
+  const { oEmbed, isLoading, error } = useYoutubeOEmbed(
+    `https://www.youtube.com/watch?v=${videoId}`,
+  );
 
   const player = useYouTubePlayer(videoId, {
     autoplay: true,
@@ -201,7 +212,10 @@ function App() {
 
         <View style={styles.progressContainer}>
           <TouchableOpacity
-            style={[styles.button, { backgroundColor: progressInterval === 0 ? '#9E9E9E' : '#4CAF50' }]}
+            style={[
+              styles.button,
+              { backgroundColor: progressInterval === 0 ? '#9E9E9E' : '#4CAF50' },
+            ]}
             onPress={() => setProgressInterval(progressInterval === 0 ? 1000 : 0)}
           >
             <Text style={styles.buttonText}>{progressInterval}ms interval</Text>
@@ -220,7 +234,10 @@ function App() {
             <Text style={styles.buttonText}>{isPlaying ? '⏸️ Pause' : '▶️ Play'}</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.button, styles.stopButton]} onPress={() => player.stop()}>
+          <TouchableOpacity
+            style={[styles.button, styles.stopButton]}
+            onPress={() => player.stop()}
+          >
             <Text style={styles.buttonText}>⏹️ Stop</Text>
           </TouchableOpacity>
 
@@ -235,7 +252,10 @@ function App() {
         <View style={styles.volumeSection}>
           <Text style={styles.sectionTitle}>Volume control</Text>
           <View style={styles.volumeControls}>
-            <TouchableOpacity style={[styles.volumeButton, isMuted && styles.activeButton]} onPress={toggleMute}>
+            <TouchableOpacity
+              style={[styles.volumeButton, isMuted && styles.activeButton]}
+              onPress={toggleMute}
+            >
               <Text style={styles.buttonText}>{isMuted ? '🔇 Muted' : '🔊 Unmuted'}</Text>
             </TouchableOpacity>
 

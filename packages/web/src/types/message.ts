@@ -5,7 +5,9 @@ interface ReceivePlayerControls extends PlayerControls {
   updateProgressInterval: (interval: number) => void;
 }
 
-export interface ReceiveMessage<K extends keyof ReceivePlayerControls = keyof ReceivePlayerControls> {
+export interface ReceiveMessage<
+  K extends keyof ReceivePlayerControls = keyof ReceivePlayerControls,
+> {
   command: K;
   args: Parameters<ReceivePlayerControls[K]>;
   id?: string;

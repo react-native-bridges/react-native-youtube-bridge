@@ -2,15 +2,25 @@
   "name": "react-native-youtube-bridge",
   "version": "2.1.4",
   "description": "🎥 Easy-to-use YouTube player for React Native with cross-platform support",
-  "main": "./lib/module/index.js",
-  "types": "./lib/typescript/index.d.ts",
-  "exports": {
-    ".": {
-      "source": "./src/index.tsx",
-      "types": "./lib/typescript/index.d.ts",
-      "default": "./lib/module/index.js"
-    },
-    "./package.json": "./package.json"
+  "keywords": [
+    "android",
+    "ios",
+    "react-native",
+    "react-native-youtube",
+    "react-native-youtube-bridge",
+    "react-native-youtube-iframe",
+    "youtube",
+    "youtube-iframe-api"
+  ],
+  "homepage": "https://github.com/react-native-bridges/react-native-youtube-bridge#readme",
+  "bugs": {
+    "url": "https://github.com/react-native-bridges/react-native-youtube-bridge/issues"
+  },
+  "license": "MIT",
+  "author": "saseungmin <dbd02169@naver.com> (https://github.com/saseungmin)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/react-native-bridges/react-native-youtube-bridge.git"
   },
   "files": [
     "lib",
@@ -31,34 +41,24 @@
     "!**/__mocks__",
     "!**/.*"
   ],
-  "scripts": {
-    "test": "jest",
-    "typecheck": "tsc --noEmit",
-    "clean": "del-cli lib",
-    "build": "bob build"
+  "main": "./lib/module/index.js",
+  "types": "./lib/typescript/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/typescript/index.d.ts",
+      "source": "./src/index.tsx",
+      "default": "./lib/module/index.js"
+    },
+    "./package.json": "./package.json"
   },
-  "keywords": [
-    "react-native",
-    "ios",
-    "android",
-    "youtube",
-    "react-native-youtube",
-    "react-native-youtube-bridge",
-    "youtube-iframe-api",
-    "react-native-youtube-iframe"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/react-native-bridges/react-native-youtube-bridge.git"
-  },
-  "author": "saseungmin <dbd02169@naver.com> (https://github.com/saseungmin)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/react-native-bridges/react-native-youtube-bridge/issues"
-  },
-  "homepage": "https://github.com/react-native-bridges/react-native-youtube-bridge#readme",
   "publishConfig": {
     "access": "public"
+  },
+  "scripts": {
+    "build": "bob build",
+    "clean": "del-cli lib",
+    "test": "jest",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@react-native-youtube-bridge/core": "workspace:*",
@@ -80,10 +80,15 @@
     "react-native-webview": ">=11.0.0"
   },
   "jest": {
-    "preset": "react-native",
     "modulePathIgnorePatterns": [
       "<rootDir>/lib/"
-    ]
+    ],
+    "preset": "react-native"
+  },
+  "create-react-native-library": {
+    "languages": "js",
+    "type": "library",
+    "version": "0.50.3"
   },
   "react-native-builder-bob": {
     "source": "src",
@@ -102,10 +107,5 @@
         }
       ]
     ]
-  },
-  "create-react-native-library": {
-    "languages": "js",
-    "type": "library",
-    "version": "0.50.3"
   }
 }

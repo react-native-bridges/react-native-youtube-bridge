@@ -6,10 +6,11 @@
 > **V1 users:** [V1 Documentation](/packages/react-native-youtube-bridge/docs/v1.md) | [V2 Migration Guide](/packages/react-native-youtube-bridge/docs/migration-v2.md)
 
 ## Overview
-Using a YouTube player in React Native requires complex setup and configuration.   
-However, there are currently no actively maintained YouTube player libraries for React Native. (The most popular react-native-youtube-iframe's [latest release was July 2, 2023](https://github.com/LonelyCpp/react-native-youtube-iframe/releases/tag/v2.3.0))   
 
-`react-native-youtube-bridge` is a library that makes it easy to use the [YouTube iframe Player API](https://developers.google.com/youtube/iframe_api_reference) in React Native applications.   
+Using a YouTube player in React Native requires complex setup and configuration.  
+However, there are currently no actively maintained YouTube player libraries for React Native. (The most popular react-native-youtube-iframe's [latest release was July 2, 2023](https://github.com/LonelyCpp/react-native-youtube-iframe/releases/tag/v2.3.0))
+
+`react-native-youtube-bridge` is a library that makes it easy to use the [YouTube iframe Player API](https://developers.google.com/youtube/iframe_api_reference) in React Native applications.
 
 - ✅ TypeScript support
 - ✅ iOS, Android, and Web platform support
@@ -50,21 +51,19 @@ bun add react-native-youtube-bridge
 import { YoutubeView, useYouTubePlayer } from 'react-native-youtube-bridge';
 
 function App() {
-  const videoIdOrUrl = 'AbZH7XWDW_k'
+  const videoIdOrUrl = 'AbZH7XWDW_k';
 
   // OR useYouTubePlayer({ videoId: 'AbZH7XWDW_k' })
   // OR useYouTubePlayer({ url: 'https://youtube.com/watch?v=AbZH7XWDW_k' })
   const player = useYouTubePlayer(videoIdOrUrl);
 
-  return (
-    <YoutubeView player={player} />
-  );
+  return <YoutubeView player={player} />;
 }
 ```
 
 ### Events
 
-[Events](https://developers.google.com/youtube/iframe_api_reference#Events) are fired to communicate YouTube iframe API state changes to your application.   
+[Events](https://developers.google.com/youtube/iframe_api_reference#Events) are fired to communicate YouTube iframe API state changes to your application.
 
 The `useYouTubeEvent` hook provides complete type inference and allows you to easily detect and use events in two ways.
 
@@ -91,9 +90,7 @@ function App() {
     Alert.alert('Error', `Player error (${error.code}): ${error.message}`);
   });
 
-  return (
-    <YoutubeView player={player} />
-  );
+  return <YoutubeView player={player} />;
 }
 ```
 
@@ -106,7 +103,7 @@ The `useYouTubeEvent` hook provides two ways to receive values: callback-based a
 
 ### Features
 
-You can control various player features like muting, playing, and volume adjustment by calling methods on the player instance returned from `useYouTubePlayer`, which uses the YouTube iframe API [functions](https://developers.google.com/youtube/iframe_api_reference#Functions).   
+You can control various player features like muting, playing, and volume adjustment by calling methods on the player instance returned from `useYouTubePlayer`, which uses the YouTube iframe API [functions](https://developers.google.com/youtube/iframe_api_reference#Functions).
 
 ```tsx
 import { YoutubeView, useYouTubePlayer } from 'react-native-youtube-bridge';
@@ -160,7 +157,7 @@ function App() {
         </TouchableOpacity>
       </View>
     </View>
-  )
+  );
 }
 ```
 
@@ -180,9 +177,7 @@ function App() {
     muted: true,
   });
 
-  return (
-    <YoutubeView player={player} />
-  );
+  return <YoutubeView player={player} />;
 }
 ```
 
@@ -205,15 +200,19 @@ function App() {
         aspectRatio: 16 / 9,
       }}
       // iOS, Android platform support
-      webViewStyle={{
-        // ...
-      }}
+      webViewStyle={
+        {
+          // ...
+        }
+      }
       // iOS, Android platform support
-      webViewProps={{
-        // ...
-      }}
+      webViewProps={
+        {
+          // ...
+        }
+      }
     />
-  )
+  );
 }
 ```
 
@@ -231,24 +230,23 @@ function App() {
   const player = useYouTubePlayer(videoIdOrUrl);
   const progress = useYouTubeEvent(player, 'progress', progressInterval);
 
-  return (
-    <YoutubeView player={player} />
-  )
+  return <YoutubeView player={player} />;
 }
 ```
 
 ### Player Rendering and Source Configuration (iOS, Android)
 
-**Inline HTML vs WebView Mode**   
+**Inline HTML vs WebView Mode**  
 Control the YouTube player rendering method and set source URLs for compatibility.
 
 1. **Inline HTML mode** (`useInlineHtml: true`) renders the player by loading HTML directly within the app. (default)
-2. **WebView mode** (`useInlineHtml: false`) loads an external player page. 
+2. **WebView mode** (`useInlineHtml: false`) loads an external player page.
    - The default URI is https://react-native-youtube-bridge.pages.dev.
    - To use your own custom player page as an external WebView, build your player with `@react-native-youtube-bridge/web` and set the URL in the `webViewUrl` property. For detailed implementation instructions, please refer to the [Web Player Guide](https://github.com/react-native-bridges/react-native-youtube-bridge/tree/main/packages/web).
 
 > [!NOTE]
 > **webViewUrl Usage**
+>
 > - When `useInlineHtml: true`: Set as the HTML `baseUrl` of the WebView source.
 > - When `useInlineHtml: false`: Overrides the WebView source's `uri`.
 >
@@ -288,14 +286,16 @@ export default CustomPlayerPage;
 
 ### YouTube oEmbed API
 
-You can fetch YouTube video metadata through the `useYoutubeOEmbed` hook.   
+You can fetch YouTube video metadata through the `useYoutubeOEmbed` hook.  
 This hook only supports YouTube URLs.
 
 ```tsx
 import { useYoutubeOEmbed } from 'react-native-youtube-bridge';
 
 function App() {
-  const { oEmbed, isLoading, error } = useYoutubeOEmbed('https://www.youtube.com/watch?v=AbZH7XWDW_k');
+  const { oEmbed, isLoading, error } = useYoutubeOEmbed(
+    'https://www.youtube.com/watch?v=AbZH7XWDW_k',
+  );
 
   if (isLoading) return <Text>Loading...</Text>;
   if (error) return <Text>Error: {error.message}</Text>;
@@ -304,12 +304,12 @@ function App() {
   return (
     <>
       <Text>{oEmbed.title}</Text>
-      <Image 
-        source={{ uri: oEmbed?.thumbnail_url }} 
-        style={{ width: oEmbed?.thumbnail_width, height: oEmbed?.thumbnail_height }} 
+      <Image
+        source={{ uri: oEmbed?.thumbnail_url }}
+        style={{ width: oEmbed?.thumbnail_width, height: oEmbed?.thumbnail_height }}
       />
     </>
-  )
+  );
 }
 ```
 

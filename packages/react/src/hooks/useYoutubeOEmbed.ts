@@ -39,9 +39,12 @@ const useYoutubeOEmbed = (url?: string) => {
     const fetchOEmbed = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(`https://www.youtube.com/oembed?format=json&url=${encodeURIComponent(url)}`, {
-          signal: controller.signal,
-        });
+        const response = await fetch(
+          `https://www.youtube.com/oembed?format=json&url=${encodeURIComponent(url)}`,
+          {
+            signal: controller.signal,
+          },
+        );
 
         if (!response.ok) {
           throw new Error('Failed to fetch oEmbed');

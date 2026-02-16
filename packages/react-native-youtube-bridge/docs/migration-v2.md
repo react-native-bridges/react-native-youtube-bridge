@@ -4,20 +4,21 @@ This guide will help you migrate from react-native-youtube-bridge v1 to v2. The 
 
 ## Overview of Changes
 
-| Aspect | v1 (Old) | v2 (New) |
-|--------|----------|----------|
-| **API Style** | Imperative (ref-based) | Declarative (hooks-based) |
-| **Component** | `YoutubePlayer` | `YoutubeView` + `useYouTubePlayer` |
-| **Event Handling** | Manual listeners + props | `useYouTubeEvent` hook |
-| **State Management** | Manual `useState` | Automatic reactive updates |
-| **Player Control** | `playerRef.current.method()` | `player.method()` |
-| **Configuration** | Component props | Hook parameters |
+| Aspect               | v1 (Old)                     | v2 (New)                           |
+| -------------------- | ---------------------------- | ---------------------------------- |
+| **API Style**        | Imperative (ref-based)       | Declarative (hooks-based)          |
+| **Component**        | `YoutubePlayer`              | `YoutubeView` + `useYouTubePlayer` |
+| **Event Handling**   | Manual listeners + props     | `useYouTubeEvent` hook             |
+| **State Management** | Manual `useState`            | Automatic reactive updates         |
+| **Player Control**   | `playerRef.current.method()` | `player.method()`                  |
+| **Configuration**    | Component props              | Hook parameters                    |
 
 ## Step-by-Step Migration
 
 ### 1. Component Replacement
 
 **Before (v1):**
+
 ```jsx
 import { YoutubePlayer } from 'react-native-youtube-bridge';
 
@@ -36,10 +37,11 @@ import { YoutubePlayer } from 'react-native-youtube-bridge';
   onStateChange={handleStateChange}
   onProgress={handleProgress}
   onError={handleError}
-/>
+/>;
 ```
 
 **After (v2):**
+
 ```jsx
 import { YoutubeView, useYouTubePlayer } from 'react-native-youtube-bridge';
 
@@ -51,10 +53,7 @@ const player = useYouTubePlayer(videoId, {
   muted: true,
 });
 
-<YoutubeView
-  player={player}
-  style={{ height: 400 }}
-/>
+<YoutubeView player={player} style={{ height: 400 }} />;
 ```
 
 ### 2. Event Handling Migration
@@ -62,6 +61,7 @@ const player = useYouTubePlayer(videoId, {
 The `useYouTubeEvent` hook provides complete type inference and allows you to handle events in two ways: **callback-based** and **state-based**.
 
 **Before (v1):**
+
 ```jsx
 // Manual event handlers and state management
 const [isPlaying, setIsPlaying] = useState(false);
@@ -92,6 +92,7 @@ const handlePlaybackRateChange = useCallback((rate) => {
 ```
 
 **After (v2):**
+
 ```jsx
 // State-based event handling (reactive values)
 const playbackRate = useYouTubeEvent(player, 'playbackRateChange', 1);
@@ -125,33 +126,43 @@ useYouTubeEvent(player, 'error', (error) => {
 #### `useYouTubeEvent` Usage Patterns:
 
 1. **State method** - Returns reactive values:
+
    ```jsx
    // For progress events with custom interval
    const progress = useYouTubeEvent(player, 'progress', 1000); // 1000ms interval
-   
+
    // For other events with default value
    const playbackRate = useYouTubeEvent(player, 'playbackRateChange', 1);
    const state = useYouTubeEvent(player, 'stateChange');
    ```
 
 2. **Callback method** - For side effects and actions:
+
    ```jsx
    // Simple callback
    useYouTubeEvent(player, 'ready', (playerInfo) => {
      console.log('Player ready:', playerInfo);
    });
-   
+
    // With dependency array for re-rendering control
-   useYouTubeEvent(player, 'stateChange', (state) => {
-     // Handle state change
-   }, [/* dependencies */]);
+   useYouTubeEvent(
+     player,
+     'stateChange',
+     (state) => {
+       // Handle state change
+     },
+     [
+       /* dependencies */
+     ],
+   );
    ```
 
 ### 3. Player Control Migration
 
 **Before (v1):**
+
 ```jsx
-const playerRef = useRef<PlayerControls>(null);
+const playerRef = useRef < PlayerControls > null;
 
 // Player methods
 const play = () => playerRef.current?.play();
@@ -171,6 +182,7 @@ const getPlayerInfo = async () => {
 ```
 
 **After (v2):**
+
 ```jsx
 const player = useYouTubePlayer(videoId, config);
 
@@ -228,4 +240,5 @@ The v2 API is designed to be more intuitive and reduce boilerplate code while pr
 ## Previous Versions
 
 ### [1.x.x] - Legacy Version
+
 See [v1 documentation](./v1.md) for the previous imperative API.

@@ -1,5 +1,6 @@
-import type { PlaybackQuality, PlayerInfo, PlayerState } from '.';
 import type { ERROR_CODES } from '../constants';
+
+import type { PlaybackQuality, PlayerInfo, PlayerState } from '.';
 
 export interface IframeApiType {
   Player: { new (elementId: string, options: Options): YouTubePlayer };
@@ -119,14 +120,22 @@ export interface YouTubePlayer {
     endSeconds?: number | undefined;
     suggestedQuality?: string | undefined;
   }): Promise<void>;
-  cueVideoByUrl(mediaContentUrl: string, startSeconds?: number, suggestedQuality?: string): Promise<void>;
+  cueVideoByUrl(
+    mediaContentUrl: string,
+    startSeconds?: number,
+    suggestedQuality?: string,
+  ): Promise<void>;
   cueVideoByUrl(video: {
     mediaContentUrl: string;
     startSeconds?: number | undefined;
     endSeconds?: number | undefined;
     suggestedQuality?: string | undefined;
   }): Promise<void>;
-  loadVideoByUrl(mediaContentUrl: string, startSeconds?: number, suggestedQuality?: string): Promise<void>;
+  loadVideoByUrl(
+    mediaContentUrl: string,
+    startSeconds?: number,
+    suggestedQuality?: string,
+  ): Promise<void>;
   loadVideoByUrl(video: {
     mediaContentUrl: string;
     startSeconds?: number | undefined;

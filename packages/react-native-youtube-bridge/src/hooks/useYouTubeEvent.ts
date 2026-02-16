@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
 import type { EventCallback, YoutubePlayerEvents } from '@react-native-youtube-bridge/core';
+import { useEffect, useRef, useState } from 'react';
 
 import type YoutubePlayer from '../modules/YoutubePlayer';
 import { INTERNAL_SET_PROGRESS_INTERVAL } from '../modules/YoutubePlayer';
@@ -74,7 +74,10 @@ function useYouTubeEvent(
 function useYouTubeEvent<T extends keyof YoutubePlayerEvents>(
   player: YoutubePlayer,
   eventType: T,
-  callbackOrThrottleOrDefaultValue?: EventCallback<YoutubePlayerEvents[T]> | YoutubePlayerEvents[T] | null,
+  callbackOrThrottleOrDefaultValue?:
+    | EventCallback<YoutubePlayerEvents[T]>
+    | YoutubePlayerEvents[T]
+    | null,
   deps?: React.DependencyList,
 ): YoutubePlayerEvents[T] | null | undefined {
   const isProgress = eventType === 'progress';

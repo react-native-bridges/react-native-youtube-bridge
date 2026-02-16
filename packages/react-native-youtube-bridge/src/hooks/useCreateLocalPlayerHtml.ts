@@ -1,5 +1,10 @@
+import {
+  type YoutubePlayerVars,
+  escapeHtml,
+  safeNumber,
+  validateVideoId,
+} from '@react-native-youtube-bridge/core';
 import { useCallback } from 'react';
-import { type YoutubePlayerVars, escapeHtml, safeNumber, validateVideoId } from '@react-native-youtube-bridge/core';
 
 import { youtubeIframeScripts } from './youtubeIframeScripts';
 
@@ -206,7 +211,19 @@ const useCreateLocalPlayerHtml = ({
       </body>
     </html>
   `;
-  }, [videoId, origin, startTime, endTime, autoplay, controls, loop, muted, playsinline, rel, useInlineHtml]);
+  }, [
+    videoId,
+    origin,
+    startTime,
+    endTime,
+    autoplay,
+    controls,
+    loop,
+    muted,
+    playsinline,
+    rel,
+    useInlineHtml,
+  ]);
 
   return createPlayerHTML;
 };
