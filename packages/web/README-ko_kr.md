@@ -17,11 +17,8 @@ function App() {
   return (
     <>
       {/* 방법 1: 인라인 HTML 사용 (기본값) */}
-      <YoutubePlayer
-        source={source}
-        useInlineHtml
-      />
-      
+      <YoutubePlayer source={source} useInlineHtml />
+
       {/* 방법 2: 외부 웹뷰 페이지 사용 */}
       <YoutubePlayer
         source={source}
@@ -30,7 +27,7 @@ function App() {
         webViewUrl="https://your-custom-player.com"
       />
     </>
-  )
+  );
 }
 ```
 

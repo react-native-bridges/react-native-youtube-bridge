@@ -1,11 +1,12 @@
 {
   "name": "example",
   "version": "1.1.4",
+  "private": true,
   "main": "index.js",
   "scripts": {
-    "start": "expo start --clear",
     "android": "expo run:android",
     "ios": "expo run:ios",
+    "start": "expo start --clear",
     "web": "expo start --web --clear",
     "web:build": "expo export --platform web --clear"
   },
@@ -22,6 +23,5 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
-  },
-  "private": true
+  }
 }

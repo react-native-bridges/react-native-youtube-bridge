@@ -7,8 +7,10 @@ import {
 } from '@react-native-youtube-bridge/core';
 import { useMemo } from 'react';
 
-const useYouTubeVideoId = (source: YoutubeSource, onError?: PlayerEvents['onError']): string | null | undefined => {
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+const useYouTubeVideoId = (
+  source: YoutubeSource,
+  onError?: PlayerEvents['onError'],
+): string | null | undefined => {
   const sourceValue = useMemo(() => {
     if (!source) {
       return;
@@ -28,6 +30,7 @@ const useYouTubeVideoId = (source: YoutubeSource, onError?: PlayerEvents['onErro
 
     return null;
   }, [
+    // oxlint-disable-next-line eslint-plugin-react-hooks/exhaustive-deps
     typeof source === 'string'
       ? source
       : source && 'videoId' in source

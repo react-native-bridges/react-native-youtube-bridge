@@ -6,10 +6,11 @@
 > **V1 사용자:** [V1 문서](/packages/react-native-youtube-bridge/docs/v1.md) | [V2 마이그레이션 가이드](/packages/react-native-youtube-bridge/docs/migration-v2.md)
 
 ## 개요
-React Native에서 YouTube 플레이어를 사용하려면 복잡한 설정이 필요합니다.   
-하지만 현재 지속적으로 유지보수되고 있는 React Native용 YouTube 플레이어 라이브러리가 없는 상황입니다. (가장 인기 있는 react-native-youtube-iframe의 [최근 릴리즈는 2023년 07월 02일](https://github.com/LonelyCpp/react-native-youtube-iframe/releases/tag/v2.3.0))   
 
-`react-native-youtube-bridge`는 [YouTube iframe Player API](https://developers.google.com/youtube/iframe_api_reference)를 React Native에서 쉽게 사용할 수 있도록 도와주는 라이브러리입니다.   
+React Native에서 YouTube 플레이어를 사용하려면 복잡한 설정이 필요합니다.  
+하지만 현재 지속적으로 유지보수되고 있는 React Native용 YouTube 플레이어 라이브러리가 없는 상황입니다. (가장 인기 있는 react-native-youtube-iframe의 [최근 릴리즈는 2023년 07월 02일](https://github.com/LonelyCpp/react-native-youtube-iframe/releases/tag/v2.3.0))
+
+`react-native-youtube-bridge`는 [YouTube iframe Player API](https://developers.google.com/youtube/iframe_api_reference)를 React Native에서 쉽게 사용할 수 있도록 도와주는 라이브러리입니다.
 
 - ✅ TypeScript 지원
 - ✅ iOS, Android, Web 플랫폼 지원
@@ -22,6 +23,7 @@ React Native에서 YouTube 플레이어를 사용하려면 복잡한 설정이 �
 - ✅ 유연한 렌더링 모드 (인라인 HTML & 웹뷰)
 
 ## 예제
+
 > 빠른 시작을 원하신다면 [예제](/example/)를 확인해보세요.
 
 - [웹 데모](https://react-native-youtube-bridge-example.pages.dev/)
@@ -49,20 +51,19 @@ bun add react-native-youtube-bridge
 import { YoutubeView, useYouTubePlayer } from 'react-native-youtube-bridge';
 
 function App() {
-  const videoIdOrUrl = 'AbZH7XWDW_k'
+  const videoIdOrUrl = 'AbZH7XWDW_k';
 
   // OR useYouTubePlayer({ videoId: 'AbZH7XWDW_k' })
   // OR useYouTubePlayer({ url: 'https://youtube.com/watch?v=AbZH7XWDW_k' })
   const player = useYouTubePlayer(videoIdOrUrl);
 
-  return (
-    <YoutubeView player={player} />
-  );
+  return <YoutubeView player={player} />;
 }
 ```
 
 ### 이벤트
-YouTube iframe API의 상태 변화를 애플리케이션에 전달하기 위해 [이벤트](https://developers.google.com/youtube/iframe_api_reference#Events)를 발생시킵니다.   
+
+YouTube iframe API의 상태 변화를 애플리케이션에 전달하기 위해 [이벤트](https://developers.google.com/youtube/iframe_api_reference#Events)를 발생시킵니다.
 
 `useYouTubeEvent` hook을 사용하여 완벽한 타입 추론을 지원하며, 두 가지 방법으로 이벤트를 쉽게 감지하여 사용할 수 있습니다.
 
@@ -89,20 +90,20 @@ function App() {
     Alert.alert('Error', `Player error (${error.code}): ${error.message}`);
   });
 
-  return (
-    <YoutubeView player={player} />
-  );
+  return <YoutubeView player={player} />;
 }
 ```
 
 `useYouTubeEvent` hook은 callback으로 값을 전달받는 방식과 state로 값을 바로 사용할 수 있는 두 가지 방법을 제공합니다.
+
 1. Callback 방식: 의존성에 따라 리렌더링이 필요한 경우 4번째 인자에 dependency array를 주입해주면 됩니다.
 2. State 방식:
    1. `progress` event의 경우 3번째 인자에 interval 값을 설정할 수 있습니다. (기본값: 1000ms)
    2. 나머지 event의 경우 3번째 인자에 기본 값을 설정할 수 있습니다.
 
 ### 기능
-YouTube iframe API의 [함수들](https://developers.google.com/youtube/iframe_api_reference#Functions)을 `useYouTubePlayer`를 통해 반환된 player 인스턴스 메서드를 호출하여 음소거, 재생, 볼륨 조절 등 다양한 플레이어 기능을 제어할 수 있습니다.   
+
+YouTube iframe API의 [함수들](https://developers.google.com/youtube/iframe_api_reference#Functions)을 `useYouTubePlayer`를 통해 반환된 player 인스턴스 메서드를 호출하여 음소거, 재생, 볼륨 조절 등 다양한 플레이어 기능을 제어할 수 있습니다.
 
 ```tsx
 import { YoutubeView, useYouTubePlayer } from 'react-native-youtube-bridge';
@@ -156,11 +157,12 @@ function App() {
         </TouchableOpacity>
       </View>
     </View>
-  )
+  );
 }
 ```
 
 ### 초기 플레이어 매개변수
+
 YouTube 내장 플레이어의 [매개변수](https://developers.google.com/youtube/player_parameters#Parameters)를 설정하여 초기 재생 환경을 맞춤화할 수 있습니다.
 
 ```tsx
@@ -175,13 +177,12 @@ function App() {
     muted: true,
   });
 
-  return (
-    <YoutubeView player={player} />
-  );
+  return <YoutubeView player={player} />;
 }
 ```
 
 ### 스타일
+
 YouTube 플레이어의 스타일을 원하는 대로 커스터마이징할 수 있습니다.
 
 ```tsx
@@ -199,19 +200,24 @@ function App() {
         aspectRatio: 16 / 9,
       }}
       // iOS, Android 플랫폼 지원
-      webViewStyle={{
-        // ...
-      }}
+      webViewStyle={
+        {
+          // ...
+        }
+      }
       // iOS, Android 플랫폼 지원
-      webViewProps={{
-        // ...
-      }}
+      webViewProps={
+        {
+          // ...
+        }
+      }
     />
-  )
+  );
 }
 ```
 
 ### 재생 진행률 추적
+
 - `useYouTubeEvent` hook을 사용하여 `progress` 이벤트의 리스너를 등록하여 재생 진행률을 추적할 수 있습니다.
 - 세 번째 인자에 interval 값을 설정하여 해당 간격(ms)마다 이벤트가 호출됩니다.
 - interval을 원치 않으면 `0`으로 설정하면 됩니다.
@@ -224,15 +230,13 @@ function App() {
   const player = useYouTubePlayer(videoIdOrUrl);
   const progress = useYouTubeEvent(player, 'progress', progressInterval);
 
-  return (
-    <YoutubeView player={player} />
-  )
+  return <YoutubeView player={player} />;
 }
 ```
 
 ### 플레이어 렌더링 및 소스 설정 (ios, android)
 
-**인라인 HTML vs 웹뷰 모드**   
+**인라인 HTML vs 웹뷰 모드**  
 YouTube 플레이어 렌더링 방식을 제어하고 호환성을 위한 소스 URL을 설정합니다.
 
 1. **인라인 HTML 모드** (`useInlineHtml: true`)는 앱 내에서 직접 HTML을 로드하여 플레이어를 렌더링합니다. (default)
@@ -242,6 +246,7 @@ YouTube 플레이어 렌더링 방식을 제어하고 호환성을 위한 소스
 
 > [!NOTE]
 > **webViewUrl 활용법**
+>
 > - `useInlineHtml: true`인 경우: WebView source의 HTML `baseUrl`로 설정됩니다.
 > - `useInlineHtml: false`인 경우: WebView source의 `uri`를 override합니다.
 >
@@ -280,14 +285,17 @@ export default CustomPlayerPage;
 > 자세한 내용은 [웹 플레이어 가이드](https://github.com/react-native-bridges/react-native-youtube-bridge/tree/main/packages/web)를 참고해 주세요.
 
 ### YouTube oEmbed API
-`useYoutubeOEmbed` 훅을 통해 YouTube 비디오의 메타데이터를 가져올 수 있습니다.   
+
+`useYoutubeOEmbed` 훅을 통해 YouTube 비디오의 메타데이터를 가져올 수 있습니다.  
 이 훅은 YouTube URL만 지원합니다.
 
 ```tsx
 import { useYoutubeOEmbed } from 'react-native-youtube-bridge';
 
 function App() {
-  const { oEmbed, isLoading, error } = useYoutubeOEmbed('https://www.youtube.com/watch?v=AbZH7XWDW_k');
+  const { oEmbed, isLoading, error } = useYoutubeOEmbed(
+    'https://www.youtube.com/watch?v=AbZH7XWDW_k',
+  );
 
   if (isLoading) return <Text>Loading...</Text>;
   if (error) return <Text>Error: {error.message}</Text>;
@@ -296,12 +304,12 @@ function App() {
   return (
     <>
       <Text>{oEmbed.title}</Text>
-      <Image 
-        source={{ uri: oEmbed?.thumbnail_url }} 
-        style={{ width: oEmbed?.thumbnail_width, height: oEmbed?.thumbnail_height }} 
+      <Image
+        source={{ uri: oEmbed?.thumbnail_url }}
+        style={{ width: oEmbed?.thumbnail_width, height: oEmbed?.thumbnail_height }}
       />
     </>
-  )
+  );
 }
 ```
 

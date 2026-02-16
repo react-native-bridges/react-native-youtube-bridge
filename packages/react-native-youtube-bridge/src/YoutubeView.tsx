@@ -1,15 +1,18 @@
+import { type MessageData, MATCH_URL_YOUTUBE } from '@react-native-youtube-bridge/core';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { type DataDetectorTypes, Dimensions, StyleSheet, Linking } from 'react-native';
-import WebView, { type WebViewMessageEvent } from 'react-native-webview';
+import { WebView, type WebViewMessageEvent } from 'react-native-webview';
 import type { ShouldStartLoadRequest } from 'react-native-webview/lib/WebViewTypes';
-import { type MessageData, MATCH_URL_YOUTUBE } from '@react-native-youtube-bridge/core';
 
-import YoutubeViewWrapper from './YoutubeViewWrapper';
 import useCreateLocalPlayerHtml from './hooks/useCreateLocalPlayerHtml';
+import WebviewYoutubePlayerController from './modules/WebviewYoutubePlayerController';
+import {
+  INTERNAL_SET_CONTROLLER_INSTANCE,
+  INTERNAL_UPDATE_PROGRESS_INTERVAL,
+} from './modules/YoutubePlayer';
 import type { YoutubeViewProps } from './types/youtube';
 import { getYoutubeWebViewUrl } from './utils/youtube';
-import WebviewYoutubePlayerController from './modules/WebviewYoutubePlayerController';
-import { INTERNAL_SET_CONTROLLER_INSTANCE, INTERNAL_UPDATE_PROGRESS_INTERVAL } from './modules/YoutubePlayer';
+import YoutubeViewWrapper from './YoutubeViewWrapper';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -37,7 +40,6 @@ function YoutubeView({
   const createPlayerHTML = useCreateLocalPlayerHtml({ videoId, useInlineHtml, ...playerVars });
   const webViewUrl = getYoutubeWebViewUrl(videoId, useInlineHtml, playerVars, webViewBaseUrl);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: webViewProps.source is intentionally excluded to prevent unnecessary re-renders
   const webViewSource = useMemo(() => {
     if (useInlineHtml) {
       const webViewBaseUrlWithSlash =
@@ -50,10 +52,11 @@ function YoutubeView({
     }
 
     if (webViewUrl) {
-      return { ...(webViewProps?.source ?? {}), uri: webViewUrl };
+      return { ...webViewProps?.source, uri: webViewUrl };
     }
 
     return undefined;
+    // oxlint-disable-next-line eslint-plugin-react-hooks/exhaustive-deps
   }, [useInlineHtml, createPlayerHTML, webViewBaseUrl, webViewUrl]);
 
   const handleMessage = useCallback(

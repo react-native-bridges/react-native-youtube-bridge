@@ -65,7 +65,10 @@ class YoutubePlayer {
     }
   }
 
-  subscribe<T extends YoutubeEventType>(event: T, callback: EventCallback<YoutubePlayerEvents[T]>): () => void {
+  subscribe<T extends YoutubeEventType>(
+    event: T,
+    callback: EventCallback<YoutubePlayerEvents[T]>,
+  ): () => void {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, new Set());
     }

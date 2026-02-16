@@ -4,6 +4,3 @@ packages:
 onlyBuiltDependencies:
   - '@swc/core'
   - 'esbuild'
-catalog:
-  'typescript': ^5.8.3
-  'jest': ^29.7.0

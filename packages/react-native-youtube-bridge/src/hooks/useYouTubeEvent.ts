@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
 import type { EventCallback, YoutubePlayerEvents } from '@react-native-youtube-bridge/core';
+import { useEffect, useRef, useState } from 'react';
 
 import type YoutubePlayer from '../modules/YoutubePlayer';
 import { INTERNAL_SET_PROGRESS_INTERVAL } from '../modules/YoutubePlayer';
@@ -74,7 +74,10 @@ function useYouTubeEvent(
 function useYouTubeEvent<T extends keyof YoutubePlayerEvents>(
   player: YoutubePlayer,
   eventType: T,
-  callbackOrThrottleOrDefaultValue?: EventCallback<YoutubePlayerEvents[T]> | YoutubePlayerEvents[T] | null,
+  callbackOrThrottleOrDefaultValue?:
+    | EventCallback<YoutubePlayerEvents[T]>
+    | YoutubePlayerEvents[T]
+    | null,
   deps?: React.DependencyList,
 ): YoutubePlayerEvents[T] | null | undefined {
   const isProgress = eventType === 'progress';
@@ -111,6 +114,7 @@ function useYouTubeEvent<T extends keyof YoutubePlayerEvents>(
     if (isCallback) {
       callbackRef.current = callbackOrThrottleOrDefaultValue;
     }
+    // oxlint-disable-next-line eslint-plugin-react-hooks/exhaustive-deps
   }, [callbackOrThrottleOrDefaultValue, isCallback, ...(deps ?? [])]);
 
   useEffect(() => {
@@ -119,7 +123,6 @@ function useYouTubeEvent<T extends keyof YoutubePlayerEvents>(
     }
   }, [throttleMs, player]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: defaultValue is intentionally excluded to prevent unnecessary re-subscriptions
   useEffect(() => {
     if (!player) {
       return;
@@ -140,6 +143,7 @@ function useYouTubeEvent<T extends keyof YoutubePlayerEvents>(
       setData(defaultValue ?? null);
       unsubscribe();
     };
+    // oxlint-disable-next-line eslint-plugin-react-hooks/exhaustive-deps
   }, [player, eventType, isCallback]);
 
   return isCallback ? undefined : data;

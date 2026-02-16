@@ -17,11 +17,8 @@ function App() {
   return (
     <>
       {/* Method 1: Using inline HTML (default) */}
-      <YoutubePlayer
-        source={source}
-        useInlineHtml
-      />
-      
+      <YoutubePlayer source={source} useInlineHtml />
+
       {/* Method 2: Using external WebView page */}
       <YoutubePlayer
         source={source}
@@ -30,7 +27,7 @@ function App() {
         webViewUrl="https://your-custom-player.com"
       />
     </>
-  )
+  );
 }
 ```
 

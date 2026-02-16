@@ -1,38 +1,41 @@
 {
   "name": "@react-native-youtube-bridge/root",
-  "description": "🎥 Easy-to-use YouTube player for React Native with cross-platform support",
   "private": true,
-  "scripts": {
-    "example": "pnpm --filter example run",
-    "test": "jest",
-    "clear": "rimraf --glob **/dist",
-    "typecheck": "pnpm -r run typecheck",
-    "build": "pnpm -r run build",
-    "lint": "biome format packages/** --write",
-    "changeset": "changeset"
-  },
+  "description": "🎥 Easy-to-use YouTube player for React Native with cross-platform support",
   "keywords": [
-    "react-native",
-    "ios",
     "android",
-    "youtube",
+    "ios",
+    "react-native",
     "react-native-youtube",
     "react-native-youtube-bridge",
-    "youtube-iframe-api",
-    "react-native-youtube-iframe"
+    "react-native-youtube-iframe",
+    "youtube",
+    "youtube-iframe-api"
   ],
+  "homepage": "https://github.com/react-native-bridges/react-native-youtube-bridge#readme",
+  "bugs": {
+    "url": "https://github.com/react-native-bridges/react-native-youtube-bridge/issues"
+  },
+  "license": "MIT",
+  "author": "saseungmin <dbd02169@naver.com> (https://github.com/saseungmin)",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/react-native-bridges/react-native-youtube-bridge.git"
   },
-  "author": "saseungmin <dbd02169@naver.com> (https://github.com/saseungmin)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/react-native-bridges/react-native-youtube-bridge/issues"
+  "scripts": {
+    "build": "pnpm -r run build",
+    "changeset": "changeset",
+    "clear": "rimraf --glob **/dist",
+    "example": "pnpm --filter example run",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
+    "lint": "oxlint",
+    "lint:ci": "oxlint --format=github",
+    "lint:fix": "oxlint --fix",
+    "test": "jest",
+    "typecheck": "pnpm -r run typecheck"
   },
-  "homepage": "https://github.com/react-native-bridges/react-native-youtube-bridge#readme",
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
     "@changesets/cli": "^2.29.4",
     "@commitlint/config-conventional": "^19.6.0",
     "@evilmartians/lefthook": "^1.5.0",
@@ -40,15 +43,20 @@
     "@types/node": "^22.0.0",
     "commitlint": "^19.6.1",
     "jest": "^29.7.0",
+    "oxfmt": "^0.32.0",
+    "oxlint": "^1.47.0",
     "typescript": "^5.8.3"
   },
-  "packageManager": "pnpm@10.11.0",
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
     ]
   },
   "jest": {
-    "modulePathIgnorePatterns": ["lib", "node_modules"]
-  }
+    "modulePathIgnorePatterns": [
+      "lib",
+      "node_modules"
+    ]
+  },
+  "packageManager": "pnpm@10.29.3"
 }

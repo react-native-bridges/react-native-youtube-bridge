@@ -2,13 +2,16 @@ pre-commit:
   parallel: true
   commands:
     lint:
-      glob: "*.{js,ts,jsx,tsx}"
-      run: npx biome format --write {staged_files}
+      glob: '**/*.{js,ts,jsx,tsx}'
+      run: pnpm oxlint {staged_files}
+    format:
+      glob: '**/*.{js,ts,jsx,tsx}'
+      run: pnpm oxfmt {staged_files}
     types:
-      glob: "*.{js,ts,jsx,tsx}"
+      glob: '**/*.{js,ts,jsx,tsx}'
       run: pnpm run typecheck
 commit-msg:
   parallel: true
   commands:
     commitlint:
-      run: npx commitlint --edit
+      run: pnpm commitlint --edit

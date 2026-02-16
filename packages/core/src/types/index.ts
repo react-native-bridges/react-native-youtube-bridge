@@ -12,7 +12,11 @@ type YoutubeErrorMessage = (typeof ERROR_CODES)[YoutubeErrorCode];
  * const player = useYouTubePlayer({ url: 'https://www.youtube.com/watch?v=AbZH7XWDW_k' });
  * ```
  */
-export type YoutubeSource = string | { videoId: string | undefined } | { url: string | undefined } | undefined;
+export type YoutubeSource =
+  | string
+  | { videoId: string | undefined }
+  | { url: string | undefined }
+  | undefined;
 
 export type ProgressData = {
   /**

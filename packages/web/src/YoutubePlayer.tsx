@@ -1,12 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import './YoutubePlayer.css';
 
-import { useYouTubeVideoId } from '@react-native-youtube-bridge/react';
 import { WebYoutubePlayerController } from '@react-native-youtube-bridge/core';
+import { useYouTubeVideoId } from '@react-native-youtube-bridge/react';
+import { useEffect, useRef, useState } from 'react';
 
 import { useWebView } from './hooks/useWebView';
 import { parseTimeParam } from './utils';
-
-import './YoutubePlayer.css';
 
 function YoutubePlayer() {
   const urlParams = new URLSearchParams(window.location.search);

@@ -2,6 +2,30 @@
   "name": "@react-native-youtube-bridge/react",
   "version": "2.1.4",
   "description": "React implementation for react-native-youtube-bridge",
+  "keywords": [
+    "android",
+    "ios",
+    "react-native",
+    "react-native-youtube",
+    "react-native-youtube-bridge",
+    "react-native-youtube-iframe",
+    "youtube",
+    "youtube-iframe-api"
+  ],
+  "homepage": "https://github.com/react-native-bridges/react-native-youtube-bridge#readme",
+  "bugs": {
+    "url": "https://github.com/react-native-bridges/react-native-youtube-bridge/issues"
+  },
+  "license": "MIT",
+  "author": "saseungmin <dbd02169@naver.com> (https://github.com/saseungmin)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/react-native-bridges/react-native-youtube-bridge.git"
+  },
+  "files": [
+    "dist",
+    "package.json"
+  ],
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -12,44 +36,20 @@
       "require": "./dist/index.js"
     }
   },
-  "files": [
-    "dist",
-    "package.json"
-  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown --watch ./src",
     "typecheck": "tsc --noEmit"
   },
-  "keywords": [
-    "react-native",
-    "ios",
-    "android",
-    "youtube",
-    "react-native-youtube",
-    "react-native-youtube-bridge",
-    "youtube-iframe-api",
-    "react-native-youtube-iframe"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/react-native-bridges/react-native-youtube-bridge.git"
-  },
-  "author": "saseungmin <dbd02169@naver.com> (https://github.com/saseungmin)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/react-native-bridges/react-native-youtube-bridge/issues"
-  },
-  "homepage": "https://github.com/react-native-bridges/react-native-youtube-bridge#readme",
-  "publishConfig": {
-    "access": "public"
-  },
   "dependencies": {
     "@react-native-youtube-bridge/core": "workspace:*"
   },
   "devDependencies": {
-    "react": "19.0.0",
     "@types/react": "^19.0.12",
+    "react": "19.0.0",
     "tsdown": "^0.12.8"
   },
   "peerDependencies": {
