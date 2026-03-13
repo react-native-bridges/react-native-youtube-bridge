@@ -34,6 +34,11 @@ interface AutoplayBlockedMessageData {
   type: 'autoplayBlocked';
 }
 
+interface MuteChangeMessageData {
+  type: 'muteChange';
+  muted: boolean;
+}
+
 interface CommandResultMessageData {
   type: 'commandResult';
   id: string;
@@ -48,4 +53,5 @@ export type MessageData =
   | PlaybackRateChangeMessageData
   | PlaybackQualityChangeMessageData
   | AutoplayBlockedMessageData
+  | MuteChangeMessageData
   | CommandResultMessageData;

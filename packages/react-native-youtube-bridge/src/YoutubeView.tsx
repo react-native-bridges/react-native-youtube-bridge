@@ -115,6 +115,11 @@ function YoutubeView({
           player.emit(data.type, undefined);
           return;
         }
+
+        if (data.type === 'muteChange') {
+          player.emit(data.type, data.muted);
+          return;
+        }
       } catch (error) {
         if (__DEV__) {
           console.error('Error parsing WebView message:', error, event?.nativeEvent?.data);

@@ -10,6 +10,7 @@ import type WebviewYoutubePlayerController from './WebviewYoutubePlayerControlle
 export const INTERNAL_SET_CONTROLLER_INSTANCE = Symbol('setControllerInstance');
 export const INTERNAL_UPDATE_PROGRESS_INTERVAL = Symbol('updateProgressInterval');
 export const INTERNAL_SET_PROGRESS_INTERVAL = Symbol('setProgressInterval');
+export const INTERNAL_SET_MUTE_TRACKING = Symbol('setMuteTracking');
 
 type YoutubeEventType = keyof YoutubePlayerEvents;
 
@@ -19,6 +20,7 @@ class YoutubePlayer {
   private controller: WebviewYoutubePlayerController | WebYoutubePlayerController | null = null;
 
   private progressInterval: number | null = null;
+  private muteChangeSubscriptionCount = 0;
 
   private videoId: string | null | undefined;
   private options: YoutubePlayerVars;
@@ -50,6 +52,7 @@ class YoutubePlayer {
     controller: WebviewYoutubePlayerController | WebYoutubePlayerController | null,
   ): void {
     this.controller = controller;
+    this.controller?.setMutedTrackingEnabled(this.muteChangeSubscriptionCount > 0);
   }
 
   [INTERNAL_SET_PROGRESS_INTERVAL](interval: number): void {
@@ -63,6 +66,18 @@ class YoutubePlayer {
     if (this.progressInterval) {
       this.controller?.updateProgressInterval(this.progressInterval);
     }
+  }
+
+  [INTERNAL_SET_MUTE_TRACKING](enabled: boolean): void {
+    if (enabled) {
+      this.muteChangeSubscriptionCount += 1;
+    }
+
+    if (!enabled) {
+      this.muteChangeSubscriptionCount = Math.max(0, this.muteChangeSubscriptionCount - 1);
+    }
+
+    this.controller?.setMutedTrackingEnabled(this.muteChangeSubscriptionCount > 0);
   }
 
   subscribe<T extends YoutubeEventType>(
@@ -338,6 +353,7 @@ class YoutubePlayer {
     this.controller?.destroy();
     this.controller = null;
     this.progressInterval = null;
+    this.muteChangeSubscriptionCount = 0;
   }
 }
 

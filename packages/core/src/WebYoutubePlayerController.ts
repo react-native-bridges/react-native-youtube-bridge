@@ -7,12 +7,18 @@ type PlayerConfig = Omit<YoutubePlayerConfig, 'source'> & {
   videoId: string;
 };
 
+const MUTED_TRACKING_INTERVAL_MS = 250;
+
 class WebYoutubePlayerController {
   private player: YouTubePlayer | null = null;
   private progressInterval: NodeJS.Timeout | null = null;
   private callbacks: PlayerEvents = {};
   private progressIntervalMs = 1000;
   private seekTimeout: NodeJS.Timeout | null = null;
+  private mutedTrackingInterval: NodeJS.Timeout | null = null;
+  private isMutedSyncing = false;
+  private lastKnownMuted: boolean | null = null;
+  private mutedTrackingEnabled = false;
   private desiredMuted = false;
 
   static createInstance(): WebYoutubePlayerController {
@@ -83,6 +89,8 @@ class WebYoutubePlayerController {
     }
 
     this.desiredMuted = Boolean(config.playerVars?.muted);
+    this.lastKnownMuted = null;
+    this.stopMutedTracking();
 
     if (this.player) {
       try {
@@ -111,13 +119,15 @@ class WebYoutubePlayerController {
       events: {
         onReady: (event) => {
           const { playerInfo } = event.target;
+          const readyMuted =
+            typeof playerInfo.muted === 'boolean' ? playerInfo.muted : this.desiredMuted;
 
           this.callbacks.onReady?.({
             availablePlaybackRates: playerInfo.availablePlaybackRates,
             availableQualityLevels: playerInfo.availableQualityLevels,
             currentTime: playerInfo.currentTime,
             duration: playerInfo.duration,
-            muted: playerInfo.muted,
+            muted: readyMuted,
             playbackQuality: playerInfo.playbackQuality,
             playbackRate: playerInfo.playbackRate,
             playerState: playerInfo.playerState,
@@ -125,15 +135,22 @@ class WebYoutubePlayerController {
             volume: playerInfo.volume,
           });
 
+          this.updateMutedState(readyMuted, true);
           this.applyDesiredMutedState();
           this.startProgressTracking();
+          this.startMutedTracking();
         },
         onStateChange: (event) => {
           const state = event.data;
           const mutedState = event.target?.playerInfo?.muted;
+
+          if (typeof mutedState === 'boolean') {
+            this.updateMutedState(mutedState, true);
+          }
+
           this.callbacks.onStateChange?.(state);
 
-          this.handleStateChange(state, mutedState);
+          this.handleStateChange(state);
         },
         onError: (event) => {
           console.error('YouTube player error:', event.data);
@@ -163,11 +180,7 @@ class WebYoutubePlayerController {
     });
   }
 
-  private handleStateChange(state: number, mutedState?: boolean): void {
-    if (state !== PlayerState.PLAYING && typeof mutedState === 'boolean') {
-      this.desiredMuted = mutedState;
-    }
-
+  private handleStateChange(state: number): void {
     if (state === PlayerState.ENDED) {
       this.stopProgressTracking();
       this.sendProgress();
@@ -283,12 +296,22 @@ class WebYoutubePlayerController {
 
   mute(): void {
     this.desiredMuted = true;
-    this.player?.mute();
+    if (!this.player) {
+      return;
+    }
+
+    this.player.mute();
+    this.updateMutedState(true, true);
   }
 
   unMute(): void {
     this.desiredMuted = false;
-    this.player?.unMute();
+    if (!this.player) {
+      return;
+    }
+
+    this.player.unMute();
+    this.updateMutedState(false, true);
   }
 
   async isMuted(): Promise<boolean> {
@@ -370,6 +393,69 @@ class WebYoutubePlayerController {
     this.callbacks = { ...this.callbacks, ...newCallbacks };
   }
 
+  setMutedTrackingEnabled(enabled: boolean): void {
+    this.mutedTrackingEnabled = enabled;
+
+    if (enabled) {
+      this.lastKnownMuted = null;
+      this.startMutedTracking();
+      void this.syncMutedStateFromPlayer();
+      return;
+    }
+
+    this.stopMutedTracking();
+  }
+
+  private startMutedTracking(): void {
+    if (!this.mutedTrackingEnabled || !this.player) {
+      return;
+    }
+
+    this.stopMutedTracking();
+    this.mutedTrackingInterval = setInterval(() => {
+      void this.syncMutedStateFromPlayer();
+    }, MUTED_TRACKING_INTERVAL_MS);
+  }
+
+  private stopMutedTracking(): void {
+    if (this.mutedTrackingInterval) {
+      clearInterval(this.mutedTrackingInterval);
+      this.mutedTrackingInterval = null;
+    }
+    this.isMutedSyncing = false;
+  }
+
+  private async syncMutedStateFromPlayer(): Promise<void> {
+    if (this.isMutedSyncing || !this.player || !this.player.isMuted) {
+      return;
+    }
+
+    this.isMutedSyncing = true;
+
+    try {
+      const muted = await this.player.isMuted();
+      this.updateMutedState(Boolean(muted), true);
+    } catch {
+      // ignore polling errors while player is transitioning
+    } finally {
+      this.isMutedSyncing = false;
+    }
+  }
+
+  private updateMutedState(muted: boolean, emitEvent = true): void {
+    this.desiredMuted = muted;
+
+    if (this.lastKnownMuted === muted) {
+      return;
+    }
+
+    this.lastKnownMuted = muted;
+
+    if (emitEvent) {
+      this.callbacks.onMuteChange?.(muted);
+    }
+  }
+
   private applyDesiredMutedState(): void {
     if (!this.desiredMuted) {
       return;
@@ -377,6 +463,7 @@ class WebYoutubePlayerController {
 
     try {
       this.player?.mute();
+      this.updateMutedState(true, true);
     } catch (error) {
       console.warn('Failed to apply muted state:', error);
     }
@@ -384,6 +471,7 @@ class WebYoutubePlayerController {
 
   destroy(): void {
     this.stopProgressTracking();
+    this.stopMutedTracking();
 
     if (this.seekTimeout) {
       clearTimeout(this.seekTimeout);
@@ -398,6 +486,8 @@ class WebYoutubePlayerController {
       }
       this.player = null;
     }
+
+    this.lastKnownMuted = null;
   }
 }
 

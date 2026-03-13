@@ -62,6 +62,9 @@ function YoutubeView({ player, height, width, style, iframeStyle }: YoutubeViewP
       onAutoplayBlocked: () => {
         player.emit('autoplayBlocked', undefined);
       },
+      onMuteChange: (muted) => {
+        player.emit('muteChange', muted);
+      },
       onProgress: (progress) => {
         player.emit('progress', progress);
       },

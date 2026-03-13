@@ -73,9 +73,12 @@ import { YoutubeView, useYouTubeEvent, useYouTubePlayer } from 'react-native-you
 function App() {
   const player = useYouTubePlayer(videoIdOrUrl);
 
+  // State-based event listening
   const playbackRate = useYouTubeEvent(player, 'playbackRateChange', 1);
+  const isMuted = useYouTubeEvent(player, 'muteChange', false);
   const progress = useYouTubeEvent(player, 'progress', progressInterval);
 
+  // Callback-based event listening
   useYouTubeEvent(player, 'ready', (playerInfo) => {
     console.log('Player is ready!');
     Alert.alert('Alert', 'YouTube player is ready!');
@@ -93,6 +96,9 @@ function App() {
   return <YoutubeView player={player} />;
 }
 ```
+
+`muteChange` 이벤트를 구독하면 YouTube 플레이어 기본 UI의 스피커 버튼 또는 `player.mute()` / `player.unMute()` 호출로 변경된 음소거 상태를 실시간으로 받을 수 있습니다.  
+성능 최적화를 위해 `muteChange`를 구독할 때만 muted tracking이 활성화됩니다.
 
 `useYouTubeEvent` hook은 callback으로 값을 전달받는 방식과 state로 값을 바로 사용할 수 있는 두 가지 방법을 제공합니다.
 

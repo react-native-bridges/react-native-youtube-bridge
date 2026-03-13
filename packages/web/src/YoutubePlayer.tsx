@@ -85,6 +85,12 @@ function YoutubePlayer() {
           type: 'autoplayBlocked',
         });
       },
+      onMuteChange: (muted) => {
+        sendMessage({
+          type: 'muteChange',
+          muted,
+        });
+      },
       onProgress: (progress) => {
         sendMessage({
           type: 'progress',

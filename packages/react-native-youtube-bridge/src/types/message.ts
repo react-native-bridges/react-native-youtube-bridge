@@ -6,6 +6,7 @@ export type MessageType =
   | 'playbackRateChange'
   | 'playbackQualityChange'
   | 'autoplayBlocked'
+  | 'muteChange'
   | 'commandResult';
 
 export type CommandType =
@@ -30,5 +31,6 @@ export type CommandType =
   | 'loadVideoById'
   | 'cueVideoById'
   | 'setSize'
+  | 'setMutedTrackingEnabled'
   | 'cleanup'
   | 'updateProgressInterval';

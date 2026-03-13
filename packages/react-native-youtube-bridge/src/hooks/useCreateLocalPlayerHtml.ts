@@ -78,14 +78,45 @@ const useCreateLocalPlayerHtml = ({
 
             var player;
             var progressInterval;
+            var mutedTrackingInterval;
             var isDestroyed = false;
+            var isMutedTrackingEnabled = false;
             var desiredMuted = ${muted ? 'true' : 'false'};
+            var lastKnownMuted = null;
 
             function cleanup() {
               isDestroyed = true;
               if (progressInterval) {
                 clearInterval(progressInterval);
                 progressInterval = null;
+              }
+              stopMutedTracking();
+            }
+
+            function emitMutedChange(muted) {
+              if (window.ReactNativeWebView) {
+                window.ReactNativeWebView.postMessage(JSON.stringify({
+                  type: 'muteChange',
+                  muted: muted
+                }));
+              }
+            }
+
+            function updateMutedState(mutedState, shouldEmit) {
+              if (typeof mutedState !== 'boolean') {
+                return;
+              }
+
+              desiredMuted = mutedState;
+
+              if (lastKnownMuted === mutedState) {
+                return;
+              }
+
+              lastKnownMuted = mutedState;
+
+              if (shouldEmit !== false) {
+                emitMutedChange(mutedState);
               }
             }
 
@@ -96,12 +127,13 @@ const useCreateLocalPlayerHtml = ({
 
               try {
                 player.mute();
+                updateMutedState(true, isMutedTrackingEnabled);
               } catch (error) {
                 console.error('applyDesiredMutedState error:', error);
               }
             }
 
-            function syncDesiredMutedState(event) {
+            function syncDesiredMutedState(event, shouldEmit) {
               if (!event || !event.target) {
                 return;
               }
@@ -118,11 +150,43 @@ const useCreateLocalPlayerHtml = ({
                   mutedState = event.target.playerInfo.muted;
                 }
 
-                if (typeof mutedState === 'boolean') {
-                  desiredMuted = mutedState;
-                }
+                updateMutedState(mutedState, shouldEmit);
               } catch (error) {
                 console.error('syncDesiredMutedState error:', error);
+              }
+            }
+
+            function syncMutedStateFromPlayer(shouldEmit) {
+              if (!player || typeof player.isMuted !== 'function') {
+                return;
+              }
+
+              try {
+                updateMutedState(player.isMuted(), shouldEmit);
+              } catch (error) {
+                console.error('syncMutedStateFromPlayer error:', error);
+              }
+            }
+
+            function startMutedTracking() {
+              if (!isMutedTrackingEnabled) {
+                return;
+              }
+
+              stopMutedTracking();
+              mutedTrackingInterval = setInterval(function() {
+                if (isDestroyed) {
+                  stopMutedTracking();
+                  return;
+                }
+                syncMutedStateFromPlayer(true);
+              }, 250);
+            }
+
+            function stopMutedTracking() {
+              if (mutedTrackingInterval) {
+                clearInterval(mutedTrackingInterval);
+                mutedTrackingInterval = null;
               }
             }
 
@@ -161,6 +225,7 @@ const useCreateLocalPlayerHtml = ({
                   }
                 });
                 applyDesiredMutedState();
+                startMutedTracking();
               } catch (error) {
                 if (window.ReactNativeWebView) {
                   window.ReactNativeWebView.postMessage(JSON.stringify({
@@ -197,11 +262,21 @@ const useCreateLocalPlayerHtml = ({
               getVolume: () => player ? player.getVolume() : 0,
               mute: () => {
                 desiredMuted = true;
-                return player && player.mute();
+                if (!player) {
+                  return;
+                }
+
+                player.mute();
+                updateMutedState(true, isMutedTrackingEnabled);
               },
               unMute: () => {
                 desiredMuted = false;
-                return player && player.unMute();
+                if (!player) {
+                  return;
+                }
+
+                player.unMute();
+                updateMutedState(false, isMutedTrackingEnabled);
               },
               isMuted: () => player ? player.isMuted() : false,
               
@@ -248,6 +323,17 @@ const useCreateLocalPlayerHtml = ({
                 if (interval && player && player.getPlayerState() === YT.PlayerState.PLAYING) {
                   startProgressTracking();
                 }
+              },
+              setMutedTrackingEnabled: (enabled) => {
+                isMutedTrackingEnabled = enabled === true;
+                if (isMutedTrackingEnabled) {
+                  lastKnownMuted = null;
+                  syncMutedStateFromPlayer(true);
+                  startMutedTracking();
+                  return;
+                }
+
+                stopMutedTracking();
               },
               cleanup: cleanup,
             };

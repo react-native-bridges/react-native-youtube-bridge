@@ -114,6 +114,11 @@ export type PlayerEvents = {
    * This event fires any time the browser blocks autoplay or scripted video playback features, collectively referred to as "autoplay".
    */
   onAutoplayBlocked?: () => void;
+  /**
+   * This event fires whenever the player's muted state changes.
+   * @param {boolean} muted - The current muted state.
+   */
+  onMuteChange?: (muted: boolean) => void;
 };
 
 /**
@@ -234,6 +239,7 @@ export type YoutubePlayerEvents = {
   playbackRateChange: number;
   playbackQualityChange: PlaybackQuality;
   autoplayBlocked: undefined;
+  muteChange: boolean;
 };
 
 export type EventCallback<Data = any> = (data: Data) => any;
