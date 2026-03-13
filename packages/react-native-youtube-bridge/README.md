@@ -73,9 +73,12 @@ import { YoutubeView, useYouTubeEvent, useYouTubePlayer } from 'react-native-you
 function App() {
   const player = useYouTubePlayer(videoIdOrUrl);
 
+  // State-based event listening
   const playbackRate = useYouTubeEvent(player, 'playbackRateChange', 1);
+  const isMuted = useYouTubeEvent(player, 'muteChange', false);
   const progress = useYouTubeEvent(player, 'progress', progressInterval);
 
+  // Callback-based event listening
   useYouTubeEvent(player, 'ready', (playerInfo) => {
     console.log('Player is ready!');
     Alert.alert('Alert', 'YouTube player is ready!');
@@ -93,6 +96,9 @@ function App() {
   return <YoutubeView player={player} />;
 }
 ```
+
+`muteChange` emits real-time muted state updates from both the YouTube player's built-in mute control and `player.mute()` / `player.unMute()`.  
+For performance, muted tracking is enabled only while `muteChange` is subscribed.
 
 The `useYouTubeEvent` hook provides two ways to receive values: callback-based and state-based.
 
