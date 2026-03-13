@@ -13,6 +13,7 @@ class WebYoutubePlayerController {
   private callbacks: PlayerEvents = {};
   private progressIntervalMs = 1000;
   private seekTimeout: NodeJS.Timeout | null = null;
+  private desiredMuted = false;
 
   static createInstance(): WebYoutubePlayerController {
     return new WebYoutubePlayerController();
@@ -81,6 +82,8 @@ class WebYoutubePlayerController {
       return;
     }
 
+    this.desiredMuted = Boolean(config.playerVars?.muted);
+
     if (this.player) {
       try {
         this.player.destroy();
@@ -97,6 +100,7 @@ class WebYoutubePlayerController {
         autoplay: config.playerVars?.autoplay ? 1 : 0,
         controls: config.playerVars?.controls ? 1 : 0,
         loop: config.playerVars?.loop ? 1 : 0,
+        mute: config.playerVars?.muted ? 1 : 0,
         start: config.playerVars?.startTime,
         end: config.playerVars?.endTime,
         playsinline: config.playerVars?.playsinline ? 1 : 0,
@@ -121,13 +125,15 @@ class WebYoutubePlayerController {
             volume: playerInfo.volume,
           });
 
+          this.applyDesiredMutedState();
           this.startProgressTracking();
         },
         onStateChange: (event) => {
           const state = event.data;
+          const mutedState = event.target?.playerInfo?.muted;
           this.callbacks.onStateChange?.(state);
 
-          this.handleStateChange(state);
+          this.handleStateChange(state, mutedState);
         },
         onError: (event) => {
           console.error('YouTube player error:', event.data);
@@ -157,7 +163,11 @@ class WebYoutubePlayerController {
     });
   }
 
-  private handleStateChange(state: number): void {
+  private handleStateChange(state: number, mutedState?: boolean): void {
+    if (state !== PlayerState.PLAYING && typeof mutedState === 'boolean') {
+      this.desiredMuted = mutedState;
+    }
+
     if (state === PlayerState.ENDED) {
       this.stopProgressTracking();
       this.sendProgress();
@@ -165,6 +175,7 @@ class WebYoutubePlayerController {
     }
 
     if (state === PlayerState.PLAYING) {
+      this.applyDesiredMutedState();
       this.startProgressTracking();
       return;
     }
@@ -271,10 +282,12 @@ class WebYoutubePlayerController {
   }
 
   mute(): void {
+    this.desiredMuted = true;
     this.player?.mute();
   }
 
   unMute(): void {
+    this.desiredMuted = false;
     this.player?.unMute();
   }
 
@@ -355,6 +368,18 @@ class WebYoutubePlayerController {
 
   updateCallbacks(newCallbacks: Partial<PlayerEvents>): void {
     this.callbacks = { ...this.callbacks, ...newCallbacks };
+  }
+
+  private applyDesiredMutedState(): void {
+    if (!this.desiredMuted) {
+      return;
+    }
+
+    try {
+      this.player?.mute();
+    } catch (error) {
+      console.warn('Failed to apply muted state:', error);
+    }
   }
 
   destroy(): void {

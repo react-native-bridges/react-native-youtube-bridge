@@ -44,6 +44,7 @@ export interface Options {
         list?: string | undefined;
         listType?: 'playlist' | 'search' | 'user_uploads' | undefined;
         loop?: 0 | 1 | undefined;
+        mute?: 0 | 1 | undefined;
         origin?: string | undefined;
         playlist?: string | undefined;
         playsinline?: 0 | 1 | undefined;

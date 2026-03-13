@@ -79,12 +79,50 @@ const useCreateLocalPlayerHtml = ({
             var player;
             var progressInterval;
             var isDestroyed = false;
+            var desiredMuted = ${muted ? 'true' : 'false'};
 
             function cleanup() {
               isDestroyed = true;
               if (progressInterval) {
                 clearInterval(progressInterval);
                 progressInterval = null;
+              }
+            }
+
+            function applyDesiredMutedState() {
+              if (!desiredMuted || !player || !player.mute) {
+                return;
+              }
+
+              try {
+                player.mute();
+              } catch (error) {
+                console.error('applyDesiredMutedState error:', error);
+              }
+            }
+
+            function syncDesiredMutedState(event) {
+              if (!event || !event.target) {
+                return;
+              }
+
+              try {
+                var mutedState;
+
+                if (typeof event.target.isMuted === 'function') {
+                  mutedState = event.target.isMuted();
+                } else if (
+                  event.target.playerInfo &&
+                  typeof event.target.playerInfo.muted === 'boolean'
+                ) {
+                  mutedState = event.target.playerInfo.muted;
+                }
+
+                if (typeof mutedState === 'boolean') {
+                  desiredMuted = mutedState;
+                }
+              } catch (error) {
+                console.error('syncDesiredMutedState error:', error);
               }
             }
 
@@ -122,6 +160,7 @@ const useCreateLocalPlayerHtml = ({
                     'onAutoplayBlocked': ${youtubeIframeScripts.onAutoplayBlocked}
                   }
                 });
+                applyDesiredMutedState();
               } catch (error) {
                 if (window.ReactNativeWebView) {
                   window.ReactNativeWebView.postMessage(JSON.stringify({
@@ -156,8 +195,14 @@ const useCreateLocalPlayerHtml = ({
               
               setVolume: (volume) => player && player.setVolume(volume),
               getVolume: () => player ? player.getVolume() : 0,
-              mute: () => player && player.mute(),
-              unMute: () => player && player.unMute(),
+              mute: () => {
+                desiredMuted = true;
+                return player && player.mute();
+              },
+              unMute: () => {
+                desiredMuted = false;
+                return player && player.unMute();
+              },
               isMuted: () => player ? player.isMuted() : false,
               
               getCurrentTime: () => player ? player.getCurrentTime() : 0,
