@@ -261,12 +261,22 @@ const useCreateLocalPlayerHtml = ({
               setVolume: (volume) => player && player.setVolume(volume),
               getVolume: () => player ? player.getVolume() : 0,
               mute: () => {
+                desiredMuted = true;
+                if (!player) {
+                  return;
+                }
+
+                player.mute();
                 updateMutedState(true, isMutedTrackingEnabled);
-                return player && player.mute();
               },
               unMute: () => {
+                desiredMuted = false;
+                if (!player) {
+                  return;
+                }
+
+                player.unMute();
                 updateMutedState(false, isMutedTrackingEnabled);
-                return player && player.unMute();
               },
               isMuted: () => player ? player.isMuted() : false,
               

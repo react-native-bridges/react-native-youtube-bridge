@@ -41,7 +41,7 @@ function App() {
     muted: true,
   });
 
-  const isMuted = useYouTubeEvent(player, 'muteChange', false);
+  const isMuted = useYouTubeEvent(player, 'muteChange');
   const playbackRate = useYouTubeEvent(player, 'playbackRateChange', 1);
   const playbackQuality = useYouTubeEvent(player, 'playbackQualityChange');
   const progress = useYouTubeEvent(player, 'progress', progressInterval);

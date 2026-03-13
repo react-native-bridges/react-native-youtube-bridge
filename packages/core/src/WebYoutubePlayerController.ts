@@ -296,13 +296,21 @@ class WebYoutubePlayerController {
 
   mute(): void {
     this.desiredMuted = true;
-    this.player?.mute();
+    if (!this.player) {
+      return;
+    }
+
+    this.player.mute();
     this.updateMutedState(true, true);
   }
 
   unMute(): void {
     this.desiredMuted = false;
-    this.player?.unMute();
+    if (!this.player) {
+      return;
+    }
+
+    this.player.unMute();
     this.updateMutedState(false, true);
   }
 
