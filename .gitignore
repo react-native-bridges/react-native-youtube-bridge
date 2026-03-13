@@ -82,3 +82,5 @@ example/android/
 
 # coverage
 coverage/
+
+.omc

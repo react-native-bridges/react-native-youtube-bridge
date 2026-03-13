@@ -1,5 +1,5 @@
 const path = require('node:path');
-const { getDefaultConfig } = require('@expo/metro-config');
+const { getDefaultConfig } = require('expo/metro-config');
 
 function createMonorepoMetroConfig(dirname, options = {}) {
   const projectRoot = dirname;
