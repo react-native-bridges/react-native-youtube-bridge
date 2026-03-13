@@ -2,7 +2,10 @@ import type { EventCallback, YoutubePlayerEvents } from '@react-native-youtube-b
 import { useEffect, useRef, useState } from 'react';
 
 import type YoutubePlayer from '../modules/YoutubePlayer';
-import { INTERNAL_SET_PROGRESS_INTERVAL } from '../modules/YoutubePlayer';
+import {
+  INTERNAL_SET_MUTE_TRACKING,
+  INTERNAL_SET_PROGRESS_INTERVAL,
+} from '../modules/YoutubePlayer';
 
 const DEFAULT_PROGRESS_INTERVAL = 1000;
 
@@ -122,6 +125,18 @@ function useYouTubeEvent<T extends keyof YoutubePlayerEvents>(
       player[INTERNAL_SET_PROGRESS_INTERVAL](throttleMs);
     }
   }, [throttleMs, player]);
+
+  useEffect(() => {
+    if (!player || eventType !== 'muteChange') {
+      return;
+    }
+
+    player[INTERNAL_SET_MUTE_TRACKING](true);
+
+    return () => {
+      player[INTERNAL_SET_MUTE_TRACKING](false);
+    };
+  }, [player, eventType]);
 
   useEffect(() => {
     if (!player) {

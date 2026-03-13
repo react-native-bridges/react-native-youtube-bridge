@@ -27,7 +27,6 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [availableRates, setAvailableRates] = useState<number[]>([1]);
   const [volume, setVolume] = useState(100);
-  const [isMuted, setIsMuted] = useState(false);
   const [videoId, setVideoId] = useState('AbZH7XWDW_k');
   const [progressInterval, setProgressInterval] = useState(1000);
   const { oEmbed, isLoading, error } = useYoutubeOEmbed(
@@ -42,6 +41,11 @@ function App() {
     muted: true,
   });
 
+  const isMuted = useYouTubeEvent(player, 'muteChange', false);
+  const playbackRate = useYouTubeEvent(player, 'playbackRateChange', 1);
+  const playbackQuality = useYouTubeEvent(player, 'playbackQualityChange');
+  const progress = useYouTubeEvent(player, 'progress', progressInterval);
+
   const changePlaybackRate = (rate: number) => {
     player.setPlaybackRate(rate);
   };
@@ -54,12 +58,10 @@ function App() {
   const toggleMute = useCallback(() => {
     if (isMuted) {
       player.unMute();
-      setIsMuted(false);
       return;
     }
 
     player.mute();
-    setIsMuted(true);
   }, [player, isMuted]);
 
   const onPlay = useCallback(() => {
@@ -100,10 +102,6 @@ function App() {
     );
   };
 
-  const playbackRate = useYouTubeEvent(player, 'playbackRateChange', 1);
-  const playbackQuality = useYouTubeEvent(player, 'playbackQualityChange');
-  const progress = useYouTubeEvent(player, 'progress', progressInterval);
-
   const currentTime = progress?.currentTime ?? 0;
   const duration = progress?.duration ?? 0;
   const loadedFraction = progress?.loadedFraction ?? 0;
@@ -122,10 +120,6 @@ function App() {
 
     if (playerInfo?.volume !== undefined) {
       setVolume(playerInfo.volume);
-    }
-
-    if (playerInfo?.muted !== undefined) {
-      setIsMuted(playerInfo.muted);
     }
   });
 

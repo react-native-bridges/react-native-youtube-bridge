@@ -112,6 +112,10 @@ class WebviewYoutubePlayerController {
     await this.executeCommand('updateProgressInterval', [interval]);
   }
 
+  async setMutedTrackingEnabled(enabled: boolean): Promise<void> {
+    await this.executeCommand('setMutedTrackingEnabled', [enabled]);
+  }
+
   private executeCommand(
     command: string,
     args: (string | number | boolean | undefined)[] = [],

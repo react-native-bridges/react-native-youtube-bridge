@@ -1,6 +1,7 @@
 import type { PlayerControls } from '@react-native-youtube-bridge/core';
 
 interface ReceivePlayerControls extends PlayerControls {
+  setMutedTrackingEnabled: (enabled: boolean) => void;
   cleanup: () => void;
   updateProgressInterval: (interval: number) => void;
 }

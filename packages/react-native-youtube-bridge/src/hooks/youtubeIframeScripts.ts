@@ -80,6 +80,7 @@ const onPlayerReady = /* js */ `
     const playerInfo = event.target.playerInfo;
     
     try {
+      syncDesiredMutedState(event, isMutedTrackingEnabled);
       window.ReactNativeWebView.postMessage(JSON.stringify({
         type: 'ready',
         playerInfo: {
@@ -115,7 +116,7 @@ const onPlayerStateChange = /* js */ `
       }));
 
       if (event.data !== YT.PlayerState.PLAYING) {
-        syncDesiredMutedState(event);
+        syncDesiredMutedState(event, isMutedTrackingEnabled);
       }
 
       if (event.data === YT.PlayerState.ENDED) {
