@@ -1,5 +1,24 @@
 # @react-native-youtube-bridge/react
 
+## 2.1.5
+
+### Patch Changes
+
+- [#81](https://github.com/react-native-bridges/react-native-youtube-bridge/pull/81) [`fd60a82`](https://github.com/react-native-bridges/react-native-youtube-bridge/commit/fd60a82bc08818523e6eea9c22555e7d28dbdeff) Thanks [@saseungmin](https://github.com/saseungmin)! - chore: update tsdown dependency
+
+- [#79](https://github.com/react-native-bridges/react-native-youtube-bridge/pull/79) [`4993ebb`](https://github.com/react-native-bridges/react-native-youtube-bridge/commit/4993ebbe23418737e02ff2fbf712c7442dea5205) Thanks [@saseungmin](https://github.com/saseungmin)! - chore: reformat code with oxfmt
+
+- [#83](https://github.com/react-native-bridges/react-native-youtube-bridge/pull/83) [`3cad8a0`](https://github.com/react-native-bridges/react-native-youtube-bridge/commit/3cad8a03da7a7beb1f9600ba54fca226aa9ba003) Thanks [@saseungmin](https://github.com/saseungmin)! - fix: preserve muted preference when replay starts after video end ([#82](https://github.com/react-native-bridges/react-native-youtube-bridge/issues/82))
+
+  When a video is configured with muted=true, pressing the YouTube replay button after ENDED could resume playback with sound.
+  This patch preserves mute intent across replay by tracking the desired muted state and reapplying mute on ENDED->PLAYING transitions in both inline WebView and core controller paths.
+  It also synchronizes desired mute state when mute/unmute is explicitly toggled and updates iframe playerVars typing to include mute for consistency across web and native flows.
+
+- [#84](https://github.com/react-native-bridges/react-native-youtube-bridge/pull/84) [`a542bcc`](https://github.com/react-native-bridges/react-native-youtube-bridge/commit/a542bccb412a4e62b06649c40c13fc731b458b7f) Thanks [@saseungmin](https://github.com/saseungmin)! - chore(deps): update dependencies
+
+- Updated dependencies [[`65fa568`](https://github.com/react-native-bridges/react-native-youtube-bridge/commit/65fa568b8d94143ca09e695e8372ee0627456df9), [`fd60a82`](https://github.com/react-native-bridges/react-native-youtube-bridge/commit/fd60a82bc08818523e6eea9c22555e7d28dbdeff), [`4993ebb`](https://github.com/react-native-bridges/react-native-youtube-bridge/commit/4993ebbe23418737e02ff2fbf712c7442dea5205), [`3cad8a0`](https://github.com/react-native-bridges/react-native-youtube-bridge/commit/3cad8a03da7a7beb1f9600ba54fca226aa9ba003)]:
+  - @react-native-youtube-bridge/core@2.2.0
+
 ## 2.1.4
 
 ### Patch Changes
@@ -79,7 +98,7 @@
 
   ```jsx
   // Imperative, ref-based API
-  const playerRef = useRef<PlayerControls>(null);
+  const playerRef = useRef < PlayerControls > null;
 
   <YoutubePlayer
     ref={playerRef}
