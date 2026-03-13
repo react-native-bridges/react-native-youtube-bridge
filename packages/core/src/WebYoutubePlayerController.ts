@@ -127,7 +127,7 @@ class WebYoutubePlayerController {
             availableQualityLevels: playerInfo.availableQualityLevels,
             currentTime: playerInfo.currentTime,
             duration: playerInfo.duration,
-            muted: playerInfo.muted,
+            muted: readyMuted,
             playbackQuality: playerInfo.playbackQuality,
             playbackRate: playerInfo.playbackRate,
             playerState: playerInfo.playerState,
