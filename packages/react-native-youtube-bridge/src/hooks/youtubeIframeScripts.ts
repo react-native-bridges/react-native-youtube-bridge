@@ -114,6 +114,10 @@ const onPlayerStateChange = /* js */ `
         state: event.data
       }));
 
+      if (event.data !== YT.PlayerState.PLAYING) {
+        syncDesiredMutedState(event);
+      }
+
       if (event.data === YT.PlayerState.ENDED) {
         stopProgressTracking();
         sendProgress();
@@ -121,6 +125,7 @@ const onPlayerStateChange = /* js */ `
       }
 
       if (event.data === YT.PlayerState.PLAYING) {
+        applyDesiredMutedState();
         startProgressTracking();
         return;
       }
