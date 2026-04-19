@@ -1,0 +1,63 @@
+# Custom WebView Player
+
+You only need `@react-native-youtube-bridge/web` when you want to host your own external player page.
+
+## Typical flow
+
+1. Build a small web page with `@react-native-youtube-bridge/web`
+2. Host that page
+3. Pass the hosted URL to `YoutubeView` through `webViewUrl`
+
+## Install
+
+```bash
+pnpm add @react-native-youtube-bridge/web
+```
+
+## Minimal custom page
+
+```tsx
+import { YoutubePlayer } from '@react-native-youtube-bridge/web';
+
+function CustomPlayerPage() {
+  return <YoutubePlayer />;
+}
+
+export default CustomPlayerPage;
+```
+
+## Use it from native
+
+```tsx
+<YoutubeView player={player} useInlineHtml={false} webViewUrl="https://your-custom-player.com" />
+```
+
+## Query-string contract
+
+When native `YoutubeView` loads your hosted page, it appends player state into the URL query string. The hosted `@react-native-youtube-bridge/web` player reads these values:
+
+- `videoId`
+- `startTime`
+- `endTime`
+- `origin`
+- `autoplay`
+- `controls`
+- `loop`
+- `muted`
+- `playsinline`
+- `rel`
+
+That means a custom page should either:
+
+- render the stock `@react-native-youtube-bridge/web` player, or
+- preserve the same query contract if you build your own wrapper around it
+
+## Message bridge expectation
+
+When used inside React Native WebView, the hosted page is expected to send player events and command results back through `window.ReactNativeWebView.postMessage(...)`. If you stay with the stock `@react-native-youtube-bridge/web` player, this is already handled for you.
+
+## When this is worth it
+
+- custom hosting requirements
+- origin-specific iframe needs
+- apps that need to avoid inline HTML mode for compatibility reasons

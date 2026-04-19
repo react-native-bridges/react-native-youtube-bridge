@@ -3,6 +3,8 @@
 > English | [한국어](./README-ko_kr.md)
 
 > [!note]
+> **Full docs source:** [packages/docs](./packages/docs)
+>
 > **V1 users:** [V1 Documentation](/packages/react-native-youtube-bridge/docs/v1.md) | [V2 Migration Guide](/packages/react-native-youtube-bridge/docs/migration-v2.md)
 
 ## Overview

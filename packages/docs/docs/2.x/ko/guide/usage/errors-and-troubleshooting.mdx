@@ -1,0 +1,49 @@
+# 오류와 트러블슈팅
+
+## 잘못된 source
+
+다음 형식 중 하나를 사용하세요.
+
+- `'AbZH7XWDW_k'`
+- `{ videoId: 'AbZH7XWDW_k' }`
+- `{ url: 'https://www.youtube.com/watch?v=AbZH7XWDW_k' }`
+
+## 자주 보는 에러 코드
+
+| 코드   | 의미                           |
+| ------ | ------------------------------ |
+| `2`    | 잘못된 YouTube 파라미터 값     |
+| `5`    | HTML5 플레이어 오류            |
+| `100`  | 비디오를 찾을 수 없거나 비공개 |
+| `101`  | embedded playback 불가         |
+| `150`  | embedded playback 제한         |
+| `1000` | WebView 메시지 파싱 실패       |
+| `1001` | 네이티브 WebView 로딩 오류     |
+| `1002` | 잘못된 YouTube 비디오 ID       |
+| `1003` | YouTube API 로딩 실패          |
+| `1004` | 알 수 없는 bridge/player 오류  |
+
+## autoplay blocked
+
+오디오가 켜져 있으면 환경에 따라 autoplay가 막힐 수 있습니다. autoplay가 중요하면 `muted`와 함께 테스트하고, 필요하면 `autoplayBlocked` 이벤트를 받아 UI에서 대응하세요.
+
+## `embed not allowed`
+
+inline HTML 모드에서 YouTube iframe 제한이 걸리면:
+
+1. `useInlineHtml={false}`로 전환
+2. 기본 호스팅 페이지 또는 커스텀 페이지 사용
+3. 대상 `origin`이 호스팅된 페이지 origin과 맞는지 확인
+
+## origin mismatch
+
+커스텀 `webViewUrl`을 쓰는 경우, 페이지 origin과 iframe `origin`을 맞춰야 합니다. 페이지 자체가 열려도 origin mismatch로 iframe 동작이 깨질 수 있습니다.
+
+## WebView 로딩 문제
+
+네이티브 WebView가 로드되지 않는다면:
+
+- URL에 실제로 접근 가능한지 확인하고
+- 호스팅한 페이지가 올바른 플레이어를 렌더링하는지 확인하고
+- 전달한 source URL과 origin 설정이 맞는지 확인하고
+- `webViewProps.source.headers`나 호스팅 규칙이 로드를 방해하지 않는지도 확인하세요.

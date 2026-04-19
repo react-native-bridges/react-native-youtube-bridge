@@ -1,0 +1,62 @@
+# API Reference
+
+## Main exports
+
+```ts
+export {
+  useYouTubeEvent,
+  useYouTubePlayer,
+  YoutubeView,
+  useYoutubeOEmbed,
+} from 'react-native-youtube-bridge';
+```
+
+## Main component and hooks
+
+### `useYouTubePlayer(source, config?)`
+
+Creates a player instance from a video ID or YouTube URL.
+
+### `YoutubeView`
+
+Renders the player instance.
+
+### `useYouTubeEvent(player, event, ...)`
+
+Subscribes to player updates.
+
+### `useYoutubeOEmbed(url?)`
+
+Fetches optional metadata for richer UI.
+
+## Player methods
+
+- `play`, `pause`, `stop`, `seekTo`
+- `setVolume`, `getVolume`, `mute`, `unMute`, `isMuted`
+- `getCurrentTime`, `getDuration`, `getVideoUrl`, `getVideoEmbedCode`
+- `getPlaybackRate`, `setPlaybackRate`, `getAvailablePlaybackRates`
+- `getPlayerState`, `getVideoLoadedFraction`
+- `loadVideoById`, `cueVideoById`, `setSize`
+
+## Events
+
+- `ready`
+- `stateChange`
+- `error`
+- `progress`
+- `playbackRateChange`
+- `playbackQualityChange`
+- `autoplayBlocked`
+- `muteChange`
+
+## Important types
+
+- `YoutubeSource`
+- `YoutubePlayerVars`
+- `YoutubeError`
+- `ProgressData`
+- `PlayerInfo`
+- `PlayerState`
+- `YoutubeViewProps`
+
+For behavior details, follow the guide pages instead of treating this page as the primary onboarding surface.

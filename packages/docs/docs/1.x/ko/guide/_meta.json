@@ -1,0 +1,8 @@
+[
+  {
+    "type": "dir",
+    "name": "getting-started",
+    "label": "시작하기"
+  },
+  "migration-from-1.x"
+]

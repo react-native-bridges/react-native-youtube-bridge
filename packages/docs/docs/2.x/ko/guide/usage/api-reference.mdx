@@ -1,0 +1,49 @@
+# API 레퍼런스
+
+## 주요 export
+
+```ts
+export {
+  useYouTubeEvent,
+  useYouTubePlayer,
+  YoutubeView,
+  useYoutubeOEmbed,
+} from 'react-native-youtube-bridge';
+```
+
+## 핵심 API
+
+- `useYouTubePlayer(source, config?)`
+- `YoutubeView`
+- `useYouTubeEvent(player, event, ...)`
+- `useYoutubeOEmbed(url?)`
+
+## 플레이어 메서드
+
+- `play`, `pause`, `stop`, `seekTo`
+- `setVolume`, `getVolume`, `mute`, `unMute`, `isMuted`
+- `getCurrentTime`, `getDuration`, `getVideoUrl`, `getVideoEmbedCode`
+- `getPlaybackRate`, `setPlaybackRate`, `getAvailablePlaybackRates`
+- `getPlayerState`, `getVideoLoadedFraction`
+- `loadVideoById`, `cueVideoById`, `setSize`
+
+## 이벤트
+
+- `ready`
+- `stateChange`
+- `error`
+- `progress`
+- `playbackRateChange`
+- `playbackQualityChange`
+- `autoplayBlocked`
+- `muteChange`
+
+## 중요한 타입
+
+- `YoutubeSource`
+- `YoutubePlayerVars`
+- `YoutubeError`
+- `ProgressData`
+- `PlayerInfo`
+- `PlayerState`
+- `YoutubeViewProps`

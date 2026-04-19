@@ -1,0 +1,33 @@
+# 빠른 시작
+
+가장 작은 예제는 아래와 같습니다.
+
+```tsx
+import { YoutubeView, useYouTubePlayer } from 'react-native-youtube-bridge';
+
+function App() {
+  const player = useYouTubePlayer('AbZH7XWDW_k');
+
+  return <YoutubeView player={player} />;
+}
+```
+
+## source 입력 형태
+
+```tsx
+const playerA = useYouTubePlayer('AbZH7XWDW_k');
+const playerB = useYouTubePlayer({ videoId: 'AbZH7XWDW_k' });
+const playerC = useYouTubePlayer({ url: 'https://www.youtube.com/watch?v=AbZH7XWDW_k' });
+```
+
+## 초기 옵션 추가
+
+```tsx
+const player = useYouTubePlayer('AbZH7XWDW_k', {
+  autoplay: true,
+  controls: true,
+  playsinline: true,
+  rel: false,
+  muted: true,
+});
+```

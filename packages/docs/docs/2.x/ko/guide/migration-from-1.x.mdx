@@ -1,0 +1,27 @@
+# 1.x에서 마이그레이션
+
+2.x는 컴포넌트 + ref 방식 대신 Hook + View 방식으로 바뀌었습니다.
+
+| 1.x                      | 2.x                                |
+| ------------------------ | ---------------------------------- |
+| `YoutubePlayer` 컴포넌트 | `useYouTubePlayer` + `YoutubeView` |
+| callback props           | `useYouTubeEvent`                  |
+| `ref.current?.play()`    | `player.play()`                    |
+
+## 이전 방식
+
+```tsx
+import { YoutubePlayer } from 'react-native-youtube-bridge';
+
+<YoutubePlayer source="AbZH7XWDW_k" />;
+```
+
+## 현재 방식
+
+```tsx
+import { YoutubeView, useYouTubePlayer } from 'react-native-youtube-bridge';
+
+const player = useYouTubePlayer('AbZH7XWDW_k');
+
+<YoutubeView player={player} />;
+```

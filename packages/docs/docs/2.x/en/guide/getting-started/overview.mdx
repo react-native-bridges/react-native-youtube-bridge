@@ -1,0 +1,46 @@
+# Overview
+
+<div style={{ width: '100%', alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
+  <img src="/example.gif" width="600" alt="Demo of react-native-youtube-bridge" />
+</div>
+
+Using a YouTube player in React Native usually means juggling iframe setup, event wiring, playback control, and platform differences.
+
+`react-native-youtube-bridge` wraps the [YouTube IFrame Player API](https://developers.google.com/youtube/iframe_api_reference) in a React Native-friendly API built around three ideas:
+
+- `useYouTubePlayer` creates and owns the player instance.
+- `YoutubeView` renders the player on iOS, Android, and Web.
+- `useYouTubeEvent` lets you react to player state, progress, mute, and error updates.
+
+## Why this library exists
+
+- No dependency on native YouTube player modules
+- Cross-platform support for iOS, Android, and Web
+- Hook-based API that feels natural in modern React code
+- Works for both quick embeds and advanced external WebView strategies
+
+## Core mental model
+
+```tsx
+import { YoutubeView, useYouTubePlayer } from 'react-native-youtube-bridge';
+
+function App() {
+  const player = useYouTubePlayer('AbZH7XWDW_k');
+
+  return <YoutubeView player={player} />;
+}
+```
+
+The player instance is the center of the API:
+
+- configure it when creating it
+- render it through `YoutubeView`
+- control it through player methods
+- subscribe to updates through `useYouTubeEvent`
+
+## Platform story
+
+- **iOS / Android**: renders through `react-native-webview`
+- **Web**: renders through the browser YouTube iframe API
+- **Expo**: works well for Expo apps
+- **Advanced native compatibility**: you can switch from inline HTML to an external WebView page when embed restrictions or origin constraints require it

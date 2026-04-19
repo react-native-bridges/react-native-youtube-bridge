@@ -1,0 +1,105 @@
+# Handling Events
+
+`useYouTubeEvent` supports both reactive state subscriptions and callback-style side effects.
+
+## 1. State-style subscriptions
+
+Use this when your UI should re-render with the latest value.
+
+```tsx
+const playbackRate = useYouTubeEvent(player, 'playbackRateChange', 1);
+const isMuted = useYouTubeEvent(player, 'muteChange', false);
+const progress = useYouTubeEvent(player, 'progress', 1000);
+```
+
+## 2. Callback-style subscriptions
+
+Use this for side effects, analytics, toasts, logging, or one-off app reactions.
+
+```tsx
+useYouTubeEvent(player, 'ready', (playerInfo) => {
+  console.log('ready', playerInfo);
+});
+
+useYouTubeEvent(player, 'error', (error) => {
+  console.error(error);
+});
+
+useYouTubeEvent(player, 'autoplayBlocked', () => {
+  console.log('autoplay blocked');
+});
+```
+
+## Optional dependency array for callbacks
+
+If your callback depends on changing values, pass a dependency array as the fourth argument.
+
+```tsx
+useYouTubeEvent(
+  player,
+  'stateChange',
+  (state) => {
+    console.log('state', state, analyticsLabel);
+  },
+  [analyticsLabel],
+);
+```
+
+## Event list
+
+| Event                   | Payload           | Notes                                                          |
+| ----------------------- | ----------------- | -------------------------------------------------------------- |
+| `ready`                 | `PlayerInfo`      | First full player snapshot                                     |
+| `stateChange`           | `PlayerState`     | `UNSTARTED`, `PLAYING`, `PAUSED`, `BUFFERING`, `ENDED`, `CUED` |
+| `error`                 | `YoutubeError`    | YouTube or bridge-level error                                  |
+| `progress`              | `ProgressData`    | `currentTime`, `duration`, `percentage`, `loadedFraction`      |
+| `playbackRateChange`    | `number`          | Current playback speed                                         |
+| `playbackQualityChange` | `PlaybackQuality` | Current quality level                                          |
+| `autoplayBlocked`       | `undefined`       | Browser/platform autoplay restriction                          |
+| `muteChange`            | `boolean`         | Current muted state                                            |
+
+## `ready` payload
+
+`ready` provides a rich initial snapshot:
+
+- `availablePlaybackRates`
+- `availableQualityLevels`
+- `currentTime`
+- `duration`
+- `muted`
+- `playbackQuality`
+- `playbackRate`
+- `playerState`
+- `size`
+- `volume`
+
+## `progress` payload
+
+`progress` includes:
+
+```ts
+{
+  currentTime: number;
+  duration: number;
+  percentage: number;
+  loadedFraction: number;
+}
+```
+
+### Progress interval behavior
+
+`progress` is special:
+
+- third argument = polling interval in milliseconds
+- default = `1000`
+- pass `0` if you do not want interval-based progress updates
+
+```tsx
+const progress = useYouTubeEvent(player, 'progress', 500);
+```
+
+The bridge also refreshes progress shortly after `seekTo()` so the UI catches up quickly after manual seeking.
+
+## Mute tracking nuance
+
+Muted state tracking is enabled only while `muteChange` is subscribed. This keeps the feature user-friendly without paying the tracking cost when the app does not need it.

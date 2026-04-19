@@ -2,6 +2,9 @@
 
 > English | [한국어](./README-ko_kr.md)
 
+> [!note]
+> Full Rspress docs source for the main library now lives in [../docs](../docs).
+
 A YouTube player library for external WebView implementation, designed to work seamlessly with [`react-native-youtube-bridge`](https://github.com/react-native-bridges/react-native-youtube-bridge) in React Native environments.
 
 ## Overview

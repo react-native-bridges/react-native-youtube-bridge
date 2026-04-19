@@ -1,0 +1,39 @@
+# 개요
+
+<div style={{ width: '100%', alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
+  <img src="/example.gif" width="600" alt="react-native-youtube-bridge 데모" />
+</div>
+
+React Native에서 YouTube 플레이어를 붙이려면 iframe 설정, 이벤트 연결, 재생 제어, 플랫폼 차이를 한 번에 처리해야 하는 경우가 많습니다.
+
+`react-native-youtube-bridge`는 [YouTube IFrame Player API](https://developers.google.com/youtube/iframe_api_reference)를 React Native에 맞는 방식으로 감싼 라이브러리이며, 핵심은 세 가지입니다.
+
+- `useYouTubePlayer`로 플레이어 인스턴스를 만든다.
+- `YoutubeView`로 플레이어를 렌더링한다.
+- `useYouTubeEvent`로 상태, 진행률, 음소거, 에러를 구독한다.
+
+## 왜 이 라이브러리를 쓰나
+
+- 네이티브 YouTube 플레이어 모듈 없이 사용 가능
+- iOS, Android, Web 지원
+- 현대적인 React 코드에 잘 맞는 Hook 기반 API
+- 빠른 임베드부터 고급 외부 WebView 전략까지 확장 가능
+
+## 핵심 사용 모델
+
+```tsx
+import { YoutubeView, useYouTubePlayer } from 'react-native-youtube-bridge';
+
+function App() {
+  const player = useYouTubePlayer('AbZH7XWDW_k');
+
+  return <YoutubeView player={player} />;
+}
+```
+
+플레이어 인스턴스가 API의 중심입니다.
+
+- 생성 시 옵션을 설정하고
+- `YoutubeView`에 전달해 렌더링하고
+- 메서드로 제어하고
+- `useYouTubeEvent`로 변화를 구독합니다.

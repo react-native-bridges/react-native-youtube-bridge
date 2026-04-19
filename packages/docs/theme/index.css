@@ -1,0 +1,3 @@
+.rp-flex:has(.custom-code) {
+  width: 100%;
+}

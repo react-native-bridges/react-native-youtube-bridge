@@ -1,0 +1,57 @@
+# 커스텀 WebView 플레이어
+
+직접 호스팅하는 외부 플레이어 페이지가 필요할 때만 `@react-native-youtube-bridge/web`를 사용하면 됩니다.
+
+## 전형적인 흐름
+
+1. `@react-native-youtube-bridge/web`로 작은 웹 플레이어 페이지 작성
+2. 해당 페이지를 배포
+3. `YoutubeView`의 `webViewUrl`로 전달
+
+## 설치
+
+```bash
+pnpm add @react-native-youtube-bridge/web
+```
+
+## 최소 예제
+
+```tsx
+import { YoutubePlayer } from '@react-native-youtube-bridge/web';
+
+function CustomPlayerPage() {
+  return <YoutubePlayer />;
+}
+
+export default CustomPlayerPage;
+```
+
+## 네이티브에서 사용
+
+```tsx
+<YoutubeView player={player} useInlineHtml={false} webViewUrl="https://your-custom-player.com" />
+```
+
+## query-string 계약
+
+네이티브 `YoutubeView`는 외부 플레이어 페이지를 로드할 때 URL query에 아래 값을 붙입니다.
+
+- `videoId`
+- `startTime`
+- `endTime`
+- `origin`
+- `autoplay`
+- `controls`
+- `loop`
+- `muted`
+- `playsinline`
+- `rel`
+
+즉 커스텀 페이지는 다음 중 하나여야 합니다.
+
+- stock `@react-native-youtube-bridge/web` 플레이어를 그대로 사용하거나
+- 직접 wrapper를 만들더라도 같은 query contract를 유지해야 합니다.
+
+## 메시지 브리지 기대사항
+
+React Native WebView 안에서 실행될 때는 플레이어 이벤트와 command 결과를 `window.ReactNativeWebView.postMessage(...)`로 다시 전달해야 합니다. stock `@react-native-youtube-bridge/web`를 쓰면 이 부분은 이미 처리되어 있습니다.
