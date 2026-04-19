@@ -1,0 +1,40 @@
+# Migration from 1.x
+
+Version 2.x changes the API from a component-and-ref model to a hook-and-view model.
+
+## High-level change
+
+| 1.x                         | 2.x                                |
+| --------------------------- | ---------------------------------- |
+| `YoutubePlayer` component   | `useYouTubePlayer` + `YoutubeView` |
+| callback props              | `useYouTubeEvent`                  |
+| `ref.current?.play()`       | `player.play()`                    |
+| component props hold config | hook config holds player options   |
+
+## Before
+
+```tsx
+import { YoutubePlayer } from 'react-native-youtube-bridge';
+
+<YoutubePlayer source="AbZH7XWDW_k" />;
+```
+
+## After
+
+```tsx
+import { YoutubeView, useYouTubePlayer } from 'react-native-youtube-bridge';
+
+const player = useYouTubePlayer('AbZH7XWDW_k');
+
+<YoutubeView player={player} />;
+```
+
+## Event migration
+
+Use `useYouTubeEvent` for:
+
+- callback-style side effects
+- state-style subscriptions
+- progress polling intervals
+
+For a deeper walkthrough, keep the old 1.x docs nearby while migrating one screen at a time.

@@ -1,0 +1,33 @@
+# Player Config
+
+Pass initial player options as the second argument to `useYouTubePlayer`.
+
+```tsx
+const player = useYouTubePlayer('AbZH7XWDW_k', {
+  autoplay: true,
+  controls: true,
+  playsinline: true,
+  rel: false,
+  muted: true,
+});
+```
+
+## Important options
+
+- `autoplay`
+- `controls`
+- `loop`
+- `muted`
+- `startTime`
+- `endTime`
+- `playsinline`
+- `rel`
+- `origin`
+
+## Autoplay caveat
+
+Autoplay may be blocked by browser or platform policy when audio is not muted. If autoplay behavior matters, test the combination of `autoplay` and `muted` on your target platforms.
+
+## About `origin`
+
+`origin` matters most when you are dealing with advanced WebView scenarios. If you are using a custom player page or custom `webViewUrl`, keep the document origin and the configured iframe origin aligned.

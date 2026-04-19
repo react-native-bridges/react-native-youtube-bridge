@@ -1,0 +1,85 @@
+# Player Controls
+
+The player object returned by `useYouTubePlayer` exposes direct playback controls, async getters, and dynamic video loading methods.
+
+## Playback actions
+
+```tsx
+player.play();
+player.pause();
+player.stop();
+player.seekTo(30, true);
+```
+
+## Volume and mute
+
+```tsx
+player.setVolume(50);
+player.mute();
+player.unMute();
+
+const volume = await player.getVolume();
+const muted = await player.isMuted();
+```
+
+## Player state and video info
+
+```tsx
+const [currentTime, duration, state, loadedFraction, url, embedCode] = await Promise.all([
+  player.getCurrentTime(),
+  player.getDuration(),
+  player.getPlayerState(),
+  player.getVideoLoadedFraction(),
+  player.getVideoUrl(),
+  player.getVideoEmbedCode(),
+]);
+```
+
+## Playback rate
+
+```tsx
+const currentRate = await player.getPlaybackRate();
+const availableRates = await player.getAvailablePlaybackRates();
+
+player.setPlaybackRate(1.5);
+```
+
+## Load or cue another video
+
+```tsx
+player.loadVideoById('M7lc1UVf-VE');
+player.cueVideoById('M7lc1UVf-VE', 30);
+```
+
+- `loadVideoById` starts loading the target video immediately.
+- `cueVideoById` prepares the target video without starting playback.
+
+## Resize the player
+
+```tsx
+player.setSize(640, 360);
+```
+
+This is mostly useful when you need imperative size control after initial render.
+
+## Practical toolbar example
+
+```tsx
+function Controls({ player, currentTime, isPlaying }: Props) {
+  return (
+    <>
+      <Button title="-10s" onPress={() => player.seekTo(Math.max(currentTime - 10, 0), true)} />
+      <Button
+        title={isPlaying ? 'Pause' : 'Play'}
+        onPress={() => (isPlaying ? player.pause() : player.play())}
+      />
+      <Button title="Stop" onPress={() => player.stop()} />
+      <Button title="+10s" onPress={() => player.seekTo(currentTime + 10, true)} />
+    </>
+  );
+}
+```
+
+## What belongs here vs events
+
+Use player methods for **actions** and on-demand reads. Use `useYouTubeEvent` for **reactive updates** that should drive UI automatically.

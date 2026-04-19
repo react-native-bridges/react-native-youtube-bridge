@@ -1,0 +1,63 @@
+# 플레이어 제어
+
+`useYouTubePlayer`가 반환하는 플레이어 객체에는 직접 호출할 수 있는 메서드, 비동기 getter, 동적 비디오 로드 메서드가 포함됩니다.
+
+## 재생 제어
+
+```tsx
+player.play();
+player.pause();
+player.stop();
+player.seekTo(30, true);
+```
+
+## 볼륨과 음소거
+
+```tsx
+player.setVolume(50);
+player.mute();
+player.unMute();
+
+const volume = await player.getVolume();
+const muted = await player.isMuted();
+```
+
+## 상태와 비디오 정보 조회
+
+```tsx
+const [currentTime, duration, state, loadedFraction, url, embedCode] = await Promise.all([
+  player.getCurrentTime(),
+  player.getDuration(),
+  player.getPlayerState(),
+  player.getVideoLoadedFraction(),
+  player.getVideoUrl(),
+  player.getVideoEmbedCode(),
+]);
+```
+
+## 재생 속도
+
+```tsx
+const currentRate = await player.getPlaybackRate();
+const availableRates = await player.getAvailablePlaybackRates();
+
+player.setPlaybackRate(1.5);
+```
+
+## 다른 비디오 로드 또는 큐잉
+
+```tsx
+player.loadVideoById('M7lc1UVf-VE');
+player.cueVideoById('M7lc1UVf-VE', 30);
+```
+
+- `loadVideoById`는 바로 로드를 시작합니다.
+- `cueVideoById`는 재생 없이 다음 비디오를 준비합니다.
+
+## 크기 변경
+
+```tsx
+player.setSize(640, 360);
+```
+
+초기 렌더 이후 imperative하게 크기를 바꿔야 할 때 유용합니다.

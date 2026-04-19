@@ -1,0 +1,13 @@
+# 1.x Overview
+
+Version 1.x used a component-driven API centered on `YoutubePlayer` and callback props.
+
+```tsx
+import { YoutubePlayer } from 'react-native-youtube-bridge';
+
+function App() {
+  return <YoutubePlayer source="AbZH7XWDW_k" />;
+}
+```
+
+Use this lane only if you are maintaining a 1.x integration. For new work, move to the 2.x hook-based API.

@@ -1,0 +1,13 @@
+# Migrate to 2.x
+
+The 2.x API replaces the old component/ref model with:
+
+- `useYouTubePlayer`
+- `YoutubeView`
+- `useYouTubeEvent`
+
+Recommended migration order:
+
+1. replace `YoutubePlayer` with `useYouTubePlayer` + `YoutubeView`
+2. move callback props to `useYouTubeEvent`
+3. move ref method calls to `player.method()` calls

@@ -1,0 +1,41 @@
+# Quick Start
+
+The smallest working example looks like this:
+
+```tsx
+import { YoutubeView, useYouTubePlayer } from 'react-native-youtube-bridge';
+
+function App() {
+  const player = useYouTubePlayer('AbZH7XWDW_k');
+
+  return <YoutubeView player={player} />;
+}
+```
+
+## Accepted source forms
+
+You can initialize the player with:
+
+```tsx
+const playerA = useYouTubePlayer('AbZH7XWDW_k');
+const playerB = useYouTubePlayer({ videoId: 'AbZH7XWDW_k' });
+const playerC = useYouTubePlayer({ url: 'https://www.youtube.com/watch?v=AbZH7XWDW_k' });
+```
+
+## Add initial player options
+
+```tsx
+const player = useYouTubePlayer('AbZH7XWDW_k', {
+  autoplay: true,
+  controls: true,
+  playsinline: true,
+  rel: false,
+  muted: true,
+});
+```
+
+## Next steps
+
+- Learn the source model in [Basic Usage](/guide/usage/basic-usage.html)
+- Subscribe to updates in [Handling Events](/guide/usage/handling-events.html)
+- Control playback in [Player Controls](/guide/usage/player-controls.html)

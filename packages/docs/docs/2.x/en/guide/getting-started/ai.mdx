@@ -1,0 +1,9 @@
+# AI / LLM Summary
+
+If you need a very short summary for AI tooling or internal docs ingestion:
+
+- `react-native-youtube-bridge` is a hook-based React Native wrapper around the YouTube IFrame Player API.
+- Main API: `useYouTubePlayer`, `YoutubeView`, `useYouTubeEvent`.
+- Source input supports raw video IDs, `{ videoId }`, or `{ url }`.
+- Native platforms use WebView; Web uses the iframe API directly.
+- Advanced native setups can use `useInlineHtml={false}` and a custom `webViewUrl` built with `@react-native-youtube-bridge/web`.
