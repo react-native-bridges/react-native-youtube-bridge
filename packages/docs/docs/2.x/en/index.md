@@ -13,7 +13,7 @@ hero:
       text: GitHub
       link: https://github.com/react-native-bridges/react-native-youtube-bridge
   image:
-    src: /example.gif
+    src: https://raw.githubusercontent.com/react-native-bridges/react-native-youtube-bridge/main/assets/example.gif
     alt: Demo of react-native-youtube-bridge
 features:
   - title: Cross-Platform Player

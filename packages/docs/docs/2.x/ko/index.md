@@ -13,7 +13,7 @@ hero:
       text: GitHub
       link: https://github.com/react-native-bridges/react-native-youtube-bridge
   image:
-    src: /example.gif
+    src: https://raw.githubusercontent.com/react-native-bridges/react-native-youtube-bridge/main/assets/example.gif
     alt: react-native-youtube-bridge 데모
 features:
   - title: 크로스 플랫폼 플레이어
