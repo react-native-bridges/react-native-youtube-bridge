@@ -1,5 +1,20 @@
 # @react-native-youtube-bridge/react
 
+## 2.1.6
+
+### Patch Changes
+
+- [#86](https://github.com/react-native-bridges/react-native-youtube-bridge/pull/86) [`fbb0477`](https://github.com/react-native-bridges/react-native-youtube-bridge/commit/fbb04777d982d21dcb8eafbb8cf32f1250c14686) Thanks [@saseungmin](https://github.com/saseungmin)! - docs: add versioned Rspress documentation
+
+  - Add hosted docs links to package README files.
+  - Point docs references and package homepage metadata to https://react-native-youtube-bridge-docs.pages.dev/.
+  - Document V1/V2 navigation, quick start, API reference, migration guidance, and AI-readable docs outputs.
+  - Keep README content concise and point users to the deployed documentation site.
+  - No runtime behavior changes.
+
+- Updated dependencies [[`fbb0477`](https://github.com/react-native-bridges/react-native-youtube-bridge/commit/fbb04777d982d21dcb8eafbb8cf32f1250c14686)]:
+  - @react-native-youtube-bridge/core@2.2.1
+
 ## 2.1.5
 
 ### Patch Changes
