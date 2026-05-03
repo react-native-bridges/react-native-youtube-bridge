@@ -3,7 +3,7 @@
 > [English](./README.md) | 한국어
 
 > [!note]
-> 메인 라이브러리의 전체 Rspress 문서 소스는 [../docs](../docs)에 있습니다.
+> 전체 문서는 <https://react-native-youtube-bridge-docs.pages.dev/ko>에서 확인할 수 있습니다.
 
 [`react-native-youtube-bridge`](https://github.com/react-native-bridges/react-native-youtube-bridge)와 함께 사용할 외부 WebView 플레이어 페이지를 호스팅하기 위한 패키지입니다.
 

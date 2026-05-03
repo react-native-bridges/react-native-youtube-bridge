@@ -1,5 +1,7 @@
 # React Native Youtube Bridge docs
 
+Deployed documentation: <https://react-native-youtube-bridge-docs.pages.dev/>
+
 ## Setup
 
 ```bash
