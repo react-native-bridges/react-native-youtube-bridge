@@ -1,0 +1,53 @@
+# Inline HTML vs WebView
+
+iOS와 Android에서는 두 가지 렌더링 전략을 지원합니다.
+
+## Inline HTML 모드
+
+```tsx
+<YoutubeView player={player} useInlineHtml />
+```
+
+- 기본 모드
+- 앱 내부에서 HTML을 직접 로드
+- 대부분의 앱에서 가장 단순한 선택
+
+## 외부 WebView 모드
+
+```tsx
+<YoutubeView player={player} useInlineHtml={false} webViewUrl="https://your-custom-player.com" />
+```
+
+- 외부 플레이어 페이지를 로드
+- inline HTML 제약이나 호스팅 요구사항이 있을 때 유용
+- 기본 호스팅 페이지: `https://react-native-youtube-bridge.pages.dev`
+
+## `webViewUrl` 의미
+
+- `useInlineHtml: true`일 때는 HTML `baseUrl`
+- `useInlineHtml: false`일 때는 WebView `uri` override
+
+## 정확한 origin 규칙
+
+커스텀 origin을 쓰는 경우 문서 origin과 YouTube iframe `origin`을 정확히 맞춰야 합니다.
+
+inline HTML 모드에서는:
+
+- `webViewUrl`이 HTML `baseUrl`이 되고
+- iframe `origin`은 그 페이지 origin과 정확히 일치해야 하며
+- port가 있다면 포함해야 하고
+- `baseUrl`은 trailing slash를 포함하고
+- `origin`은 trailing slash 없이 써야 합니다.
+
+예시:
+
+- base URL: `https://localhost:8081/`
+- origin: `https://localhost:8081`
+
+## 언제 외부 WebView로 전환할까
+
+다음과 같다면 외부 WebView 모드를 우선 고려하세요.
+
+- inline HTML에서 `embed not allowed`가 발생할 때
+- 직접 호스팅하는 플레이어 페이지가 필요할 때
+- 페이지 환경을 더 세밀하게 제어해야 할 때

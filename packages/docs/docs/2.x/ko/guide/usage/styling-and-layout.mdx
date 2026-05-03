@@ -1,0 +1,44 @@
+# 스타일과 레이아웃
+
+`YoutubeView`가 실제 렌더링 표면을 담당합니다.
+
+```tsx
+<YoutubeView player={player} width="100%" height={240} />
+```
+
+## 주요 스타일 props
+
+```tsx
+<YoutubeView
+  player={player}
+  height={400}
+  width={200}
+  style={{ borderRadius: 10 }}
+  iframeStyle={{ aspectRatio: 16 / 9 }}
+  webViewStyle={{ backgroundColor: 'transparent' }}
+/>
+```
+
+- `iframeStyle`: Web 전용
+- `webViewStyle`: iOS / Android 전용
+- `webViewProps`: iOS / Android 전용
+
+## `webViewProps` 자세히
+
+`webViewProps`는 bridge 기본 동작을 깨지 않으면서 네이티브 WebView를 튜닝할 때 유용합니다.
+
+```tsx
+<YoutubeView
+  player={player}
+  webViewProps={{
+    renderToHardwareTextureAndroid: true,
+    source: {
+      headers: {
+        'X-Example-Header': 'demo',
+      },
+    },
+  }}
+/>
+```
+
+다만 bridge가 `ref`, `source.uri`, `style`, `onMessage`, `javaScriptEnabled`, `onError`는 직접 관리하므로 `webViewProps`는 부분 커스터마이징 레이어로 생각하는 게 좋습니다.

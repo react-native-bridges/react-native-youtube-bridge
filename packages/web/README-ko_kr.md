@@ -2,56 +2,28 @@
 
 > [English](./README.md) | 한국어
 
-React Native 환경에서 [`react-native-youtube-bridge`](https://github.com/react-native-bridges/react-native-youtube-bridge)와 함께 사용할 수 있는 외부 웹뷰용 YouTube 플레이어 라이브러리입니다.
+> [!note]
+> 메인 라이브러리의 전체 Rspress 문서 소스는 [../docs](../docs)에 있습니다.
+
+[`react-native-youtube-bridge`](https://github.com/react-native-bridges/react-native-youtube-bridge)와 함께 사용할 외부 WebView 플레이어 페이지를 호스팅하기 위한 패키지입니다.
 
 ## 개요
 
-이 라이브러리는 React Native 애플리케이션에서 YouTube 동영상을 재생할 때, 커스텀 웹 페이지를 통해 외부 웹뷰를 구현하고자 하는 경우에 유용합니다.
+직접 외부 플레이어 페이지를 호스팅하고, 메인 라이브러리의 `YoutubeView`에 `webViewUrl`로 전달하고 싶을 때만 이 패키지를 사용하면 됩니다.
 
-## 사용 사례
-
-React Native 환경에서는 다음과 같은 두 가지 방법으로 YouTube iframe을 WebView에서 사용할 수 있습니다:
+React Native 앱에서는 계속 `react-native-youtube-bridge`를 사용합니다.
 
 ```tsx
-function App() {
-  return (
-    <>
-      {/* 방법 1: 인라인 HTML 사용 (기본값) */}
-      <YoutubePlayer source={source} useInlineHtml />
+import { YoutubeView, useYouTubePlayer } from 'react-native-youtube-bridge';
 
-      {/* 방법 2: 외부 웹뷰 페이지 사용 */}
-      <YoutubePlayer
-        source={source}
-        useInlineHtml={false}
-        // 기본값: https://react-native-youtube-bridge.pages.dev
-        webViewUrl="https://your-custom-player.com"
-      />
-    </>
-  );
+function App() {
+  const player = useYouTubePlayer('AbZH7XWDW_k');
+
+  return <YoutubeView player={player} useInlineHtml={false} webViewUrl="https://your-custom-player.com" />;
 }
 ```
 
-현재는 기본 정적 사이트(https://react-native-youtube-bridge.pages.dev)를 외부 웹뷰 URL로 사용하고 있습니다.
-
-만약 직접 제작한 커스텀 플레이어 페이지를 사용하고 싶다면, `webViewUrl` 속성에 해당 URL을 전달하면 됩니다. 이때 `@react-native-youtube-bridge/web`을 활용하여 React 기반의 커스텀 플레이어 페이지를 손쉽게 구축할 수 있습니다.
-
-## 설치
-
-```bash
-# npm
-npm install @react-native-youtube-bridge/web
-
-# pnpm
-pnpm add @react-native-youtube-bridge/web
-
-# yarn
-yarn add @react-native-youtube-bridge/web
-
-# bun
-bun add @react-native-youtube-bridge/web
-```
-
-## 사용법
+호스팅되는 페이지에서는 `@react-native-youtube-bridge/web`를 사용합니다.
 
 ```tsx
 import { YoutubePlayer } from '@react-native-youtube-bridge/web';
@@ -63,10 +35,37 @@ function CustomPlayerPage() {
 export default CustomPlayerPage;
 ```
 
-## 기여하기
+## Query string contract
 
-프로젝트 기여 방법과 개발 워크플로우에 대한 자세한 내용은 [기여 가이드](./CONTRIBUTING.md)를 참고해 주세요.
+`YoutubeView`가 호스팅된 페이지를 로드할 때 플레이어 설정을 URL query string으로 붙입니다. 기본 `YoutubePlayer` 컴포넌트는 아래 값을 자동으로 읽습니다.
 
-## 라이센스
+- `videoId`
+- `startTime`
+- `endTime`
+- `origin`
+- `autoplay`
+- `controls`
+- `loop`
+- `muted`
+- `playsinline`
+- `rel`
+
+## 설치
+
+```bash
+npm install @react-native-youtube-bridge/web
+```
+
+## 언제 사용하면 좋은가요?
+
+- 직접 호스팅해야 하는 요구사항이 있을 때
+- iframe origin을 세밀하게 맞춰야 할 때
+- inline HTML 모드 대신 외부 WebView 페이지가 필요한 호환성 이슈가 있을 때
+
+## 기여
+
+프로젝트 기여 방법과 개발 워크플로우는 [Contributing Guide](./CONTRIBUTING.md)를 참고하세요.
+
+## 라이선스
 
 [MIT](./LICENSE)

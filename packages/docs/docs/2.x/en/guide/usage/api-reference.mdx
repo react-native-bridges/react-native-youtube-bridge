@@ -1,0 +1,195 @@
+# API Reference
+
+## Main exports
+
+```ts
+export {
+  useYouTubeEvent,
+  useYouTubePlayer,
+  YoutubeView,
+  useYoutubeOEmbed,
+} from 'react-native-youtube-bridge';
+```
+
+## Main component and hooks
+
+### `useYouTubePlayer(source, config?)`
+
+Creates a player instance from a video ID or YouTube URL.
+
+### `YoutubeView`
+
+Renders the player instance.
+
+### `useYouTubeEvent(player, event, ...)`
+
+Subscribes to player updates.
+
+### `useYoutubeOEmbed(url?)`
+
+Fetches optional metadata for richer UI.
+
+## Player methods
+
+- `play`, `pause`, `stop`, `seekTo`
+- `setVolume`, `getVolume`, `mute`, `unMute`, `isMuted`
+- `getCurrentTime`, `getDuration`, `getVideoUrl`, `getVideoEmbedCode`
+- `getPlaybackRate`, `setPlaybackRate`, `getAvailablePlaybackRates`
+- `getPlayerState`, `getVideoLoadedFraction`
+- `loadVideoById`, `cueVideoById`, `setSize`
+
+> Async getter methods should be called after the `ready` event when you need reliable values. Before the render surface is attached, they can return `undefined`.
+
+## Events
+
+- `ready`
+- `stateChange`
+- `error`
+- `progress`
+- `playbackRateChange`
+- `playbackQualityChange`
+- `autoplayBlocked`
+- `muteChange`
+
+## Important types
+
+- `YoutubeSource`
+- `YoutubePlayerVars`
+- `YoutubeError`
+- `ProgressData`
+- `PlayerInfo`
+- `PlayerState`
+- `YoutubeViewProps`
+
+For behavior details, follow the guide pages instead of treating this page as the primary onboarding surface.
+
+## `YoutubeView` props
+
+### `player`
+
+The `YoutubePlayer` instance returned from `useYouTubePlayer`. Pass the same instance to `YoutubeView` so the view can attach to the controller used by hooks and method calls.
+
+```tsx
+const player = useYouTubePlayer('AbZH7XWDW_k');
+
+return <YoutubeView player={player} />;
+```
+
+### `width` / `height`
+
+Controls the rendered player size. Both props accept a number, `'auto'`, or a percentage string such as `'100%'`.
+
+```tsx
+<YoutubeView player={player} width="100%" height={220} />
+```
+
+### `style`
+
+Applies React Native view styles to the player container.
+
+```tsx
+<YoutubeView player={player} style={{ borderRadius: 12, overflow: 'hidden' }} />
+```
+
+### `iframeStyle` (web only)
+
+Applies CSS properties to the iframe wrapper on React Native Web.
+
+### `useInlineHtml` (iOS / Android, default: `true`)
+
+When `true`, the native WebView receives inline HTML. When `false`, the WebView loads the default hosted player page (`https://react-native-youtube-bridge.pages.dev`) or the URL supplied by `webViewUrl`.
+
+### `webViewUrl` (iOS / Android)
+
+Overrides the WebView source URL, or becomes the `baseUrl` when `useInlineHtml` is `true`.
+
+When using inline HTML, the `webViewUrl` origin must exactly match the YouTube IFrame API `origin` value. Include the port when needed, use a trailing slash for the `baseUrl`, and omit the trailing slash from the `origin`.
+
+### `webViewStyle` (iOS / Android)
+
+Applies React Native view styles directly to the underlying WebView.
+
+### `webViewProps` (iOS / Android)
+
+Passes additional props to the underlying WebView while preserving the internal props controlled by this library. `ref`, `source`, `style`, `onMessage`, `javaScriptEnabled`, and `onError` are managed internally and cannot be overridden.
+
+## `YoutubeViewProps` type
+
+[Go to source](https://github.com/react-native-bridges/react-native-youtube-bridge/blob/main/packages/react-native-youtube-bridge/src/types/youtube.ts#L17)
+
+````tsx title="YoutubeViewProps"
+/**
+ * The props for the YoutubeView component.
+ * @example
+ * ```tsx
+ * const player = useYouTubePlayer('AbZH7XWDW_k');
+ *
+ * <YoutubeView player={player} />
+ * ```
+ */
+export type YoutubeViewProps = {
+  /**
+   * The player instance.
+   * @example
+   * ```tsx
+   * const player = useYouTubePlayer('AbZH7XWDW_k');
+   *
+   * <YoutubeView player={player} />
+   * ```
+   */
+  player: YoutubePlayer;
+  /**
+   * The width of the player.
+   */
+  width?: number | 'auto' | `${number}%`;
+  /**
+   * The height of the player.
+   */
+  height?: number | 'auto' | `${number}%`;
+  /**
+   * The style of the player.
+   */
+  style?: StyleProp<ViewStyle>;
+  /**
+   * The style of the iframe wrapper.
+   * @platform web
+   */
+  iframeStyle?: CSSProperties;
+  /**
+   * If set to true, the player will use inline HTML.
+   * @remarks
+   * When false, the player will use a webview with the default URI (https://react-native-youtube-bridge.pages.dev).
+   * To use a custom webview, set `webViewUrl` to your own URL.
+   * @defaultValue true
+   * @platform ios, android
+   */
+  useInlineHtml?: boolean;
+  /**
+   * The URL for the WebView source.
+   * @remarks
+   * When `useInlineHtml` is `true`, this value is set as the `baseUrl` for HTML content.
+   * In this case, the origin of `webViewUrl` MUST exactly match the YouTube IFrame API `origin`.
+   * - Include the port when applicable (e.g. baseUrl `https://localhost:8081/` ⇄ origin `https://localhost:8081`).
+   * - Use a trailing slash on the `baseUrl`, but not on `origin` (scheme + host [+ port] only).
+   *
+   * When `useInlineHtml` is `false`, this value overrides the default URI for the WebView source (https://react-native-youtube-bridge.pages.dev).
+   * @platform ios, android
+   */
+  webViewUrl?: string;
+  /**
+   * The style of the WebView.
+   * @platform ios, android
+   */
+  webViewStyle?: StyleProp<ViewStyle>;
+  /**
+   * The props of the WebView.
+   * @platform ios, android
+   */
+  webViewProps?: Omit<
+    WebViewProps,
+    'ref' | 'source' | 'style' | 'onMessage' | 'javaScriptEnabled' | 'onError'
+  > & {
+    source?: Omit<WebViewSourceUri, 'uri'>;
+  };
+};
+````

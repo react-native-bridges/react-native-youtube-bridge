@@ -1,0 +1,53 @@
+# Inline HTML vs WebView
+
+On iOS and Android, the library supports two render strategies.
+
+## Inline HTML mode
+
+```tsx
+<YoutubeView player={player} useInlineHtml />
+```
+
+- default mode
+- loads HTML directly inside the app
+- simplest path for most apps
+
+## External WebView mode
+
+```tsx
+<YoutubeView player={player} useInlineHtml={false} webViewUrl="https://your-custom-player.com" />
+```
+
+- loads an external player page
+- useful when inline HTML runs into embed restrictions or custom hosting requirements
+- default hosted page: `https://react-native-youtube-bridge.pages.dev`
+
+## `webViewUrl` meaning
+
+- with `useInlineHtml: true`: used as the HTML `baseUrl`
+- with `useInlineHtml: false`: overrides the WebView `uri`
+
+## Exact origin rules
+
+If you customize the page origin, keep the document origin and YouTube iframe `origin` aligned.
+
+For inline HTML mode:
+
+- `webViewUrl` becomes the HTML `baseUrl`
+- the iframe `origin` must exactly match that page origin
+- include the port if one exists
+- use a trailing slash on the `baseUrl`
+- do **not** use a trailing slash on `origin`
+
+Example:
+
+- base URL: `https://localhost:8081/`
+- origin: `https://localhost:8081`
+
+## When to switch modes
+
+Prefer external WebView mode when:
+
+- inline HTML fails with `embed not allowed`
+- you need your own hosted player page
+- you need tighter control over the page environment

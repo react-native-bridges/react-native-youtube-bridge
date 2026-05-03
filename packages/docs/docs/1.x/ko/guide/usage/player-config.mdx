@@ -1,0 +1,18 @@
+# 플레이어 설정
+
+`playerVars`로 YouTube 재생 환경을 설정합니다.
+
+```tsx
+<YoutubePlayer
+  source="AbZH7XWDW_k"
+  playerVars={{
+    autoplay: true,
+    controls: true,
+    playsinline: true,
+    rel: false,
+    muted: true,
+  }}
+/>
+```
+
+주요 옵션은 `autoplay`, `controls`, `loop`, `muted`, `startTime`, `endTime`, `playsinline`, `rel`, `origin`입니다.

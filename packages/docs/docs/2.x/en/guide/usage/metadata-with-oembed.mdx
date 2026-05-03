@@ -1,0 +1,35 @@
+# Metadata with oEmbed
+
+Playback does not require oEmbed, but UI often benefits from it.
+
+`useYoutubeOEmbed` fetches metadata for a YouTube URL and returns:
+
+- `oEmbed`
+- `isLoading`
+- `error`
+
+```tsx
+const { oEmbed, isLoading, error } = useYoutubeOEmbed(
+  'https://www.youtube.com/watch?v=AbZH7XWDW_k',
+);
+```
+
+## Common fields in `oEmbed`
+
+- `title`
+- `thumbnail_url`
+- `author_name`
+- `author_url`
+- `provider_name`
+- `width`
+- `height`
+
+## Good use cases
+
+- show a video title above the player
+- render a thumbnail or preview list
+- build richer media cards around the player
+
+## Keep it optional
+
+Use it as a UI enhancement, not as a requirement for playback.

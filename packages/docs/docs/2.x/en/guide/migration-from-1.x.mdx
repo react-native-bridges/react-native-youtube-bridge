@@ -1,0 +1,270 @@
+# Migration from 1.x
+
+This guide helps you migrate from `react-native-youtube-bridge` 1.x to 2.x.
+
+The 2.x API was redesigned to be more React-friendly by using hooks, similar to modern Expo APIs such as `expo-audio` and `expo-video`.
+
+## Overview of changes
+
+| Aspect           | 1.x                            | 2.x                                |
+| ---------------- | ------------------------------ | ---------------------------------- |
+| API style        | Imperative, ref-based          | Declarative, hook-based            |
+| Main render API  | `YoutubePlayer` component      | `useYouTubePlayer` + `YoutubeView` |
+| Event handling   | Callback props                 | `useYouTubeEvent` hook             |
+| State management | Manual `useState`              | Reactive event subscriptions       |
+| Player control   | `playerRef.current.method()`   | `player.method()`                  |
+| Initial config   | Component props / `playerVars` | Hook config                        |
+
+## 1. Replace the component API
+
+### Before: 1.x
+
+```tsx
+import { YoutubePlayer } from 'react-native-youtube-bridge';
+
+<YoutubePlayer
+  ref={playerRef}
+  source="AbZH7XWDW_k"
+  height={400}
+  playerVars={{
+    autoplay: true,
+    controls: true,
+    playsinline: true,
+    rel: false,
+    muted: true,
+  }}
+  onReady={handleReady}
+  onStateChange={handleStateChange}
+  onProgress={handleProgress}
+  onError={handleError}
+/>;
+```
+
+### After: 2.x
+
+```tsx
+import { YoutubeView, useYouTubePlayer } from 'react-native-youtube-bridge';
+
+const player = useYouTubePlayer('AbZH7XWDW_k', {
+  autoplay: true,
+  controls: true,
+  playsinline: true,
+  rel: false,
+  muted: true,
+});
+
+<YoutubeView player={player} height={400} />;
+```
+
+## 2. Move player config to `useYouTubePlayer`
+
+In 1.x, most player options lived on the component through `playerVars`.
+
+```tsx
+<YoutubePlayer
+  source="AbZH7XWDW_k"
+  playerVars={{
+    autoplay: true,
+    controls: true,
+    muted: true,
+  }}
+/>
+```
+
+In 2.x, pass those options as the second argument to `useYouTubePlayer`.
+
+```tsx
+const player = useYouTubePlayer('AbZH7XWDW_k', {
+  autoplay: true,
+  controls: true,
+  muted: true,
+});
+
+<YoutubeView player={player} />;
+```
+
+Rendering props such as `height`, `width`, `style`, `iframeStyle`, `webViewStyle`, `webViewProps`, `useInlineHtml`, and `webViewUrl` stay on `YoutubeView`.
+
+## 3. Migrate events to `useYouTubeEvent`
+
+`useYouTubeEvent` supports both state-style subscriptions and callback-style side effects.
+
+### Before: 1.x callback props
+
+```tsx
+const [isPlaying, setIsPlaying] = useState(false);
+const [currentTime, setCurrentTime] = useState(0);
+const [duration, setDuration] = useState(0);
+const [playbackRate, setPlaybackRate] = useState(1);
+const [availableRates, setAvailableRates] = useState([1]);
+
+const handleReady = useCallback((playerInfo) => {
+  if (playerInfo?.availablePlaybackRates) {
+    setAvailableRates(playerInfo.availablePlaybackRates);
+  }
+}, []);
+
+const handleStateChange = useCallback((state) => {
+  setIsPlaying(state === PlayerState.PLAYING);
+}, []);
+
+const handleProgress = useCallback((progress) => {
+  setCurrentTime(progress.currentTime);
+  setDuration(progress.duration);
+}, []);
+
+const handlePlaybackRateChange = useCallback((rate) => {
+  setPlaybackRate(rate);
+}, []);
+
+<YoutubePlayer
+  source="AbZH7XWDW_k"
+  onReady={handleReady}
+  onStateChange={handleStateChange}
+  onProgress={handleProgress}
+  onPlaybackRateChange={handlePlaybackRateChange}
+/>;
+```
+
+### After: 2.x event hook
+
+```tsx
+const player = useYouTubePlayer('AbZH7XWDW_k');
+
+// State-style subscriptions
+const playbackRate = useYouTubeEvent(player, 'playbackRateChange', 1);
+const progress = useYouTubeEvent(player, 'progress', 1000);
+const state = useYouTubeEvent(player, 'stateChange');
+
+const currentTime = progress?.currentTime ?? 0;
+const duration = progress?.duration ?? 0;
+const isPlaying = state === PlayerState.PLAYING;
+
+// Callback-style side effects
+const [availableRates, setAvailableRates] = useState([1]);
+
+useYouTubeEvent(player, 'ready', (playerInfo) => {
+  if (playerInfo.availablePlaybackRates) {
+    setAvailableRates(playerInfo.availablePlaybackRates);
+  }
+});
+
+useYouTubeEvent(player, 'autoplayBlocked', () => {
+  console.log('Autoplay was blocked');
+});
+
+useYouTubeEvent(player, 'error', (error) => {
+  console.error('Player error:', error);
+});
+
+return <YoutubeView player={player} />;
+```
+
+## 4. Replace ref-based controls
+
+### Before: 1.x ref methods
+
+```tsx
+const playerRef = useRef<PlayerControls>(null);
+
+const play = () => playerRef.current?.play();
+const pause = () => playerRef.current?.pause();
+const stop = () => playerRef.current?.stop();
+const seekTo = (time: number) => playerRef.current?.seekTo(time, true);
+const setVolume = (volume: number) => playerRef.current?.setVolume(volume);
+const mute = () => playerRef.current?.mute();
+const unMute = () => playerRef.current?.unMute();
+
+const getPlayerInfo = async () => {
+  const currentTime = await playerRef.current?.getCurrentTime();
+  const duration = await playerRef.current?.getDuration();
+  const state = await playerRef.current?.getPlayerState();
+};
+
+<YoutubePlayer ref={playerRef} source="AbZH7XWDW_k" />;
+```
+
+### After: 2.x direct player methods
+
+```tsx
+const player = useYouTubePlayer('AbZH7XWDW_k');
+
+const play = () => player.play();
+const pause = () => player.pause();
+const stop = () => player.stop();
+const seekTo = (time: number) => player.seekTo(time, true);
+const setVolume = (volume: number) => player.setVolume(volume);
+const mute = () => player.mute();
+const unMute = () => player.unMute();
+
+const getPlayerInfo = async () => {
+  const currentTime = await player.getCurrentTime();
+  const duration = await player.getDuration();
+  const state = await player.getPlayerState();
+};
+
+<YoutubeView player={player} />;
+```
+
+> Async getter methods should be called after the `ready` event when you need reliable values. Before `YoutubeView` attaches the underlying controller, a getter can return `undefined`.
+
+## 5. Update source handling
+
+Both versions support raw video IDs and YouTube URLs, but 2.x passes source to `useYouTubePlayer` instead of `YoutubePlayer`.
+
+```tsx
+const playerA = useYouTubePlayer('AbZH7XWDW_k');
+const playerB = useYouTubePlayer({ videoId: 'AbZH7XWDW_k' });
+const playerC = useYouTubePlayer({ url: 'https://youtube.com/watch?v=AbZH7XWDW_k' });
+```
+
+## 6. Rendering mode migration
+
+The rendering-mode props still belong to the render surface, so move them to `YoutubeView`.
+
+### Before: 1.x
+
+```tsx
+<YoutubePlayer
+  source="AbZH7XWDW_k"
+  useInlineHtml={false}
+  webViewUrl="https://your-custom-player.com"
+/>
+```
+
+### After: 2.x
+
+```tsx
+const player = useYouTubePlayer('AbZH7XWDW_k');
+
+<YoutubeView player={player} useInlineHtml={false} webViewUrl="https://your-custom-player.com" />;
+```
+
+## Migration checklist
+
+### Required changes
+
+- [ ] Replace `YoutubePlayer` imports with `YoutubeView` and `useYouTubePlayer`
+- [ ] Move `source` from the component to `useYouTubePlayer(source)`
+- [ ] Move `playerVars` into the `useYouTubePlayer(source, config)` second argument
+- [ ] Replace event handler props with `useYouTubeEvent` hooks
+- [ ] Remove `useRef<PlayerControls>` for normal playback control
+- [ ] Replace `playerRef.current?.method()` with `player.method()`
+- [ ] Keep render-only props such as `height`, `width`, styles, and WebView options on `YoutubeView`
+
+### Optional improvements
+
+- [ ] Replace manual `useState` mirrors with state-style `useYouTubeEvent` subscriptions
+- [ ] Add callback-style `useYouTubeEvent(player, 'error', ...)` error handling
+- [ ] Use `muteChange` if your UI needs reactive muted state
+- [ ] Remove now-unnecessary callback memoization used only for 1.x prop stability
+
+## Breaking changes summary
+
+- `YoutubePlayer` was replaced by `useYouTubePlayer` + `YoutubeView`
+- Event props were removed in favor of `useYouTubeEvent`
+- Ref-based control moved to direct player methods
+- `playerVars` moved from component props to hook config
+- Manual state management can often be replaced with reactive event values
+
+Most apps can migrate one screen at a time: create the player with `useYouTubePlayer`, render it with `YoutubeView`, then move events and ref calls into hooks/direct player methods.

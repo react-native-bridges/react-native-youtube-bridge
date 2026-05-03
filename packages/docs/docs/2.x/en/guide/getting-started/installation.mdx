@@ -1,0 +1,35 @@
+import { PackageManagerTabs } from '@rspress/core/theme';
+
+# Installation
+
+Install the main package:
+
+<PackageManagerTabs command="install react-native-youtube-bridge" />
+
+## Peer dependency
+
+`react-native-youtube-bridge` uses `react-native-webview` on iOS and Android.
+
+Install it in your app if it is not already present:
+
+<PackageManagerTabs command="install react-native-webview" />
+
+## Minimum expectations
+
+| Package                | Version    |
+| ---------------------- | ---------- |
+| `react`                | `>=16.8.0` |
+| `react-native`         | `>=0.60.0` |
+| `react-native-webview` | `>=11.0.0` |
+
+## What you get after install
+
+The main package exports:
+
+- `useYouTubePlayer`
+- `useYouTubeEvent`
+- `YoutubeView`
+- public event and config types
+- `useYoutubeOEmbed`
+
+If you only need the normal player flow, you do **not** need to install `@react-native-youtube-bridge/web`.

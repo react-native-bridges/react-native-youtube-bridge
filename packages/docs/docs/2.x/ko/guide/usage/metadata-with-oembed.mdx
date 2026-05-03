@@ -1,0 +1,31 @@
+# oEmbed 메타데이터
+
+재생 자체에는 필요 없지만, UI를 더 풍부하게 만들 때 유용합니다.
+
+`useYoutubeOEmbed`는 YouTube URL에 대한 메타데이터를 가져오며 아래 값을 반환합니다.
+
+- `oEmbed`
+- `isLoading`
+- `error`
+
+```tsx
+const { oEmbed, isLoading, error } = useYoutubeOEmbed(
+  'https://www.youtube.com/watch?v=AbZH7XWDW_k',
+);
+```
+
+## 자주 쓰는 `oEmbed` 필드
+
+- `title`
+- `thumbnail_url`
+- `author_name`
+- `author_url`
+- `provider_name`
+- `width`
+- `height`
+
+## 활용 예시
+
+- 플레이어 위에 비디오 제목 표시
+- 썸네일/미리보기 카드 구성
+- 더 풍부한 미디어 목록 UI 구성

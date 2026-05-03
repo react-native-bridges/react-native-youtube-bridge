@@ -1,0 +1,18 @@
+# Metadata with oEmbed
+
+`useYoutubeOEmbed` fetches optional YouTube metadata for richer UI.
+
+```tsx
+import { useYoutubeOEmbed } from 'react-native-youtube-bridge';
+
+function App() {
+  const { oEmbed, isLoading, error } = useYoutubeOEmbed(
+    'https://www.youtube.com/watch?v=AbZH7XWDW_k',
+  );
+
+  if (isLoading) return null;
+  if (error) return null;
+
+  return <Text>{oEmbed?.title}</Text>;
+}
+```

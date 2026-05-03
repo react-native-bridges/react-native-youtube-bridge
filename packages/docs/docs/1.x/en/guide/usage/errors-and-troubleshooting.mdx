@@ -1,0 +1,39 @@
+# Errors and Troubleshooting
+
+This page exists so switching from the 2.x troubleshooting page to the 1.x docs does not land on a 404.
+
+## Embed not allowed or blank player
+
+If a video does not load in inline HTML mode, try WebView mode with the hosted player page.
+
+```tsx
+<YoutubePlayer
+  source="AbZH7XWDW_k"
+  useInlineHtml={false}
+  webViewUrl="https://react-native-youtube-bridge.pages.dev"
+/>
+```
+
+## Event callbacks behave unexpectedly
+
+Wrap event callbacks with `useCallback` so the player does not receive unstable callback references every render.
+
+```tsx
+const handleReady = useCallback(() => {
+  console.log('Player is ready');
+}, []);
+
+<YoutubePlayer source="AbZH7XWDW_k" onReady={handleReady} />;
+```
+
+## Progress does not update
+
+Progress tracking is disabled unless `progressInterval` is provided with a positive interval.
+
+```tsx
+<YoutubePlayer source="AbZH7XWDW_k" progressInterval={1000} onProgress={handleProgress} />
+```
+
+## Prefer 2.x for new fixes
+
+1.x is a legacy API. If you are starting a new integration or can migrate safely, use the [2.x troubleshooting guide](/guide/usage/errors-and-troubleshooting.html) and the [migration guide](/guide/migration-from-1.x.html).

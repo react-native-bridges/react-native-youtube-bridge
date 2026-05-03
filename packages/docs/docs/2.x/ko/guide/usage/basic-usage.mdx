@@ -1,0 +1,23 @@
+# 기본 사용법
+
+## 플레이어 만들기
+
+```tsx
+import { YoutubeView, useYouTubePlayer } from 'react-native-youtube-bridge';
+
+function App() {
+  const player = useYouTubePlayer('AbZH7XWDW_k');
+
+  return <YoutubeView player={player} />;
+}
+```
+
+## source 입력 형태
+
+```tsx
+useYouTubePlayer('AbZH7XWDW_k');
+useYouTubePlayer({ videoId: 'AbZH7XWDW_k' });
+useYouTubePlayer({ url: 'https://www.youtube.com/watch?v=AbZH7XWDW_k' });
+```
+
+source가 유효하지 않으면 에러 이벤트가 발생합니다.

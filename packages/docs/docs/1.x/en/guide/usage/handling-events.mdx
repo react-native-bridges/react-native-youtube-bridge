@@ -1,0 +1,46 @@
+# Handling Events
+
+In 1.x, player events are callback props on `YoutubePlayer`.
+
+> Wrap callbacks with `useCallback` for stable references and better performance.
+
+```tsx
+import { useCallback } from 'react';
+import { YoutubePlayer, PlayerState } from 'react-native-youtube-bridge';
+
+function App() {
+  const handleReady = useCallback(() => {
+    console.log('Player is ready');
+  }, []);
+
+  const handleStateChange = useCallback((state: PlayerState) => {
+    console.log('state', state);
+  }, []);
+
+  return (
+    <YoutubePlayer
+      source="AbZH7XWDW_k"
+      onReady={handleReady}
+      onStateChange={handleStateChange}
+      onError={(error) => console.error(error)}
+      onPlaybackRateChange={(rate) => console.log('rate', rate)}
+      onPlaybackQualityChange={(quality) => console.log('quality', quality)}
+      onAutoplayBlocked={() => console.log('autoplay blocked')}
+    />
+  );
+}
+```
+
+## Progress
+
+Use `progressInterval` with `onProgress` to receive playback progress.
+
+```tsx
+<YoutubePlayer
+  source="AbZH7XWDW_k"
+  progressInterval={1000}
+  onProgress={(progress) => {
+    console.log(progress.currentTime, progress.duration, progress.loadedFraction);
+  }}
+/>
+```

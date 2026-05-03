@@ -1,0 +1,51 @@
+# Errors and Troubleshooting
+
+## Invalid source
+
+If the player cannot resolve a valid video ID from the source, it emits an error.
+
+Use one of these formats:
+
+- `'AbZH7XWDW_k'`
+- `{ videoId: 'AbZH7XWDW_k' }`
+- `{ url: 'https://www.youtube.com/watch?v=AbZH7XWDW_k' }`
+
+## Common error codes
+
+| Code   | Meaning                         |
+| ------ | ------------------------------- |
+| `2`    | Invalid YouTube parameter value |
+| `5`    | HTML5 player error              |
+| `100`  | Video not found or private      |
+| `101`  | Embedded playback not allowed   |
+| `150`  | Embedded playback restricted    |
+| `1000` | Failed to parse WebView message |
+| `1001` | Native WebView loading error    |
+| `1002` | Invalid YouTube video ID        |
+| `1003` | Failed to load YouTube API      |
+| `1004` | Unknown bridge/player error     |
+
+## Autoplay blocked
+
+Some environments block autoplay when audio is enabled. Try starting muted if autoplay behavior is important. You can also listen to `autoplayBlocked` and react in the UI.
+
+## `embed not allowed`
+
+If inline HTML mode fails because YouTube embed restrictions are triggered:
+
+1. switch to `useInlineHtml={false}`
+2. use the default hosted player page or your own custom page
+3. verify the target `origin` matches the hosted page origin
+
+## Origin mismatch issues
+
+If you use a custom `webViewUrl`, keep the page origin and iframe `origin` value aligned. Mismatched origins can break iframe behavior even if the page itself loads.
+
+## WebView loading problems
+
+If the native WebView fails to load:
+
+- verify the URL is reachable
+- verify your hosted page is serving the correct player content
+- confirm the passed source URL and origin settings are correct
+- inspect whether native `webViewProps.source.headers` or hosting rules are interfering with page load

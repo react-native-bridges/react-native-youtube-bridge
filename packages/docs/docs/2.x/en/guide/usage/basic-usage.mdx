@@ -1,0 +1,46 @@
+# Basic Usage
+
+## Create a player
+
+```tsx
+import { YoutubeView, useYouTubePlayer } from 'react-native-youtube-bridge';
+
+function App() {
+  const player = useYouTubePlayer('AbZH7XWDW_k');
+
+  return <YoutubeView player={player} />;
+}
+```
+
+## Source input forms
+
+`useYouTubePlayer` accepts:
+
+```tsx
+useYouTubePlayer('AbZH7XWDW_k');
+useYouTubePlayer({ videoId: 'AbZH7XWDW_k' });
+useYouTubePlayer({ url: 'https://www.youtube.com/watch?v=AbZH7XWDW_k' });
+```
+
+If the source is invalid, the player emits an error event.
+
+## Player lifecycle
+
+The hook owns the underlying player instance for you.
+
+- create the player once in component scope
+- pass it to `YoutubeView`
+- reuse the same instance for events and controls
+
+## Minimal configured example
+
+```tsx
+const player = useYouTubePlayer('AbZH7XWDW_k', {
+  autoplay: true,
+  controls: true,
+  playsinline: true,
+  rel: false,
+});
+
+return <YoutubeView player={player} />;
+```

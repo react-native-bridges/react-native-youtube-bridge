@@ -1,0 +1,25 @@
+import { PackageManagerTabs } from '@rspress/core/theme';
+
+# Installation
+
+:::warning Legacy version
+Version 1.x is the legacy API. New projects should install the latest 2.x version unless they specifically need to maintain an existing 1.x integration.
+:::
+
+Install the 1.x package:
+
+<PackageManagerTabs command="install react-native-youtube-bridge@1.x" />
+
+## Peer dependency
+
+`react-native-youtube-bridge` uses `react-native-webview` on iOS and Android.
+
+<PackageManagerTabs command="install react-native-webview" />
+
+## Minimum expectations
+
+| Package                | Version    |
+| ---------------------- | ---------- |
+| `react`                | `>=16.8.0` |
+| `react-native`         | `>=0.60.0` |
+| `react-native-webview` | `>=11.0.0` |

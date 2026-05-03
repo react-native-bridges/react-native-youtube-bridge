@@ -1,0 +1,97 @@
+# 이벤트 처리
+
+`useYouTubeEvent`는 reactive state 구독과 callback 기반 side effect를 모두 지원합니다.
+
+## 1. state 방식
+
+```tsx
+const playbackRate = useYouTubeEvent(player, 'playbackRateChange', 1);
+const isMuted = useYouTubeEvent(player, 'muteChange', false);
+const progress = useYouTubeEvent(player, 'progress', 1000);
+```
+
+## 2. callback 방식
+
+```tsx
+useYouTubeEvent(player, 'ready', (playerInfo) => {
+  console.log('ready', playerInfo);
+});
+
+useYouTubeEvent(player, 'error', (error) => {
+  console.error(error);
+});
+
+useYouTubeEvent(player, 'autoplayBlocked', () => {
+  console.log('autoplay blocked');
+});
+```
+
+## callback dependency array
+
+callback가 바뀌는 값에 의존한다면 네 번째 인자로 dependency array를 전달하세요.
+
+```tsx
+useYouTubeEvent(
+  player,
+  'stateChange',
+  (state) => {
+    console.log('state', state, analyticsLabel);
+  },
+  [analyticsLabel],
+);
+```
+
+## 이벤트 목록
+
+| 이벤트                  | payload           | 설명                                                           |
+| ----------------------- | ----------------- | -------------------------------------------------------------- |
+| `ready`                 | `PlayerInfo`      | 첫 전체 플레이어 스냅샷                                        |
+| `stateChange`           | `PlayerState`     | `UNSTARTED`, `PLAYING`, `PAUSED`, `BUFFERING`, `ENDED`, `CUED` |
+| `error`                 | `YoutubeError`    | YouTube 또는 bridge 레벨 에러                                  |
+| `progress`              | `ProgressData`    | `currentTime`, `duration`, `percentage`, `loadedFraction`      |
+| `playbackRateChange`    | `number`          | 현재 재생 속도                                                 |
+| `playbackQualityChange` | `PlaybackQuality` | 현재 화질                                                      |
+| `autoplayBlocked`       | `undefined`       | 브라우저/플랫폼 autoplay 제한                                  |
+| `muteChange`            | `boolean`         | 현재 음소거 상태                                               |
+
+## `ready` payload
+
+`ready`에서는 아래 같은 초기 정보를 받을 수 있습니다.
+
+- `availablePlaybackRates`
+- `availableQualityLevels`
+- `currentTime`
+- `duration`
+- `muted`
+- `playbackQuality`
+- `playbackRate`
+- `playerState`
+- `size`
+- `volume`
+
+## `progress` payload
+
+```ts
+{
+  currentTime: number;
+  duration: number;
+  percentage: number;
+  loadedFraction: number;
+}
+```
+
+### progress interval 동작
+
+- 세 번째 인자는 밀리초 단위 interval
+- 기본값은 `1000`
+- interval 기반 업데이트가 필요 없으면 `0`
+
+```tsx
+const progress = useYouTubeEvent(player, 'progress', 500);
+```
+
+`seekTo()` 이후에도 progress가 한 번 더 빠르게 갱신되어 UI가 바로 따라오도록 설계되어 있습니다.
+
+## mute tracking 주의점
+
+`muteChange`를 구독할 때만 muted tracking이 활성화됩니다.
