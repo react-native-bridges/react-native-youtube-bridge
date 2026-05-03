@@ -1,27 +1,265 @@
 # 1.x에서 마이그레이션
 
-2.x는 컴포넌트 + ref 방식 대신 Hook + View 방식으로 바뀌었습니다.
+이 문서는 `react-native-youtube-bridge` 1.x에서 2.x로 이동하는 방법을 설명합니다.
 
-| 1.x                      | 2.x                                |
-| ------------------------ | ---------------------------------- |
-| `YoutubePlayer` 컴포넌트 | `useYouTubePlayer` + `YoutubeView` |
-| callback props           | `useYouTubeEvent`                  |
-| `ref.current?.play()`    | `player.play()`                    |
+2.x API는 `expo-audio`, `expo-video` 같은 현대적인 Expo API처럼 Hook 중심으로 다시 설계되었습니다.
 
-## 이전 방식
+## 변경 사항 개요
+
+| 항목          | 1.x                           | 2.x                                |
+| ------------- | ----------------------------- | ---------------------------------- |
+| API 스타일    | imperative, ref 기반          | declarative, hook 기반             |
+| 렌더링 API    | `YoutubePlayer` 컴포넌트      | `useYouTubePlayer` + `YoutubeView` |
+| 이벤트 처리   | callback props                | `useYouTubeEvent` hook             |
+| 상태 관리     | 직접 `useState` 관리          | reactive event subscription        |
+| 플레이어 제어 | `playerRef.current.method()`  | `player.method()`                  |
+| 초기 설정     | 컴포넌트 props / `playerVars` | hook config                        |
+
+## 1. 컴포넌트 API 교체
+
+### 이전 방식: 1.x
 
 ```tsx
 import { YoutubePlayer } from 'react-native-youtube-bridge';
 
-<YoutubePlayer source="AbZH7XWDW_k" />;
+<YoutubePlayer
+  ref={playerRef}
+  source="AbZH7XWDW_k"
+  height={400}
+  playerVars={{
+    autoplay: true,
+    controls: true,
+    playsinline: true,
+    rel: false,
+    muted: true,
+  }}
+  onReady={handleReady}
+  onStateChange={handleStateChange}
+  onProgress={handleProgress}
+  onError={handleError}
+/>;
 ```
 
-## 현재 방식
+### 현재 방식: 2.x
 
 ```tsx
 import { YoutubeView, useYouTubePlayer } from 'react-native-youtube-bridge';
 
-const player = useYouTubePlayer('AbZH7XWDW_k');
+const player = useYouTubePlayer('AbZH7XWDW_k', {
+  autoplay: true,
+  controls: true,
+  playsinline: true,
+  rel: false,
+  muted: true,
+});
+
+<YoutubeView player={player} height={400} />;
+```
+
+## 2. 플레이어 설정을 `useYouTubePlayer`로 이동
+
+1.x에서는 대부분의 플레이어 옵션을 컴포넌트의 `playerVars`로 전달했습니다.
+
+```tsx
+<YoutubePlayer
+  source="AbZH7XWDW_k"
+  playerVars={{
+    autoplay: true,
+    controls: true,
+    muted: true,
+  }}
+/>
+```
+
+2.x에서는 같은 옵션을 `useYouTubePlayer`의 두 번째 인자로 전달합니다.
+
+```tsx
+const player = useYouTubePlayer('AbZH7XWDW_k', {
+  autoplay: true,
+  controls: true,
+  muted: true,
+});
 
 <YoutubeView player={player} />;
 ```
+
+`height`, `width`, `style`, `iframeStyle`, `webViewStyle`, `webViewProps`, `useInlineHtml`, `webViewUrl` 같은 렌더링 관련 prop은 `YoutubeView`에 남겨둡니다.
+
+## 3. 이벤트를 `useYouTubeEvent`로 이동
+
+`useYouTubeEvent`는 state-style 구독과 callback-style side effect를 모두 지원합니다.
+
+### 이전 방식: 1.x callback props
+
+```tsx
+const [isPlaying, setIsPlaying] = useState(false);
+const [currentTime, setCurrentTime] = useState(0);
+const [duration, setDuration] = useState(0);
+const [playbackRate, setPlaybackRate] = useState(1);
+const [availableRates, setAvailableRates] = useState([1]);
+
+const handleReady = useCallback((playerInfo) => {
+  if (playerInfo?.availablePlaybackRates) {
+    setAvailableRates(playerInfo.availablePlaybackRates);
+  }
+}, []);
+
+const handleStateChange = useCallback((state) => {
+  setIsPlaying(state === PlayerState.PLAYING);
+}, []);
+
+const handleProgress = useCallback((progress) => {
+  setCurrentTime(progress.currentTime);
+  setDuration(progress.duration);
+}, []);
+
+<YoutubePlayer
+  source="AbZH7XWDW_k"
+  onReady={handleReady}
+  onStateChange={handleStateChange}
+  onProgress={handleProgress}
+/>;
+```
+
+### 현재 방식: 2.x event hook
+
+```tsx
+const player = useYouTubePlayer('AbZH7XWDW_k');
+
+// State-style 구독
+const playbackRate = useYouTubeEvent(player, 'playbackRateChange', 1);
+const progress = useYouTubeEvent(player, 'progress', 1000);
+const state = useYouTubeEvent(player, 'stateChange');
+
+const currentTime = progress?.currentTime ?? 0;
+const duration = progress?.duration ?? 0;
+const isPlaying = state === PlayerState.PLAYING;
+
+// Callback-style side effect
+const [availableRates, setAvailableRates] = useState([1]);
+
+useYouTubeEvent(player, 'ready', (playerInfo) => {
+  if (playerInfo.availablePlaybackRates) {
+    setAvailableRates(playerInfo.availablePlaybackRates);
+  }
+});
+
+useYouTubeEvent(player, 'autoplayBlocked', () => {
+  console.log('Autoplay was blocked');
+});
+
+useYouTubeEvent(player, 'error', (error) => {
+  console.error('Player error:', error);
+});
+
+return <YoutubeView player={player} />;
+```
+
+## 4. ref 기반 제어를 직접 메서드 호출로 교체
+
+### 이전 방식: 1.x ref methods
+
+```tsx
+const playerRef = useRef<PlayerControls>(null);
+
+const play = () => playerRef.current?.play();
+const pause = () => playerRef.current?.pause();
+const stop = () => playerRef.current?.stop();
+const seekTo = (time: number) => playerRef.current?.seekTo(time, true);
+const setVolume = (volume: number) => playerRef.current?.setVolume(volume);
+const mute = () => playerRef.current?.mute();
+const unMute = () => playerRef.current?.unMute();
+
+const getPlayerInfo = async () => {
+  const currentTime = await playerRef.current?.getCurrentTime();
+  const duration = await playerRef.current?.getDuration();
+  const state = await playerRef.current?.getPlayerState();
+};
+
+<YoutubePlayer ref={playerRef} source="AbZH7XWDW_k" />;
+```
+
+### 현재 방식: 2.x direct player methods
+
+```tsx
+const player = useYouTubePlayer('AbZH7XWDW_k');
+
+const play = () => player.play();
+const pause = () => player.pause();
+const stop = () => player.stop();
+const seekTo = (time: number) => player.seekTo(time, true);
+const setVolume = (volume: number) => player.setVolume(volume);
+const mute = () => player.mute();
+const unMute = () => player.unMute();
+
+const getPlayerInfo = async () => {
+  const currentTime = await player.getCurrentTime();
+  const duration = await player.getDuration();
+  const state = await player.getPlayerState();
+};
+
+<YoutubeView player={player} />;
+```
+
+> 비동기 getter 값을 안정적으로 사용해야 한다면 `ready` 이벤트 이후에 호출하세요. `YoutubeView`가 내부 controller를 연결하기 전에는 getter가 `undefined`를 반환할 수 있습니다.
+
+## 5. source 처리 방식 업데이트
+
+두 버전 모두 비디오 ID와 YouTube URL을 지원하지만, 2.x에서는 `source`를 `YoutubePlayer`가 아니라 `useYouTubePlayer`에 전달합니다.
+
+```tsx
+const playerA = useYouTubePlayer('AbZH7XWDW_k');
+const playerB = useYouTubePlayer({ videoId: 'AbZH7XWDW_k' });
+const playerC = useYouTubePlayer({ url: 'https://youtube.com/watch?v=AbZH7XWDW_k' });
+```
+
+## 6. 렌더링 모드 마이그레이션
+
+렌더링 모드 관련 prop은 렌더 표면에 속하므로 `YoutubeView`로 이동합니다.
+
+### 이전 방식: 1.x
+
+```tsx
+<YoutubePlayer
+  source="AbZH7XWDW_k"
+  useInlineHtml={false}
+  webViewUrl="https://your-custom-player.com"
+/>
+```
+
+### 현재 방식: 2.x
+
+```tsx
+const player = useYouTubePlayer('AbZH7XWDW_k');
+
+<YoutubeView player={player} useInlineHtml={false} webViewUrl="https://your-custom-player.com" />;
+```
+
+## 마이그레이션 체크리스트
+
+### 필수 변경
+
+- [ ] `YoutubePlayer` import를 `YoutubeView`와 `useYouTubePlayer`로 교체
+- [ ] `source`를 컴포넌트에서 `useYouTubePlayer(source)`로 이동
+- [ ] `playerVars`를 `useYouTubePlayer(source, config)`의 두 번째 인자로 이동
+- [ ] 이벤트 handler props를 `useYouTubeEvent` hook으로 교체
+- [ ] 일반적인 재생 제어용 `useRef<PlayerControls>` 제거
+- [ ] `playerRef.current?.method()`를 `player.method()`로 교체
+- [ ] `height`, `width`, 스타일, WebView 옵션 같은 렌더링 prop은 `YoutubeView`에 유지
+
+### 선택 개선
+
+- [ ] 수동 `useState` 미러링을 state-style `useYouTubeEvent` 구독으로 단순화
+- [ ] `useYouTubeEvent(player, 'error', ...)`로 에러 처리 추가
+- [ ] muted 상태 UI가 필요하면 `muteChange` 사용
+- [ ] 1.x prop 안정성을 위해서만 쓰던 불필요한 callback memoization 제거
+
+## Breaking changes 요약
+
+- `YoutubePlayer`가 `useYouTubePlayer` + `YoutubeView`로 대체되었습니다.
+- 이벤트 prop은 제거되고 `useYouTubeEvent`를 사용합니다.
+- ref 기반 제어는 직접 player method 호출로 바뀌었습니다.
+- `playerVars`는 컴포넌트 prop에서 hook config로 이동했습니다.
+- 직접 관리하던 상태는 reactive event 값으로 대체할 수 있습니다.
+
+대부분의 앱은 화면 단위로 천천히 마이그레이션할 수 있습니다. 먼저 `useYouTubePlayer`로 player를 만들고 `YoutubeView`로 렌더링한 뒤, 이벤트와 ref 호출을 hook/direct method 방식으로 옮기면 됩니다.

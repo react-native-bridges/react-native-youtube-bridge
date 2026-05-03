@@ -1,13 +1,25 @@
 # 1.x Overview
 
-Version 1.x used a component-driven API centered on `YoutubePlayer` and callback props.
+<div style={{ width: '100%', alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
+  <img
+    src="https://raw.githubusercontent.com/react-native-bridges/react-native-youtube-bridge/main/assets/example.gif"
+    width="600"
+    alt="Demo of react-native-youtube-bridge"
+  />
+</div>
 
-```tsx
-import { YoutubePlayer } from 'react-native-youtube-bridge';
+Version 1.x is the legacy component-based API for `react-native-youtube-bridge`.
 
-function App() {
-  return <YoutubePlayer source="AbZH7XWDW_k" />;
-}
-```
+It wraps the [YouTube IFrame Player API](https://developers.google.com/youtube/iframe_api_reference) for React Native apps and uses a single `YoutubePlayer` component with callback props and an imperative ref.
 
-Use this lane only if you are maintaining a 1.x integration. For new work, move to the 2.x hook-based API.
+## Key features
+
+- TypeScript support
+- iOS, Android, and Web support
+- New Architecture support
+- No native YouTube player module dependency
+- YouTube IFrame Player API feature support
+- Expo-friendly setup
+- Inline HTML and external WebView rendering modes
+
+Use this version lane when maintaining an existing 1.x integration. For new work, prefer the 2.x hook-based docs.

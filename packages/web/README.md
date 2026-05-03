@@ -5,56 +5,25 @@
 > [!note]
 > Full Rspress docs source for the main library now lives in [../docs](../docs).
 
-A YouTube player library for external WebView implementation, designed to work seamlessly with [`react-native-youtube-bridge`](https://github.com/react-native-bridges/react-native-youtube-bridge) in React Native environments.
+A YouTube player package for hosting an external WebView player page that works with [`react-native-youtube-bridge`](https://github.com/react-native-bridges/react-native-youtube-bridge).
 
 ## Overview
 
-This library is useful when you want to implement external WebView functionality through custom web pages for playing YouTube videos in React Native applications.
+Use this package only when you want to host your own external player page and pass that page to the main library through `YoutubeView`'s `webViewUrl` prop.
 
-## Use Cases
-
-In React Native environments, you can use YouTube iframe in WebView through two different approaches:
+The main React Native app still uses `react-native-youtube-bridge`:
 
 ```tsx
-function App() {
-  return (
-    <>
-      {/* Method 1: Using inline HTML (default) */}
-      <YoutubePlayer source={source} useInlineHtml />
+import { YoutubeView, useYouTubePlayer } from 'react-native-youtube-bridge';
 
-      {/* Method 2: Using external WebView page */}
-      <YoutubePlayer
-        source={source}
-        useInlineHtml={false}
-        // Default: https://react-native-youtube-bridge.pages.dev
-        webViewUrl="https://your-custom-player.com"
-      />
-    </>
-  );
+function App() {
+  const player = useYouTubePlayer('AbZH7XWDW_k');
+
+  return <YoutubeView player={player} useInlineHtml={false} webViewUrl="https://your-custom-player.com" />;
 }
 ```
 
-Currently, the default static site (https://react-native-youtube-bridge.pages.dev) is being used as the external WebView URL.
-
-If you want to use your own custom player page, simply pass the URL to the `webViewUrl` property. You can easily build a React-based custom player page using `@react-native-youtube-bridge/web`.
-
-## Installation
-
-```bash
-# npm
-npm install @react-native-youtube-bridge/web
-
-# pnpm
-pnpm add @react-native-youtube-bridge/web
-
-# yarn
-yarn add @react-native-youtube-bridge/web
-
-# bun
-bun add @react-native-youtube-bridge/web
-```
-
-## Usage
+The hosted page uses `@react-native-youtube-bridge/web`:
 
 ```tsx
 import { YoutubePlayer } from '@react-native-youtube-bridge/web';
@@ -65,6 +34,33 @@ function CustomPlayerPage() {
 
 export default CustomPlayerPage;
 ```
+
+## Query-string contract
+
+When `YoutubeView` loads your hosted page, it appends the player configuration to the URL query string. The stock `YoutubePlayer` component reads these values automatically:
+
+- `videoId`
+- `startTime`
+- `endTime`
+- `origin`
+- `autoplay`
+- `controls`
+- `loop`
+- `muted`
+- `playsinline`
+- `rel`
+
+## Installation
+
+```bash
+npm install @react-native-youtube-bridge/web
+```
+
+## When this is worth it
+
+- custom hosting requirements
+- origin-specific iframe needs
+- apps that need to avoid inline HTML mode for compatibility reasons
 
 ## Contributing
 

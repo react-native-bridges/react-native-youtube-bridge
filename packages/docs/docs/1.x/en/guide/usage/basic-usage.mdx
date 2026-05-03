@@ -1,0 +1,21 @@
+# Basic Usage
+
+Version 1.x centers on the `YoutubePlayer` component.
+
+```tsx
+import { YoutubePlayer } from 'react-native-youtube-bridge';
+
+function App() {
+  return <YoutubePlayer source="AbZH7XWDW_k" height={240} width="100%" />;
+}
+```
+
+## Source input
+
+`source` can be a video ID, a `{ videoId }` object, or a `{ url }` object.
+
+```tsx
+<YoutubePlayer source="AbZH7XWDW_k" />
+<YoutubePlayer source={{ videoId: 'AbZH7XWDW_k' }} />
+<YoutubePlayer source={{ url: 'https://youtube.com/watch?v=AbZH7XWDW_k' }} />
+```

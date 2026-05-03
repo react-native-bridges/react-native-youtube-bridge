@@ -1,13 +1,25 @@
 # 1.x 개요
 
-1.x는 `YoutubePlayer` 컴포넌트와 callback props 중심의 API였습니다.
+<div style={{ width: '100%', alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
+  <img
+    src="https://raw.githubusercontent.com/react-native-bridges/react-native-youtube-bridge/main/assets/example.gif"
+    width="600"
+    alt="react-native-youtube-bridge 데모"
+  />
+</div>
 
-```tsx
-import { YoutubePlayer } from 'react-native-youtube-bridge';
+1.x는 `YoutubePlayer` 컴포넌트, callback props, imperative ref를 중심으로 한 레거시 API입니다.
 
-function App() {
-  return <YoutubePlayer source="AbZH7XWDW_k" />;
-}
-```
+`react-native-youtube-bridge`는 [YouTube IFrame Player API](https://developers.google.com/youtube/iframe_api_reference)를 React Native 앱에서 쉽게 사용할 수 있게 감싼 라이브러리입니다.
 
-새 작업에는 2.x Hook 기반 API를 권장합니다.
+## 주요 특징
+
+- TypeScript 지원
+- iOS, Android, Web 지원
+- New Architecture 지원
+- 네이티브 YouTube 플레이어 모듈 불필요
+- YouTube IFrame Player API 기능 지원
+- Expo 친화적 구성
+- Inline HTML / 외부 WebView 렌더링 모드
+
+기존 1.x 통합을 유지보수할 때 이 버전 문서를 사용하세요. 새 작업에는 2.x Hook 기반 API를 권장합니다.

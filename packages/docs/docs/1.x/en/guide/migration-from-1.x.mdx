@@ -1,13 +1,62 @@
 # Migrate to 2.x
 
-The 2.x API replaces the old component/ref model with:
+Version 2.x replaces the old component/ref model with a hook-and-view model.
 
-- `useYouTubePlayer`
-- `YoutubeView`
-- `useYouTubeEvent`
+> [!tip]
+> This page is a short migration note for readers inside the 1.x docs. For the full and latest migration guide, see the <a href="/guide/migration-from-1.x.html">2.x migration from 1.x guide</a>.
 
-Recommended migration order:
+| 1.x                         | 2.x                                |
+| --------------------------- | ---------------------------------- |
+| `YoutubePlayer` component   | `useYouTubePlayer` + `YoutubeView` |
+| callback props              | `useYouTubeEvent`                  |
+| `ref.current?.play()`       | `player.play()`                    |
+| component props hold config | hook config holds player options   |
 
-1. replace `YoutubePlayer` with `useYouTubePlayer` + `YoutubeView`
-2. move callback props to `useYouTubeEvent`
-3. move ref method calls to `player.method()` calls
+## Component replacement
+
+Before:
+
+```tsx
+import { YoutubePlayer } from 'react-native-youtube-bridge';
+
+<YoutubePlayer source="AbZH7XWDW_k" />;
+```
+
+After:
+
+```tsx
+import { YoutubeView, useYouTubePlayer } from 'react-native-youtube-bridge';
+
+const player = useYouTubePlayer('AbZH7XWDW_k');
+
+<YoutubeView player={player} />;
+```
+
+## Event migration
+
+Before:
+
+```tsx
+<YoutubePlayer onReady={handleReady} onStateChange={handleStateChange} />
+```
+
+After:
+
+```tsx
+useYouTubeEvent(player, 'ready', handleReady);
+useYouTubeEvent(player, 'stateChange', handleStateChange);
+```
+
+## Control migration
+
+Before:
+
+```tsx
+playerRef.current?.play();
+```
+
+After:
+
+```tsx
+player.play();
+```

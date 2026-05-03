@@ -2,6 +2,8 @@
 
 `useYouTubePlayer`가 반환하는 플레이어 객체에는 직접 호출할 수 있는 메서드, 비동기 getter, 동적 비디오 로드 메서드가 포함됩니다.
 
+> 비동기 getter 메서드는 플레이어가 준비된 뒤 사용하는 것을 권장합니다. `YoutubeView`가 내부 controller를 연결하기 전에는 getter가 `undefined`를 반환할 수 있으므로, 값에 의존해야 한다면 `ready` 이벤트 이후에 호출하세요.
+
 ## 재생 제어
 
 ```tsx

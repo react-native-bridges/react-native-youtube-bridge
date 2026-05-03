@@ -1,0 +1,26 @@
+# Inline HTML vs WebView
+
+iOS와 Android에서 1.x는 두 가지 렌더링 방식을 지원합니다.
+
+## Inline HTML mode
+
+```tsx
+<YoutubePlayer source="AbZH7XWDW_k" useInlineHtml />
+```
+
+- 기본 모드
+- 앱 내부에서 HTML을 직접 로드합니다.
+
+## External WebView mode
+
+```tsx
+<YoutubePlayer
+  source="AbZH7XWDW_k"
+  useInlineHtml={false}
+  webViewUrl="https://your-custom-player.com"
+/>
+```
+
+- 외부 플레이어 페이지를 로드합니다.
+- 기본 호스팅 페이지: `https://react-native-youtube-bridge.pages.dev`
+- inline HTML에서 embed 제한이나 origin 제약을 만날 때 유용합니다.

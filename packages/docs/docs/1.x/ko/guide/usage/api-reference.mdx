@@ -1,0 +1,69 @@
+# API 레퍼런스
+
+이 페이지는 레거시 1.x 컴포넌트 API를 요약하고, 2.x API reference에서 1.x로 버전을 전환했을 때 404로 떨어지지 않도록 제공합니다.
+
+## 주요 export
+
+```ts
+import { YoutubePlayer, useYoutubeOEmbed } from 'react-native-youtube-bridge';
+import type {
+  PlayerControls,
+  PlayerState,
+  ProgressData,
+  YouTubeError,
+} from 'react-native-youtube-bridge';
+```
+
+## 핵심 컴포넌트
+
+### `YoutubePlayer`
+
+YouTube 플레이어를 직접 렌더링하고 `ref`를 통해 imperative control을 제공합니다.
+
+```tsx
+const playerRef = useRef<PlayerControls>(null);
+
+<YoutubePlayer ref={playerRef} source="AbZH7XWDW_k" />;
+```
+
+## 주요 props
+
+- `source`: YouTube video ID, YouTube URL, 또는 source object.
+- `playerVars`: YouTube embedded player parameters.
+- `height` / `width`: 플레이어 크기.
+- `style`: React Native 플레이어 컨테이너 스타일.
+- `iframeStyle`: web에서 iframe wrapper 스타일.
+- `webViewStyle`: iOS와 Android에서 WebView 스타일.
+- `webViewProps`: iOS와 Android에서 추가 WebView props.
+- `useInlineHtml`: iOS와 Android에서 inline HTML 또는 외부 WebView 모드 선택.
+- `webViewUrl`: 커스텀 WebView source URL 또는 inline HTML `baseUrl`.
+- `progressInterval`: 양수 interval을 설정하면 `onProgress`를 활성화합니다.
+
+## 이벤트 props
+
+- `onReady`
+- `onStateChange`
+- `onError`
+- `onProgress`
+- `onPlaybackRateChange`
+- `onPlaybackQualityChange`
+- `onAutoplayBlocked`
+
+이벤트 핸들러는 불안정한 callback reference를 피하기 위해 `useCallback`으로 감싸세요.
+
+## Ref 메서드
+
+- `play`, `pause`, `stop`, `seekTo`
+- `setVolume`, `getVolume`, `mute`, `unMute`, `isMuted`
+- `getCurrentTime`, `getDuration`, `getVideoUrl`, `getVideoEmbedCode`
+- `getPlaybackRate`, `setPlaybackRate`, `getAvailablePlaybackRates`
+- `getPlayerState`, `getVideoLoadedFraction`
+- `loadVideoById`, `cueVideoById`, `setSize`
+
+## 메타데이터 훅
+
+`useYoutubeOEmbed(url?)`은 YouTube URL의 선택적 oEmbed 메타데이터를 가져옵니다.
+
+## 새 프로젝트
+
+1.x는 레거시입니다. 새 프로젝트는 [2.x API 레퍼런스](/ko/guide/usage/api-reference.html)와 `useYouTubePlayer` + `YoutubeView`로 시작하세요.

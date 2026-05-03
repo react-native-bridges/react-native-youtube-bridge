@@ -1,0 +1,69 @@
+# API Reference
+
+This page summarizes the legacy 1.x component API and prevents version switching from the 2.x API reference from landing on a 404.
+
+## Main exports
+
+```ts
+import { YoutubePlayer, useYoutubeOEmbed } from 'react-native-youtube-bridge';
+import type {
+  PlayerControls,
+  PlayerState,
+  ProgressData,
+  YouTubeError,
+} from 'react-native-youtube-bridge';
+```
+
+## Main component
+
+### `YoutubePlayer`
+
+Renders a YouTube player directly and exposes imperative controls through `ref`.
+
+```tsx
+const playerRef = useRef<PlayerControls>(null);
+
+<YoutubePlayer ref={playerRef} source="AbZH7XWDW_k" />;
+```
+
+## Common props
+
+- `source`: YouTube video ID, YouTube URL, or source object.
+- `playerVars`: YouTube embedded player parameters.
+- `height` / `width`: player size.
+- `style`: React Native player container style.
+- `iframeStyle`: iframe wrapper style on web.
+- `webViewStyle`: WebView style on iOS and Android.
+- `webViewProps`: additional WebView props on iOS and Android.
+- `useInlineHtml`: choose inline HTML or external WebView mode on iOS and Android.
+- `webViewUrl`: custom WebView source URL or inline HTML `baseUrl`.
+- `progressInterval`: enables `onProgress` when set to a positive interval.
+
+## Event props
+
+- `onReady`
+- `onStateChange`
+- `onError`
+- `onProgress`
+- `onPlaybackRateChange`
+- `onPlaybackQualityChange`
+- `onAutoplayBlocked`
+
+Wrap event handlers with `useCallback` to avoid unstable callback references.
+
+## Ref methods
+
+- `play`, `pause`, `stop`, `seekTo`
+- `setVolume`, `getVolume`, `mute`, `unMute`, `isMuted`
+- `getCurrentTime`, `getDuration`, `getVideoUrl`, `getVideoEmbedCode`
+- `getPlaybackRate`, `setPlaybackRate`, `getAvailablePlaybackRates`
+- `getPlayerState`, `getVideoLoadedFraction`
+- `loadVideoById`, `cueVideoById`, `setSize`
+
+## Metadata hook
+
+`useYoutubeOEmbed(url?)` fetches optional YouTube oEmbed metadata for a YouTube URL.
+
+## New projects
+
+1.x is legacy. New projects should start with the [2.x API reference](/guide/usage/api-reference.html) and `useYouTubePlayer` + `YoutubeView`.

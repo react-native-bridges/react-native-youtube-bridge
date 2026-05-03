@@ -1,0 +1,27 @@
+# Custom WebView Player
+
+직접 외부 플레이어 페이지를 호스팅해야 한다면 `@react-native-youtube-bridge/web`를 사용합니다.
+
+```bash
+npm install @react-native-youtube-bridge/web
+```
+
+```tsx
+import { YoutubePlayer } from '@react-native-youtube-bridge/web';
+
+function CustomPlayerPage() {
+  return <YoutubePlayer />;
+}
+
+export default CustomPlayerPage;
+```
+
+이후 native 앱에서 호스팅 URL을 전달합니다.
+
+```tsx
+<YoutubePlayer
+  source="AbZH7XWDW_k"
+  useInlineHtml={false}
+  webViewUrl="https://your-custom-player.com"
+/>
+```

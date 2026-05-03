@@ -4,5 +4,10 @@
     "name": "getting-started",
     "label": "Getting Started"
   },
+  {
+    "type": "dir",
+    "name": "usage",
+    "label": "Usage"
+  },
   "migration-from-1.x"
 ]

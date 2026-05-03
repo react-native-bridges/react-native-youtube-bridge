@@ -1,7 +1,62 @@
 # 2.x로 마이그레이션
 
-2.x에서는 다음으로 옮기면 됩니다.
+2.x는 기존 component/ref 모델을 hook-and-view 모델로 바꿉니다.
 
-- `YoutubePlayer` → `useYouTubePlayer` + `YoutubeView`
-- callback props → `useYouTubeEvent`
-- `ref` 메서드 호출 → `player.method()` 호출
+> [!tip]
+> 이 페이지는 1.x 문서 안에서 보는 짧은 마이그레이션 안내입니다. 전체 최신 마이그레이션 내용은 <a href="/ko/guide/migration-from-1.x.html">2.x의 1.x 마이그레이션 가이드</a>를 참고하세요.
+
+| 1.x                        | 2.x                                |
+| -------------------------- | ---------------------------------- |
+| `YoutubePlayer` 컴포넌트   | `useYouTubePlayer` + `YoutubeView` |
+| callback props             | `useYouTubeEvent`                  |
+| `ref.current?.play()`      | `player.play()`                    |
+| 컴포넌트 props에 설정 전달 | hook config에 플레이어 옵션 전달   |
+
+## 컴포넌트 교체
+
+Before:
+
+```tsx
+import { YoutubePlayer } from 'react-native-youtube-bridge';
+
+<YoutubePlayer source="AbZH7XWDW_k" />;
+```
+
+After:
+
+```tsx
+import { YoutubeView, useYouTubePlayer } from 'react-native-youtube-bridge';
+
+const player = useYouTubePlayer('AbZH7XWDW_k');
+
+<YoutubeView player={player} />;
+```
+
+## 이벤트 마이그레이션
+
+Before:
+
+```tsx
+<YoutubePlayer onReady={handleReady} onStateChange={handleStateChange} />
+```
+
+After:
+
+```tsx
+useYouTubeEvent(player, 'ready', handleReady);
+useYouTubeEvent(player, 'stateChange', handleStateChange);
+```
+
+## 제어 메서드 마이그레이션
+
+Before:
+
+```tsx
+playerRef.current?.play();
+```
+
+After:
+
+```tsx
+player.play();
+```

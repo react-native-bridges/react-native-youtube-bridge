@@ -2,6 +2,8 @@
 
 The player object returned by `useYouTubePlayer` exposes direct playback controls, async getters, and dynamic video loading methods.
 
+> Async getter methods are useful after the player is ready. Before `YoutubeView` attaches the underlying controller, a getter can return `undefined`, so subscribe to `ready` before relying on these values.
+
 ## Playback actions
 
 ```tsx

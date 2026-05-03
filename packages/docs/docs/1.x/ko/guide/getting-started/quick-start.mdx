@@ -1,0 +1,31 @@
+import { PackageManagerTabs } from '@rspress/core/theme';
+
+# 빠른 시작
+
+## 설치
+
+<PackageManagerTabs command="install react-native-youtube-bridge@1.x" />
+
+## 기본 플레이어
+
+```tsx
+import { YoutubePlayer } from 'react-native-youtube-bridge';
+
+function App() {
+  return <YoutubePlayer source="AbZH7XWDW_k" />;
+}
+```
+
+## source 입력 형태
+
+```tsx
+<YoutubePlayer source="AbZH7XWDW_k" />
+<YoutubePlayer source={{ videoId: 'AbZH7XWDW_k' }} />
+<YoutubePlayer source={{ url: 'https://youtube.com/watch?v=AbZH7XWDW_k' }} />
+```
+
+## 다음 단계
+
+- 컴포넌트 API는 [기본 사용법](/guide/usage/basic-usage.html)에서 확인하세요.
+- 플레이어 제어는 [플레이어 제어](/guide/usage/player-controls.html)에서 확인하세요.
+- 2.x로 이동하려면 [마이그레이션 가이드](/guide/migration-from-1.x.html)를 참고하세요.

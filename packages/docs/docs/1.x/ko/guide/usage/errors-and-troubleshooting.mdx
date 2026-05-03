@@ -1,0 +1,39 @@
+# 에러와 트러블슈팅
+
+이 페이지는 2.x 트러블슈팅 페이지에서 1.x 문서로 버전을 전환했을 때 404로 떨어지지 않도록 제공합니다.
+
+## Embed not allowed 또는 빈 플레이어
+
+inline HTML 모드에서 영상이 로드되지 않으면 호스팅된 플레이어 페이지를 사용하는 WebView 모드로 전환해 보세요.
+
+```tsx
+<YoutubePlayer
+  source="AbZH7XWDW_k"
+  useInlineHtml={false}
+  webViewUrl="https://react-native-youtube-bridge.pages.dev"
+/>
+```
+
+## 이벤트 콜백이 예상과 다르게 동작할 때
+
+렌더마다 불안정한 callback reference가 전달되지 않도록 이벤트 콜백은 `useCallback`으로 감싸세요.
+
+```tsx
+const handleReady = useCallback(() => {
+  console.log('Player is ready');
+}, []);
+
+<YoutubePlayer source="AbZH7XWDW_k" onReady={handleReady} />;
+```
+
+## Progress가 업데이트되지 않을 때
+
+`progressInterval`에 양수 interval을 전달하지 않으면 progress tracking은 비활성화됩니다.
+
+```tsx
+<YoutubePlayer source="AbZH7XWDW_k" progressInterval={1000} onProgress={handleProgress} />
+```
+
+## 새 수정은 2.x를 우선하세요
+
+1.x는 레거시 API입니다. 새 통합을 시작하거나 안전하게 전환할 수 있다면 [2.x 트러블슈팅 가이드](/ko/guide/usage/errors-and-troubleshooting.html)와 [마이그레이션 가이드](/ko/guide/migration-from-1.x.html)를 참고하세요.

@@ -1,0 +1,31 @@
+# Player Controls
+
+Version 1.x exposes player controls through a `ref`.
+
+```tsx
+import { useRef } from 'react';
+import { Button, View } from 'react-native';
+import { YoutubePlayer, type PlayerControls } from 'react-native-youtube-bridge';
+
+function App() {
+  const playerRef = useRef<PlayerControls>(null);
+
+  return (
+    <View>
+      <YoutubePlayer ref={playerRef} source="AbZH7XWDW_k" />
+      <Button title="Play" onPress={() => playerRef.current?.play()} />
+      <Button title="Pause" onPress={() => playerRef.current?.pause()} />
+      <Button title="Seek" onPress={() => playerRef.current?.seekTo(30, true)} />
+    </View>
+  );
+}
+```
+
+## Common methods
+
+- `play`, `pause`, `stop`, `seekTo`
+- `setVolume`, `getVolume`, `mute`, `unMute`, `isMuted`
+- `getCurrentTime`, `getDuration`, `getVideoUrl`, `getVideoEmbedCode`
+- `getPlaybackRate`, `setPlaybackRate`, `getAvailablePlaybackRates`
+- `getPlayerState`, `getVideoLoadedFraction`
+- `loadVideoById`, `cueVideoById`, `setSize`

@@ -7,6 +7,8 @@ export default defineConfig({
   root: path.join(__dirname, 'docs'),
   lang: 'en',
   title: 'React Native Youtube Bridge',
+  icon: '/logo.png',
+  logo: '/logo.png',
   logoText: 'React Native Youtube Bridge',
   llms: true,
   multiVersion: {

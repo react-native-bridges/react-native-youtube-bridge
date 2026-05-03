@@ -1,0 +1,43 @@
+# 이벤트 처리
+
+1.x에서는 이벤트를 `YoutubePlayer`의 callback prop으로 전달합니다.
+
+> 안정적인 참조와 성능을 위해 callback은 `useCallback`으로 감싸는 것을 권장합니다.
+
+```tsx
+import { useCallback } from 'react';
+import { YoutubePlayer, PlayerState } from 'react-native-youtube-bridge';
+
+function App() {
+  const handleReady = useCallback(() => {
+    console.log('ready');
+  }, []);
+
+  const handleStateChange = useCallback((state: PlayerState) => {
+    console.log('state', state);
+  }, []);
+
+  return (
+    <YoutubePlayer
+      source="AbZH7XWDW_k"
+      onReady={handleReady}
+      onStateChange={handleStateChange}
+      onError={(error) => console.error(error)}
+    />
+  );
+}
+```
+
+## Progress
+
+`progressInterval`과 `onProgress`를 함께 사용하면 재생 진행률을 받을 수 있습니다.
+
+```tsx
+<YoutubePlayer
+  source="AbZH7XWDW_k"
+  progressInterval={1000}
+  onProgress={(progress) => {
+    console.log(progress.currentTime, progress.duration, progress.loadedFraction);
+  }}
+/>
+```

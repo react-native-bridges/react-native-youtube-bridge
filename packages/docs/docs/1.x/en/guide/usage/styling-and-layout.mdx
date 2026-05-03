@@ -1,0 +1,18 @@
+# Styling and Layout
+
+`YoutubePlayer` accepts sizing and platform-specific styling props.
+
+```tsx
+<YoutubePlayer
+  source="AbZH7XWDW_k"
+  height={400}
+  width="100%"
+  style={{ borderRadius: 10 }}
+  iframeStyle={{ aspectRatio: 16 / 9 }}
+  webViewStyle={{ backgroundColor: 'transparent' }}
+/>
+```
+
+- `iframeStyle`: Web only
+- `webViewStyle`: iOS / Android only
+- `webViewProps`: iOS / Android only

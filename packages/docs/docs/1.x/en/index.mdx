@@ -1,0 +1,28 @@
+---
+head:
+  - - meta
+    - 'http-equiv': refresh
+      content: 0; url=/1.x/guide/getting-started/overview.html
+  - - link
+    - rel: canonical
+      href: /1.x/guide/getting-started/overview.html
+---
+
+import { useEffect } from 'react';
+
+export function RedirectToVersionOverview() {
+  useEffect(() => {
+    window.location.replace('/1.x/guide/getting-started/overview.html');
+  }, []);
+
+return null;
+}
+
+<RedirectToVersionOverview />
+
+# React Native Youtube Bridge 1.x
+
+> [!warning]
+> Version 1.x is the legacy API. New projects should use the 2.x hook-based docs.
+
+Redirecting to the [1.x overview](/1.x/guide/getting-started/overview.html).
