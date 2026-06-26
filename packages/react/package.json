@@ -1,6 +1,6 @@
 {
   "name": "@react-native-youtube-bridge/react",
-  "version": "2.1.6",
+  "version": "2.1.7",
   "description": "React implementation for react-native-youtube-bridge",
   "keywords": [
     "android",
