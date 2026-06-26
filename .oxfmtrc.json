@@ -3,7 +3,7 @@
   "ignorePatterns": ["lib", "node_modules", "ios", "android", "dist", "**/*.md"],
   "experimentalSortImports": {
     "groups": [
-      ["side-effect"],
+      ["side_effect"],
       ["builtin"],
       ["external", "type-external"],
       ["internal", "type-internal"],

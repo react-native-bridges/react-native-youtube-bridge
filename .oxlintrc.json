@@ -9,6 +9,9 @@
   },
   "rules": {
     "react/react-in-jsx-scope": "off",
+    "react/react-compiler": "off",
+    "eslint/no-shadow": "off",
+    "eslint/no-underscore-dangle": "off",
     "import/no-unassigned-import": ["error", { "allow": ["**/*.css"] }],
     "unicorn/require-post-message-target-origin": "off"
   },
