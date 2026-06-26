@@ -3,15 +3,15 @@ pre-commit:
   commands:
     lint:
       glob: '**/*.{js,ts,jsx,tsx}'
-      run: pnpm oxlint {staged_files}
+      run: corepack pnpm oxlint {staged_files}
     format:
       glob: '**/*.{js,ts,jsx,tsx}'
-      run: pnpm oxfmt {staged_files}
+      run: corepack pnpm oxfmt {staged_files}
     types:
       glob: '**/*.{js,ts,jsx,tsx}'
-      run: pnpm run typecheck
+      run: corepack pnpm run typecheck
 commit-msg:
   parallel: true
   commands:
     commitlint:
-      run: pnpm commitlint --edit
+      run: corepack pnpm commitlint --edit
