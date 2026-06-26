@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
   "ignorePatterns": ["lib", "node_modules", "ios", "android", "dist", "**/*.md"],
-  "experimentalSortImports": {
+  "sortImports": {
     "groups": [
       ["side_effect"],
       ["builtin"],
@@ -12,7 +12,7 @@
       ["index", "type-index"]
     ]
   },
-  "experimentalSortPackageJson": {
+  "sortPackageJson": {
     "sortScripts": true
   },
   "singleQuote": true
