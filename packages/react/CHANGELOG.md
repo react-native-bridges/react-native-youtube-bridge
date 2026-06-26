@@ -1,5 +1,18 @@
 # @react-native-youtube-bridge/react
 
+## 2.1.7
+
+### Patch Changes
+
+- [#90](https://github.com/react-native-bridges/react-native-youtube-bridge/pull/90) [`6679a9d`](https://github.com/react-native-bridges/react-native-youtube-bridge/commit/6679a9d5cece7adbfb5d48d59b926aa7181e5183) Thanks [@saseungmin](https://github.com/saseungmin)! - Simplify YouTube source normalization in `useYouTubeVideoId` while preserving the existing video ID resolution behavior.
+
+- [#88](https://github.com/react-native-bridges/react-native-youtube-bridge/pull/88) [`395a824`](https://github.com/react-native-bridges/react-native-youtube-bridge/commit/395a8249d96dd8819f003e29c25b8d1279101c5b) Thanks [@saseungmin](https://github.com/saseungmin)! - Fix package entry metadata to match tsdown's `.cjs`, `.mjs`, `.d.cts`, and `.d.mts` outputs so Expo Snack and TypeScript CJS/ESM resolvers can load the internal packages.
+
+- [#90](https://github.com/react-native-bridges/react-native-youtube-bridge/pull/90) [`6679a9d`](https://github.com/react-native-bridges/react-native-youtube-bridge/commit/6679a9d5cece7adbfb5d48d59b926aa7181e5183) Thanks [@saseungmin](https://github.com/saseungmin)! - Update the development dependency baseline.
+
+- Updated dependencies [[`395a824`](https://github.com/react-native-bridges/react-native-youtube-bridge/commit/395a8249d96dd8819f003e29c25b8d1279101c5b), [`6679a9d`](https://github.com/react-native-bridges/react-native-youtube-bridge/commit/6679a9d5cece7adbfb5d48d59b926aa7181e5183)]:
+  - @react-native-youtube-bridge/core@2.2.2
+
 ## 2.1.6
 
 ### Patch Changes
