@@ -9,19 +9,21 @@
   },
   "rules": {
     "react/react-in-jsx-scope": "off",
+    "react/react-compiler": "off",
+    "eslint/no-shadow": "off",
+    "eslint/no-underscore-dangle": "off",
     "import/no-unassigned-import": ["error", { "allow": ["**/*.css"] }],
     "unicorn/require-post-message-target-origin": "off"
   },
   "settings": {
     "jsx-a11y": {
-      "polymorphicPropName": null,
       "components": {},
       "attributes": {}
     },
     "react": {
       "formComponents": [],
       "linkComponents": [],
-      "version": null,
+      "version": "19.2",
       "componentWrapperFunctions": []
     },
     "jsdoc": {

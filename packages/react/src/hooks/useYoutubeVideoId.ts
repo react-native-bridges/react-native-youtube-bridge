@@ -7,38 +7,31 @@ import {
 } from '@react-native-youtube-bridge/core';
 import { useMemo } from 'react';
 
+const getSourceValue = (source: YoutubeSource): string | null | undefined => {
+  if (!source) {
+    return undefined;
+  }
+
+  if (typeof source === 'string') {
+    return source;
+  }
+
+  if ('videoId' in source) {
+    return source.videoId;
+  }
+
+  if ('url' in source) {
+    return source.url;
+  }
+
+  return null;
+};
+
 const useYouTubeVideoId = (
   source: YoutubeSource,
   onError?: PlayerEvents['onError'],
 ): string | null | undefined => {
-  const sourceValue = useMemo(() => {
-    if (!source) {
-      return;
-    }
-
-    if (typeof source === 'string') {
-      return source;
-    }
-
-    if ('videoId' in source) {
-      return source.videoId;
-    }
-
-    if ('url' in source) {
-      return source.url;
-    }
-
-    return null;
-  }, [
-    // oxlint-disable-next-line eslint-plugin-react-hooks/exhaustive-deps
-    typeof source === 'string'
-      ? source
-      : source && 'videoId' in source
-        ? source.videoId
-        : source && 'url' in source
-          ? source.url
-          : null,
-  ]);
+  const sourceValue = getSourceValue(source);
 
   const videoId = useMemo(() => {
     if (sourceValue === null) {

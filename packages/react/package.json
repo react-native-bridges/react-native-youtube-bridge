@@ -55,9 +55,10 @@
     "@react-native-youtube-bridge/core": "workspace:*"
   },
   "devDependencies": {
-    "@types/react": "^19.1.0",
-    "react": "19.1.0",
-    "tsdown": "catalog:"
+    "@types/react": "^19.2.17",
+    "react": "19.2.3",
+    "tsdown": "catalog:",
+    "typescript": "catalog:"
   },
   "peerDependencies": {
     "react": ">=16.8.0"
