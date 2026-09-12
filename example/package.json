@@ -7,21 +7,32 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "start": "expo start --clear",
+    "typecheck": "tsc --noEmit",
     "web": "expo start --web --clear",
     "web:build": "expo export --platform web --clear"
   },
   "dependencies": {
-    "@expo/metro-runtime": "~56.0.15",
-    "expo": "~56.0.12",
-    "expo-status-bar": "~56.0.4",
+    "@expo/metro-runtime": "~57.0.15",
+    "expo": "~57.0.22",
+    "expo-status-bar": "~57.0.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "react-native": "0.85.3",
+    "react-native": "0.86.3",
     "react-native-web": "~0.21.2",
     "react-native-webview": "13.16.1",
     "react-native-youtube-bridge": "workspace:*"
   },
   "devDependencies": {
-    "@babel/core": "^7.29.7"
+    "@babel/core": "^7.29.7",
+    "@types/react": "~19.2.18",
+    "babel-preset-expo": "~57.0.11",
+    "typescript": "catalog:"
+  },
+  "expo": {
+    "install": {
+      "exclude": [
+        "typescript"
+      ]
+    }
   }
 }

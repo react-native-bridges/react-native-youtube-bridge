@@ -32,20 +32,21 @@
     "lint": "oxlint",
     "lint:ci": "oxlint --format=github",
     "lint:fix": "oxlint --fix",
-    "test": "jest",
+    "test": "pnpm --filter @react-native-youtube-bridge/core build && pnpm --filter react-native-youtube-bridge test",
+    "test:packages": "node scripts/check-packages.mjs",
     "typecheck": "pnpm -r run typecheck"
   },
   "devDependencies": {
-    "@changesets/changelog-github": "^0.7.0",
-    "@changesets/cli": "^2.31.0",
-    "@commitlint/config-conventional": "^21.1.0",
-    "@evilmartians/lefthook": "^2.1.9",
+    "@changesets/changelog-github": "^1.0.1",
+    "@changesets/cli": "^3.0.2",
+    "@commitlint/config-conventional": "^21.2.2",
+    "@evilmartians/lefthook": "^2.1.12",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.13.2",
-    "commitlint": "^21.1.0",
-    "jest": "^30.4.2",
-    "oxfmt": "^0.56.0",
-    "oxlint": "^1.71.0",
+    "@types/node": "^24.13.4",
+    "commitlint": "^21.2.2",
+    "jest": "^30.5.1",
+    "oxfmt": "^0.67.0",
+    "oxlint": "^1.82.0",
     "typescript": "catalog:"
   },
   "commitlint": {
@@ -53,14 +54,8 @@
       "@commitlint/config-conventional"
     ]
   },
-  "jest": {
-    "modulePathIgnorePatterns": [
-      "lib",
-      "node_modules"
-    ]
-  },
   "engines": {
     "node": ">=24.11.0"
   },
-  "packageManager": "pnpm@11.9.0"
+  "packageManager": "pnpm@11.26.0"
 }

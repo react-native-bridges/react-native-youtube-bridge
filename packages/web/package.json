@@ -27,8 +27,10 @@
     "package.json"
   ],
   "main": "dist/web.mjs",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/web.mjs"
     }
   },
@@ -36,7 +38,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc -b && vite build",
+    "build": "vite build && tsdown",
     "dev": "vite",
     "typecheck": "tsc --noEmit"
   },
@@ -45,10 +47,12 @@
     "@react-native-youtube-bridge/react": "workspace:*"
   },
   "devDependencies": {
-    "@types/react": "^19.2.17",
-    "@vitejs/plugin-react-swc": "^4.3.1",
+    "@types/react": "~19.2.18",
+    "@vitejs/plugin-react-swc": "^4.3.3",
     "react": "19.2.3",
-    "vite": "^8.1.0"
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vite": "^8.3.0"
   },
   "peerDependencies": {
     "react": ">=16.8.0"

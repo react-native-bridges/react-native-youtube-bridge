@@ -25,5 +25,5 @@
       "@react-native-youtube-bridge/web": ["../packages/web/src/index.ts"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "../packages/web/global.d.ts"]
 }

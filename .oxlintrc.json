@@ -9,11 +9,19 @@
   },
   "rules": {
     "react/react-in-jsx-scope": "off",
-    "react/react-compiler": "off",
     "eslint/no-shadow": "off",
     "eslint/no-underscore-dangle": "off",
-    "import/no-unassigned-import": ["error", { "allow": ["**/*.css"] }],
-    "unicorn/require-post-message-target-origin": "off"
+    "import/no-unassigned-import": [
+      "error",
+      {
+        "allow": ["**/*.css"]
+      }
+    ],
+    "unicorn/require-post-message-target-origin": "off",
+    "react/refs": "off",
+    "react/set-state-in-effect": "off",
+    "react/memo-dependencies": "off",
+    "react/exhaustive-effect-dependencies": "off"
   },
   "settings": {
     "jsx-a11y": {
