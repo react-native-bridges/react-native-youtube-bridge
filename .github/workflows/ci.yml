@@ -20,6 +20,9 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
+      - name: Audit dependencies for high and critical vulnerabilities
+        run: pnpm run audit:security
+
       - name: Lint files
         run: pnpm run lint:ci
 
@@ -101,6 +104,10 @@ jobs:
       - name: Install external web dependencies
         working-directory: web
         run: bun install --frozen-lockfile
+
+      - name: Audit external web dependencies
+        working-directory: web
+        run: bun audit --audit-level high
 
       - name: Typecheck and build external web
         working-directory: web
