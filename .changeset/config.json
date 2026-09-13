@@ -1,8 +1,10 @@
 {
-  "$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
+  "$schema": "https://unpkg.com/@changesets/config@4.0.0/schema.json",
   "changelog": [
     "@changesets/changelog-github",
-    { "repo": "react-native-bridges/react-native-youtube-bridge" }
+    {
+      "repo": "react-native-bridges/react-native-youtube-bridge"
+    }
   ],
   "commit": false,
   "fixed": [],
@@ -10,5 +12,6 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["example", "@react-native-youtube-bridge/docs"]
+  "ignore": ["example", "@react-native-youtube-bridge/docs"],
+  "format": "oxfmt"
 }

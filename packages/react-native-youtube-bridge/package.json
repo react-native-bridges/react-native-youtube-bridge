@@ -65,13 +65,14 @@
     "@react-native-youtube-bridge/react": "workspace:*"
   },
   "devDependencies": {
-    "@react-native/babel-preset": "0.85.3",
-    "@types/react": "^19.2.17",
+    "@react-native/babel-preset": "0.86.3",
+    "@react-native/jest-preset": "0.86.3",
+    "@types/react": "~19.2.18",
     "del-cli": "^7.0.0",
     "react": "19.2.3",
-    "react-native": "0.85.3",
-    "react-native-builder-bob": "^0.41.0",
-    "react-native-webview": "^13.16.1",
+    "react-native": "0.86.3",
+    "react-native-builder-bob": "^0.43.1",
+    "react-native-webview": "13.16.1",
     "typescript": "catalog:"
   },
   "peerDependencies": {
@@ -83,7 +84,10 @@
     "modulePathIgnorePatterns": [
       "<rootDir>/lib/"
     ],
-    "preset": "react-native"
+    "preset": "@react-native/jest-preset",
+    "transformIgnorePatterns": [
+      "node_modules/(?!\\.pnpm/|((jest-)?react-native|@react-native(-community)?)/)"
+    ]
   },
   "create-react-native-library": {
     "languages": "js",

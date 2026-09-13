@@ -30,6 +30,7 @@ jobs:
         run: |
           pnpm --filter @react-native-youtube-bridge/core build
           pnpm --filter @react-native-youtube-bridge/react build
+          pnpm --filter react-native-youtube-bridge build
 
       - name: Typecheck files
         run: pnpm run typecheck
@@ -51,9 +52,58 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
 
       - name: Setup
         uses: ./.github/actions/setup
 
       - name: Build package
         run: pnpm run build
+
+      - name: Check packaged entry points and consumer types
+        run: pnpm run test:packages
+
+      - name: Validate release plan
+        run: pnpm changeset status --since=origin/main
+
+      - name: Check Expo dependency compatibility
+        working-directory: example
+        run: pnpm exec expo install --check
+
+      - name: Bundle example for iOS, Android, and Web
+        working-directory: example
+        run: pnpm exec expo export --platform all
+
+      - name: Check native release bundling
+        working-directory: example
+        run: pnpm exec expo export:embed --platform android --dev false --entry-file index.js --bundle-output dist/native/index.android.bundle --assets-dest dist/native/assets
+
+  external-web:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Build shared dependencies
+        run: |
+          pnpm --filter @react-native-youtube-bridge/core build
+          pnpm --filter @react-native-youtube-bridge/react build
+
+      - name: Install pinned Bun
+        run: |
+          BUN_VERSION=$(node -p "require('./web/package.json').packageManager.split('@')[1]")
+          npm install --global "bun@$BUN_VERSION"
+
+      - name: Install external web dependencies
+        working-directory: web
+        run: bun install --frozen-lockfile
+
+      - name: Typecheck and build external web
+        working-directory: web
+        run: |
+          bun run typecheck
+          bun run build

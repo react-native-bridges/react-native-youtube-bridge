@@ -8,12 +8,18 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      react: path.resolve(__dirname, './node_modules/react'),
-      'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
-      '@react-native-youtube-bridge/web': path.resolve(__dirname, '../packages/web/src/index.ts'),
-      '@react-native-youtube-bridge/core': path.resolve(__dirname, '../packages/core/src/index.ts'),
+      react: path.resolve(import.meta.dirname, './node_modules/react'),
+      'react-dom': path.resolve(import.meta.dirname, './node_modules/react-dom'),
+      '@react-native-youtube-bridge/web': path.resolve(
+        import.meta.dirname,
+        '../packages/web/src/index.ts',
+      ),
+      '@react-native-youtube-bridge/core': path.resolve(
+        import.meta.dirname,
+        '../packages/core/src/index.ts',
+      ),
       '@react-native-youtube-bridge/react': path.resolve(
-        __dirname,
+        import.meta.dirname,
         '../packages/react/src/index.ts',
       ),
     },
