@@ -67,7 +67,13 @@ jobs:
       - name: Check packaged entry points and consumer types
         run: pnpm run test:packages
 
-      - name: Validate release plan
+      # Release PRs consume changesets into versions/changelogs; merge queues
+      # contain PRs whose changeset submission has already been checked.
+      - name: Validate changeset submission
+        if: >-
+          ${{ github.event_name == 'pull_request' &&
+              !(github.event.pull_request.head.repo.full_name == github.repository &&
+                github.head_ref == 'changeset-release/main') }}
         run: pnpm changeset status --since=origin/main
 
       - name: Check Expo dependency compatibility
