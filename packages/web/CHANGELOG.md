@@ -1,5 +1,18 @@
 # @react-native-youtube-bridge/web
 
+## 2.2.3
+
+### Patch Changes
+
+- [#91](https://github.com/react-native-bridges/react-native-youtube-bridge/pull/91) [`415c902`](https://github.com/react-native-bridges/react-native-youtube-bridge/commit/415c9025448c71e337fee9409af7f5b7924c44d4) Thanks [@saseungmin](https://github.com/saseungmin)! - Publish bundled TypeScript declarations and expose their entry point so consumers can resolve the web player's types from the installed package, including projects that check declaration files and side-effect imports strictly.
+
+- [#91](https://github.com/react-native-bridges/react-native-youtube-bridge/pull/91) [`415c902`](https://github.com/react-native-bridges/react-native-youtube-bridge/commit/415c9025448c71e337fee9409af7f5b7924c44d4) Thanks [@saseungmin](https://github.com/saseungmin)! - Update the build tooling used to publish the library packages, including tsdown, React Native Builder Bob, and Vite. Preserve the existing public APIs and peer dependency ranges.
+  
+  Verify the updated packages with the Expo 57 / React Native 0.86.3 example, React 19.2.3, and React Native WebView 13.16.1. Add checks for packed entry points, consumer types, and native release bundling while retaining TypeScript 5.9.3 compatibility.
+- Updated dependencies [[`415c902`](https://github.com/react-native-bridges/react-native-youtube-bridge/commit/415c9025448c71e337fee9409af7f5b7924c44d4)]:
+  - @react-native-youtube-bridge/core@2.2.3
+  - @react-native-youtube-bridge/react@2.1.8
+
 ## 2.2.2
 
 ### Patch Changes
