@@ -1,6 +1,6 @@
 {
   "name": "@react-native-youtube-bridge/web",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "Web implementation for react-native-youtube-bridge",
   "keywords": [
     "android",
