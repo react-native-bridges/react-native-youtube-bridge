@@ -4,6 +4,13 @@ packages:
 catalog:
   tsdown: '0.23.0'
   typescript: '5.9.3'
+# Keep older dependency lines on patched releases accepted by their current parents.
+overrides:
+  'js-yaml@>=3.0.0 <3.15.2': '3.15.2'
+  'minimatch@>=3.0.0 <3.1.4': '3.1.4'
+  'brace-expansion@>=1.0.0 <1.1.18': '1.1.18'
+  'picomatch@>=2.0.0 <2.3.2': '2.3.2'
+  'vite>esbuild@>=0.27.3 <0.28.1': '0.28.1'
 allowBuilds:
   '@evilmartians/lefthook': true
   '@parcel/watcher': true

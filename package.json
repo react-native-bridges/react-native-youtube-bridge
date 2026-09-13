@@ -23,6 +23,7 @@
     "url": "git+https://github.com/react-native-bridges/react-native-youtube-bridge.git"
   },
   "scripts": {
+    "audit:security": "pnpm audit --audit-level high",
     "build": "pnpm -r run build",
     "changeset": "changeset",
     "clear": "rimraf --glob **/dist",
