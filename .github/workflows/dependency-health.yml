@@ -1,0 +1,56 @@
+name: Dependency health
+
+# These checks use changing external data and run separately from PR validation.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  expo-recommendations:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Check current Expo recommendations
+        working-directory: example
+        run: pnpm exec expo install --check
+
+  workspace-security:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Audit dependencies for high and critical vulnerabilities
+        run: pnpm run audit:security
+
+  external-web-security:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Install pinned Bun
+        run: |
+          BUN_VERSION=$(node -p "require('./web/package.json').packageManager.split('@')[1]")
+          npm install --global "bun@$BUN_VERSION"
+
+      - name: Install external web dependencies
+        working-directory: web
+        run: bun install --frozen-lockfile
+
+      - name: Audit external web dependencies
+        working-directory: web
+        run: bun audit --audit-level high
