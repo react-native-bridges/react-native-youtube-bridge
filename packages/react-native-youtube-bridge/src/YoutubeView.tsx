@@ -28,6 +28,7 @@ function YoutubeView({
 }: YoutubeViewProps) {
   const webViewRef = useRef<WebView>(null);
   const playerRef = useRef<WebviewYoutubePlayerController>(null);
+  const attachedPlayerRef = useRef<typeof player | null>(null);
 
   const [isReady, setIsReady] = useState(false);
 
@@ -59,6 +60,39 @@ function YoutubeView({
     // oxlint-disable-next-line eslint-plugin-react-hooks/exhaustive-deps
   }, [useInlineHtml, createPlayerHTML, webViewBaseUrl, webViewUrl]);
 
+  const initializedReadySourceRef = useRef<typeof webViewSource>(undefined);
+
+  const attachController = useCallback(
+    (fromReady = false) => {
+      if (!webViewRef.current) {
+        return false;
+      }
+
+      if (
+        playerRef.current &&
+        attachedPlayerRef.current === player &&
+        (!fromReady || initializedReadySourceRef.current === webViewSource)
+      ) {
+        return true;
+      }
+
+      if (!playerRef.current || attachedPlayerRef.current !== player) {
+        playerRef.current = WebviewYoutubePlayerController.createInstance(webViewRef);
+      }
+
+      player[INTERNAL_SET_CONTROLLER_INSTANCE](playerRef.current);
+      player[INTERNAL_UPDATE_PROGRESS_INTERVAL]();
+      attachedPlayerRef.current = player;
+
+      if (fromReady) {
+        initializedReadySourceRef.current = webViewSource;
+      }
+
+      return true;
+    },
+    [player, webViewSource],
+  );
+
   const handleMessage = useCallback(
     (event: WebViewMessageEvent) => {
       try {
@@ -81,6 +115,10 @@ function YoutubeView({
         }
 
         if (data.type === 'ready') {
+          if (!attachController(true)) {
+            return;
+          }
+
           setIsReady(true);
           player.emit(data.type, data.playerInfo);
           return;
@@ -127,7 +165,7 @@ function YoutubeView({
         player.emit('error', { code: 1000, message: 'FAILED_TO_PARSE_WEBVIEW_MESSAGE' });
       }
     },
-    [player],
+    [attachController, player],
   );
 
   const handleShouldStartLoadWithRequest = useCallback((request: ShouldStartLoadRequest) => {
@@ -140,13 +178,8 @@ function YoutubeView({
   }, []);
 
   useEffect(() => {
-    if (isReady && webViewRef.current) {
-      const controller = WebviewYoutubePlayerController.createInstance(webViewRef);
-
-      playerRef.current = controller;
-
-      player[INTERNAL_SET_CONTROLLER_INSTANCE](controller);
-      player[INTERNAL_UPDATE_PROGRESS_INTERVAL]();
+    if (isReady) {
+      attachController();
     }
 
     return () => {
@@ -154,13 +187,15 @@ function YoutubeView({
         setIsReady(false);
       }
     };
-  }, [isReady, player]);
+  }, [attachController, isReady]);
 
   useEffect(() => {
     return () => {
       if (playerRef.current) {
         playerRef.current = null;
       }
+      attachedPlayerRef.current = null;
+      initializedReadySourceRef.current = undefined;
     };
   }, []);
 
