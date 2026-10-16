@@ -94,6 +94,11 @@ We use [TypeScript](https://www.typescriptlang.org/) for type checking, [oxlint]
 
 Our pre-commit hooks verify that the linter and tests pass when committing.
 
+PR CI checks Expo compatibility against the installed SDK's bundled version ranges
+and validates builds, types, tests, and example bundles. Current Expo recommendations
+and security advisories are checked separately by the manually triggered
+`Dependency health` workflow in GitHub Actions. Run it when reviewing dependency updates.
+
 ### Publishing to npm
 
 We use [changesets](https://github.com/changesets/changesets) to make it easier to publish new versions. It handles common tasks like bumping version based on semver, creating tags and releases etc.
