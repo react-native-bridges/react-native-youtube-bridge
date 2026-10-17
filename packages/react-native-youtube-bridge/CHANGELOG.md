@@ -1,5 +1,13 @@
 # react-native-youtube-bridge
 
+## 2.2.4
+
+### Patch Changes
+
+- [#98](https://github.com/react-native-bridges/react-native-youtube-bridge/pull/98) [`7bcf50b`](https://github.com/react-native-bridges/react-native-youtube-bridge/commit/7bcf50bbddd50134b68322a8c5b5643b6b94ed7e) Thanks [@saseungmin](https://github.com/saseungmin)! - Attach the native player controller before emitting ready so commands and getters called from ready listeners work immediately.
+
+- [#97](https://github.com/react-native-bridges/react-native-youtube-bridge/pull/97) [`7050d27`](https://github.com/react-native-bridges/react-native-youtube-bridge/commit/7050d276e64911336f5ce782cc8525f15ad273c0) Thanks [@Nezz](https://github.com/Nezz)! - Emit `ready` on native only after the player's controller is attached, so commands called from a `ready` listener (such as `seekTo`, `setPlaybackRate` or `play`) reach the player instead of being dropped.
+
 ## 2.2.3
 
 ### Patch Changes
