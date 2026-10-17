@@ -12,8 +12,8 @@
     "web:build": "expo export --platform web --clear"
   },
   "dependencies": {
-    "@expo/metro-runtime": "~57.0.15",
-    "expo": "~57.0.22",
+    "@expo/metro-runtime": "~57.0.17",
+    "expo": "~57.0.30",
     "expo-status-bar": "~57.0.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
@@ -25,7 +25,7 @@
   "devDependencies": {
     "@babel/core": "^7.29.7",
     "@types/react": "~19.2.18",
-    "babel-preset-expo": "~57.0.11",
+    "babel-preset-expo": "~57.0.16",
     "typescript": "catalog:"
   },
   "expo": {
