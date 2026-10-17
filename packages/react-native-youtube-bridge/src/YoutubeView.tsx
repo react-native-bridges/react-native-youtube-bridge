@@ -1,4 +1,8 @@
-import { type MessageData, MATCH_URL_YOUTUBE } from '@react-native-youtube-bridge/core';
+import {
+  type MessageData,
+  type PlayerInfo,
+  MATCH_URL_YOUTUBE,
+} from '@react-native-youtube-bridge/core';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { type DataDetectorTypes, Dimensions, StyleSheet, Linking } from 'react-native';
 import { WebView, type WebViewMessageEvent } from 'react-native-webview';
@@ -31,6 +35,7 @@ function YoutubeView({
   const attachedPlayerRef = useRef<typeof player | null>(null);
 
   const [isReady, setIsReady] = useState(false);
+  const pendingReadyRef = useRef<PlayerInfo | null>(null);
 
   const dataDetectorTypes = useMemo(() => ['none'] as DataDetectorTypes[], []);
 
